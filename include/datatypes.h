@@ -34,8 +34,8 @@ typedef struct s_rt_color
 
 typedef struct s_rt_resolution
 {
-	unsigned int	x;
-	unsigned int	y;
+	int				x;
+	int				y;
 }		t_rt_resolution;
 
 typedef struct s_rt_vector
@@ -101,7 +101,7 @@ typedef struct s_rt_camera
 {
 	t_rt_vector			coordinates;
 	t_rt_vector			orientation;
-	unsigned int		fov;
+	int					fov;
 }		t_rt_camera;
 
 typedef struct s_rt_scene
