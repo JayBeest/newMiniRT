@@ -53,3 +53,5 @@ dkms.conf
 
 bin/
 obj/
+.idea/
+.DS_Store
