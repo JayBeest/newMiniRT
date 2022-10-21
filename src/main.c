@@ -37,6 +37,7 @@ void	init_mock_rt(t_rt_scene *scene)
 	scene->objects[1].sphere.coordinates = (t_rt_vector){0, 0, 20};
 	scene->objects[1].sphere.diameter = 20;
 	scene->objects[1].sphere.color = (t_rt_color){255, 0, 0, 255};
+	scene->objects[1].cylinder.type = CYLINDER;
 	scene->objects[2].cylinder.coordinates = (t_rt_vector){50.0, 0.0, 20.6};
 	scene->objects[2].cylinder.orientation = (t_rt_vector){0, 0, 1.0};
 	scene->objects[2].cylinder.diameter = 14.2;
