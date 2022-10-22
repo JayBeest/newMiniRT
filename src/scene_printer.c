@@ -23,17 +23,26 @@ void	print_ambient_light(t_rt_ambient_light ambient)
 	print_color(ambient.color);
 }
 
-void	print_camera(t_rt_camera camera)
+void	print_camera(t_rt_camera *camera, int amount)
 {
-	printf("	- Camera -\n");
-	print_coordinates(camera.coordinates);
-	print_orientation(camera.orientation);
-	printf("fov: %d\n", camera.fov);
+	int	i;
+
+	i = 0;
+	while (i < amount)
+	{
+		printf("	- Camera[%d] -\n", i);
+		print_coordinates(camera[i].coordinates);
+		print_orientation(camera[i].orientation);
+		printf("fov: %d\n", camera[i].fov);
+		i++;
+	}
 }
 
 void	print_spotlights(t_rt_spot_light *spotlights, int amount)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	while (i < amount)
 	{
 		printf("	- Spotlight[%d] -\n", i);
@@ -72,7 +81,9 @@ void	print_cylinder(t_rt_obj_cylinder cylinder)
 
 void	print_objects(t_rt_obj_union *objects, int amount)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	while (i < amount)
 	{
 		printf("	- Object[%d] -\n", i);
@@ -91,7 +102,7 @@ void	print_scene(t_rt_scene scene)
 	printf("		*** MiniRT Scene ***\n");
 	printf("resolution: %dx%d\n", scene.resolution.x, scene.resolution.y);
 	print_ambient_light(scene.ambient_light);
-	print_camera(scene.camera);
+	print_camera(scene.cameras, scene.camera_amount);
 	print_spotlights(scene.spot_lights, scene.light_amount);
 	print_objects(scene.objects, scene.object_amount);
 }

@@ -12,10 +12,13 @@ SRC			=	main.c \
 				init.c \
 				alloc.c \
 				scene_printer.c \
+				error.c \
 
 HEADERS		=	datatypes.h \
 				init.h \
-				alloc.h
+				alloc.h \
+				error.h \
+
 OBJ 		=	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 
 INCL_DIRS	=	include/ MLX42/include/MLX42/

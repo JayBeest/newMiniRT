@@ -14,9 +14,9 @@ void	init_mock_rt(t_rt_scene *scene)
 	scene->ambient_light.intensity = 0.2f;
 	scene->ambient_light.color = (t_rt_color){255, 255, 255, 255};
 
-	scene->camera.coordinates = (t_rt_vector){-50, 0, 20};
-	scene->camera.orientation = (t_rt_vector){0, 0, 0};
-	scene->camera.fov = 70;
+	scene->cameras[0].coordinates = (t_rt_vector){-50, 0, 20};
+	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
+	scene->cameras[0].fov = 70;
 	scene->spot_lights[0].coordinates = (t_rt_vector){-40, 0, 30};
 	scene->spot_lights[0].intensity = 0.7f;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};

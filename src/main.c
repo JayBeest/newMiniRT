@@ -7,20 +7,20 @@
 #include <init.h>
 #include <scene_printer.h>
 #include <alloc.h>
+#include <error.h>
 
 #include <stdio.h>
 #include <string.h>
 
-t_err	err_msg(t_err err, char *return_fun, char *str)
+int	free_scene(t_rt_scene scene, int return_value)
 {
-	static char *message[DEFAULT_ERR] = {
-			[INVALID_FILE] = "[%s] %s: invalid file\n",
-			[INVALID_EXT] = "[%s] %s: invalid extension\n",
-			[OPEN_F] = "[%s] %s: error opening file\n",
-			[AMBIENT_SET] = "[%s] %s: ambient light already set\n"
-	};
-	printf(message[err], return_fun, str);
-	return (err);
+	if (scene.objects != NULL)
+		free(scene.objects);
+	if (scene.spot_lights != NULL)
+		free(scene.spot_lights);
+	if (scene.cameras != NULL)
+		free(scene.cameras);
+	return (return_value);
 }
 
 t_err	check_file(char *file)
@@ -121,13 +121,14 @@ int main(int argc, char **argv)
 		if (check_file(argv[1]) != NO_ERR)
 			return (1);
 		if (parse_file_and_alloc_scene(argv[1], &scene) != NO_ERR)
-			return (1);
+			return (free_scene(scene, 1));
 	}
 	else
 	{
 		scene.light_amount = 1;
 		scene.object_amount = 3;
-		allocate_scene(&scene);
+		if (allocate_scene(&scene) != NO_ERR)
+			return (free_scene(scene, 1));
 		init_mock_rt(&scene);
 	}
 

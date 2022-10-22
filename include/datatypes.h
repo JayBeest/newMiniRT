@@ -54,6 +54,7 @@ typedef struct s_rt_vector
 typedef struct s_rt_obj_default
 {
 	t_rt_obj_type		type;
+	t_rt_color			color;
 }				t_rt_obj_default;
 
 typedef struct s_rt_obj_sphere
@@ -116,7 +117,7 @@ typedef struct s_rt_scene
 	t_rt_obj_union *	objects;
 	t_rt_spot_light *	spot_lights;
 	t_rt_ambient_light	ambient_light;
-	t_rt_camera			camera;
+	t_rt_camera	*		cameras;
 	t_rt_resolution		resolution;
 	int					object_amount;
 	int					light_amount;
