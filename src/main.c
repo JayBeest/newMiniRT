@@ -127,6 +127,7 @@ int main(int argc, char **argv)
 	{
 		scene.light_amount = 1;
 		scene.object_amount = 3;
+		scene.camera_amount = 1;
 		if (allocate_scene(&scene) != NO_ERR)
 			return (free_scene(scene, 1));
 		init_mock_rt(&scene);
