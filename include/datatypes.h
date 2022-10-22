@@ -1,6 +1,8 @@
 #ifndef RT_DATATYPES_H
 # define RT_DATATYPES_H
 
+# include "stdbool.h"
+
 # define RESOLUTION_X 768
 # define RESOLUTION_Y 768
 
@@ -8,13 +10,17 @@ typedef enum e_err
 {
 	NO_ERR,
 	MALLOC_F,
+	OPEN_F,
 	MLX_INIT_F,
 	MLX_NEW_IMG_F,
 	PARSE_F,
 	INVALID_ARG,
 	INVALID_FILE,
+	INVALID_EXT,
 	INVALID_OBJ,
-	PIXEL_OOB
+	AMBIENT_SET,
+	PIXEL_OOB,
+	DEFAULT_ERR
 }		t_err;
 
 typedef enum e_rt_obj_type
@@ -88,6 +94,7 @@ typedef struct s_rt_ambient_light
 {
 	double				intensity;
 	t_rt_color			color;
+	bool				set;
 }				t_rt_ambient_light;
 
 typedef struct s_rt_spot_light
@@ -113,7 +120,9 @@ typedef struct s_rt_scene
 	t_rt_resolution		resolution;
 	int					object_amount;
 	int					light_amount;
+	int					camera_amount;
 
+	bool				g_mockup;
 }				t_rt_scene;
 
 #endif

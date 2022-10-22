@@ -9,10 +9,12 @@ HEADER_DIR	=	include/
 BIN			=	$(BIN_DIR)$(NAME)
 
 SRC			=	main.c \
+				init.c \
 				alloc.c \
 				scene_printer.c \
 
 HEADERS		=	datatypes.h \
+				init.h \
 				alloc.h
 OBJ 		=	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 

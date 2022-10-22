@@ -1,59 +1,150 @@
 #include <stdlib.h>
+#include <stdbool.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <datatypes.h>
+#include <libft.h>
+#include <init.h>
 #include <scene_printer.h>
 #include <alloc.h>
 
 #include <stdio.h>
 #include <string.h>
 
-void	init_rt(t_rt_scene *scene)
+t_err	err_msg(t_err err, char *return_fun, char *str)
 {
-	bzero(scene, sizeof(t_rt_scene));
-
-	scene->resolution.x = RESOLUTION_X;
-	scene->resolution.y = RESOLUTION_Y;
-
-	scene->light_amount = 1;
-	scene->object_amount = 3;
+	static char *message[DEFAULT_ERR] = {
+			[INVALID_FILE] = "[%s] %s: invalid file\n",
+			[INVALID_EXT] = "[%s] %s: invalid extension\n",
+			[OPEN_F] = "[%s] %s: error opening file\n",
+			[AMBIENT_SET] = "[%s] %s: ambient light already set\n"
+	};
+	printf(message[err], return_fun, str);
+	return (err);
 }
 
-void	init_mock_rt(t_rt_scene *scene)
+t_err	check_file(char *file)
 {
-	scene->ambient_light.intensity = 0.2;
-	scene->ambient_light.color = (t_rt_color){255, 255, 255, 255};
+	int 	fd;
+	size_t	len;
 
-	scene->camera.coordinates = (t_rt_vector){-50, 0, 20};
-	scene->camera.orientation = (t_rt_vector){0, 0, 0};
-	scene->camera.fov = 70;
-	scene->spot_lights[0].coordinates = (t_rt_vector){-40, 0, 30};
-	scene->spot_lights[0].intensity = 0.7;
-	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};
-
-	scene->objects[0].plane.type = PLANE;
-	scene->objects[0].plane.coordinates = (t_rt_vector){0, 0, 0};
-	scene->objects[0].plane.orientation = (t_rt_vector){0, 1.0, 0};
-	scene->objects[0].plane.color = (t_rt_color){255, 0, 255, 255};
-	scene->objects[1].sphere.type = SPHERE;
-	scene->objects[1].sphere.coordinates = (t_rt_vector){0, 0, 20};
-	scene->objects[1].sphere.diameter = 20;
-	scene->objects[1].sphere.color = (t_rt_color){255, 0, 0, 255};
-	scene->objects[1].cylinder.type = CYLINDER;
-	scene->objects[2].cylinder.coordinates = (t_rt_vector){50.0, 0.0, 20.6};
-	scene->objects[2].cylinder.orientation = (t_rt_vector){0, 0, 1.0};
-	scene->objects[2].cylinder.diameter = 14.2;
-	scene->objects[2].cylinder.height = 21.42;
-	scene->objects[2].cylinder.color = (t_rt_color){10, 0, 255, 255};
+	len = ft_strlen(file);
+	if (len < 4)
+		return (err_msg(INVALID_FILE, "check_file", file));
+	if (ft_strncmp(&(file[len - 3]), ".rt", 4) != 0)
+		return (err_msg(INVALID_EXT, "check_file", file));
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return(err_msg(OPEN_F, "check_file", file));
+	close(fd);
+	return (NO_ERR);
 }
 
-int main( void )
+t_err	count_ambient(t_rt_scene *scene, char *line)
+{
+	if (scene->ambient_light.set == true)
+		return (err_msg(AMBIENT_SET, "count_ambient", line));
+	scene->ambient_light.set = true;
+	return (NO_ERR);
+}
+
+t_err	count_camera(int *camera_amount)
+{
+	*camera_amount = *camera_amount + 1;
+	return (NO_ERR);
+}
+
+t_err	count_light(int *light_amount)
+{
+	*light_amount = *light_amount + 1;
+	return (NO_ERR);
+}
+t_err	count_object(int *object_amount)
+{
+	*object_amount = *object_amount + 1;
+	return (NO_ERR);
+}
+
+t_err	count_in_line(char *line, t_rt_scene *scene)
+{
+	printf("parsing line: %s$\n", line);
+	line = ft_skipspace(line);
+	if (ft_strlen(line) == 0)
+		return (NO_ERR);
+	else if (ft_strncmp(line, "A ", 2) == 0)
+		return(count_ambient(scene, line));
+	else if (ft_strncmp(line, "C ", 2) == 0)
+		scene->camera_amount++;
+	else if (ft_strncmp(line, "L ", 2) == 0)
+		scene->light_amount++;
+	else if (ft_strncmp(line, "sp ", 3) == 0 || \
+			ft_strncmp(line, "pl ", 3) == 0 || \
+			ft_strncmp(line, "cy ", 3) == 0)
+			scene->object_amount++;
+	else
+		return (err_msg(INVALID_OBJ, "count_in_line", line));
+	return (NO_ERR);
+}
+
+t_err	count_scene(char *file, t_rt_scene *scene)
+{
+	t_err	err;
+	int		fd;
+	char	*line;
+
+	err = check_file(file);
+	if (err != NO_ERR)
+		return (err);
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return (err_msg(OPEN_F, "count_objs_lights", file));
+	while (1)
+	{
+		line = ft_gnl(fd);
+		if (!line)
+			break ;
+		if (count_in_line(line, scene) != NO_ERR)
+			return (INVALID_OBJ);
+		free(line);
+	}
+	close(fd);
+
+	return (NO_ERR);
+}
+
+t_err	parse_scene(char *file, t_rt_scene *scene)
+{
+	// Check(partial) validity and count Objects, count Lights
+	return (count_scene(file, scene));
+	// Alloc arrays
+	// fill scene(check parameter validity)
+	return (NO_ERR);
+}
+
+int main(int argc, char **argv)
 {
 	t_rt_scene	scene;
 
 	init_rt(&scene);
+	if (argc == 2)
+	{
+		if (parse_scene(argv[1], &scene) != NO_ERR)
+			return (1);
+	}
+	else
+	{
+		scene.g_mockup = true;
+		scene.light_amount = 1;
+		scene.object_amount = 3;
+	}
 	allocate_objects(&scene.objects, scene.object_amount);
 	allocate_spot_lights(&scene.spot_lights, scene.light_amount);
-	init_mock_rt(&scene);
+	if (scene.g_mockup)
+		init_mock_rt(&scene);
+
 	print_scene(scene);
+
+	printf("amount of camera's: %d\namount of lights: %d\namount of objects: %d\n", scene.camera_amount, scene.light_amount, scene.object_amount);
 
 	return 0;
 }
