@@ -30,12 +30,12 @@ t_err	check_file(char *file)
 
 	len = ft_strlen(file);
 	if (len < 4)
-		return (err_msg(INVALID_FILE, "check_file", file));
+		return (err_msg(INVALID_FILE, __FILE__, __LINE__, file));
 	if (ft_strncmp(&(file[len - 3]), ".rt", 4) != 0)
-		return (err_msg(INVALID_EXT, "check_file", file));
+		return (err_msg(INVALID_EXT, __FILE__, __LINE__, file));
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		return(err_msg(OPEN_F, "check_file", file));
+		return(err_msg(OPEN_F, __FILE__, __LINE__, file));
 	close(fd);
 	return (NO_ERR);
 }
@@ -43,7 +43,7 @@ t_err	check_file(char *file)
 t_err	count_ambient(t_rt_scene *scene, char *line)
 {
 	if (scene->ambient_light.set == true)
-		return (err_msg(AMBIENT_SET, "count_ambient", line));
+		return (err_msg(AMBIENT_SET, __FILE__, __LINE__, line));
 	scene->ambient_light.set = true;
 	return (NO_ERR);
 }
@@ -65,7 +65,7 @@ t_err	count_in_line(char *line, t_rt_scene *scene)
 			ft_strncmp(line, "cy ", 3) == 0)
 			scene->object_amount++;
 	else
-		return (err_msg(INVALID_OBJ, "count_in_line", line));
+		return (err_msg(INVALID_OBJ, __FILE__, __LINE__, line));
 	return (NO_ERR);
 }
 
@@ -77,7 +77,7 @@ t_err	count_scene(char *file, t_rt_scene *scene)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		return (err_msg(OPEN_F, "count_objs_lights", file));
+		return (err_msg(OPEN_F, __FILE__, __LINE__, file));
 	while (1)
 	{
 		line = ft_gnl(fd);

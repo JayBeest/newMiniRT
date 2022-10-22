@@ -7,7 +7,7 @@ t_err	allocate_objects(t_rt_obj_union **objects, int amount)
 {
 	*objects = ft_calloc(amount, sizeof(t_rt_obj_union));
 	if (!*objects)
-		return (err_msg(MALLOC_F, "allocate_objects", NULL));
+		return (err_msg(MALLOC_F, __FILE__, __LINE__, NULL));
 	return (NO_ERR);
 }
 
@@ -15,7 +15,7 @@ t_err	allocate_spot_lights(t_rt_spot_light **spot_lights, int amount)
 {
 	*spot_lights = ft_calloc(amount, sizeof(t_rt_spot_light));
 	if (!*spot_lights)
-		return (err_msg(MALLOC_F, "allocate_spot_lights", NULL));
+		return (err_msg(MALLOC_F, __FILE__, __LINE__, NULL));
 	return (NO_ERR);
 }
 
@@ -23,7 +23,7 @@ t_err	allocate_cameras(t_rt_camera **cameras, int amount)
 {
 	*cameras = ft_calloc(amount, sizeof(t_rt_camera));
 	if (!*cameras)
-		return (err_msg(MALLOC_F, "allocate_cameras", NULL));
+		return (err_msg(MALLOC_F, __FILE__, __LINE__, NULL));
 	return (NO_ERR);
 }
 

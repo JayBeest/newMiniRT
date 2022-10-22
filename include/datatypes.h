@@ -20,7 +20,7 @@ typedef enum e_err
 	INVALID_OBJ,
 	AMBIENT_SET,
 	PIXEL_OOB,
-	DEFAULT_ERR
+	ERR_COUNTER
 }		t_err;
 
 typedef enum e_rt_obj_type
