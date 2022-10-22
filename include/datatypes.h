@@ -1,5 +1,5 @@
-#ifndef RT_DATATYPES_H
-# define RT_DATATYPES_H
+#ifndef RT_DATA_TYPES_H
+# define RT_DATA_TYPES_H
 
 # include "stdbool.h"
 

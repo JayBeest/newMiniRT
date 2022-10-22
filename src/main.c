@@ -48,23 +48,6 @@ t_err	count_ambient(t_rt_scene *scene, char *line)
 	return (NO_ERR);
 }
 
-t_err	count_camera(int *camera_amount)
-{
-	*camera_amount = *camera_amount + 1;
-	return (NO_ERR);
-}
-
-t_err	count_light(int *light_amount)
-{
-	*light_amount = *light_amount + 1;
-	return (NO_ERR);
-}
-t_err	count_object(int *object_amount)
-{
-	*object_amount = *object_amount + 1;
-	return (NO_ERR);
-}
-
 t_err	count_in_line(char *line, t_rt_scene *scene)
 {
 	printf("parsing line: %s$\n", line);
