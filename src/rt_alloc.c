@@ -1,7 +1,8 @@
 #include <stdlib.h>
-#include <alloc.h>
 #include <libft.h>
-#include <error.h>
+#include <rt_datatypes.h>
+#include <rt_alloc.h>
+#include <rt_error.h>
 
 t_err	allocate_objects(t_rt_obj_union **objects, int amount)
 {

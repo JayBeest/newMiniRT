@@ -1,5 +1,5 @@
-#include <datatypes.h>
 #include <stdio.h>
+#include <rt_datatypes.h>
 
 t_err	err_msg(t_err err, char *file, int line, char *str)
 {

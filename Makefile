@@ -9,15 +9,20 @@ HEADER_DIR	=	include/
 BIN			=	$(BIN_DIR)$(NAME)
 
 SRC			=	main.c \
-				init.c \
-				alloc.c \
-				scene_printer.c \
-				error.c \
+				rt_init.c \
+				rt_check_infile.c \
+				rt_alloc.c \
+				rt_parser.c \
+				rt_scene_printer.c \
+				rt_error.c \
 
-HEADERS		=	datatypes.h \
-				init.h \
-				alloc.h \
-				error.h \
+HEADERS		=	rt_datatypes.h \
+				rt_init.h \
+				rt_check_infile.h \
+				rt_alloc.h \
+				rt_parser.h \
+				rt_scene_printer.h \
+				rt_error.h \
 
 OBJ 		=	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 

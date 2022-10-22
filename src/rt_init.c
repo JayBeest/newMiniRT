@@ -1,5 +1,5 @@
 #include <libft.h>
-#include <datatypes.h>
+#include <rt_datatypes.h>
 
 void	init_rt(t_rt_scene *scene)
 {

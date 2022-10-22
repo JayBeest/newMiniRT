@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <datatypes.h>
+#include <rt_datatypes.h>
 
 void	print_color(t_rt_color color)
 {
