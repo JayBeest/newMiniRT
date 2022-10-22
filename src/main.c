@@ -71,13 +71,10 @@ t_err	count_in_line(char *line, t_rt_scene *scene)
 
 t_err	count_scene(char *file, t_rt_scene *scene)
 {
-	t_err	err;
 	int		fd;
 	char	*line;
 
-	err = check_file(file);
-	if (err != NO_ERR)
-		return (err);
+
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (err_msg(OPEN_F, "count_objs_lights", file));
@@ -95,7 +92,7 @@ t_err	count_scene(char *file, t_rt_scene *scene)
 	return (NO_ERR);
 }
 
-t_err	init_scene(char *file, t_rt_scene *scene)
+t_err	parse_file_and_alloc_scene(char *file, t_rt_scene *scene)
 {
 	t_err	err;
 
@@ -121,15 +118,16 @@ int main(int argc, char **argv)
 	init_rt(&scene);
 	if (argc == 2)
 	{
-		if (init_scene(argv[1], &scene) != NO_ERR)
+		if (check_file(argv[1]) != NO_ERR)
+			return (1);
+		if (parse_file_and_alloc_scene(argv[1], &scene) != NO_ERR)
 			return (1);
 	}
 	else
 	{
 		scene.light_amount = 1;
 		scene.object_amount = 3;
-		allocate_objects(&scene.objects, scene.object_amount);
-		allocate_spot_lights(&scene.spot_lights, scene.light_amount);
+		allocate_scene(&scene);
 		init_mock_rt(&scene);
 	}
 
