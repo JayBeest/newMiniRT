@@ -121,8 +121,6 @@ typedef struct s_rt_scene
 	int					object_amount;
 	int					light_amount;
 	int					camera_amount;
-
-	bool				g_mockup;
 }				t_rt_scene;
 
 #endif

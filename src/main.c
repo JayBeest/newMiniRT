@@ -91,16 +91,26 @@ t_err	count_scene(char *file, t_rt_scene *scene)
 		free(line);
 	}
 	close(fd);
-
+	//  scene complete? all objects++ accounted for?
 	return (NO_ERR);
 }
 
-t_err	parse_scene(char *file, t_rt_scene *scene)
+t_err	init_scene(char *file, t_rt_scene *scene)
 {
+	t_err	err;
+
 	// Check(partial) validity and count Objects, count Lights
-	return (count_scene(file, scene));
+	err = count_scene(file, scene);
+	if (err != NO_ERR)
+		return (err);
 	// Alloc arrays
+	err = allocate_scene(scene);
+	if (err != NO_ERR)
+		return (err);
 	// fill scene(check parameter validity)
+//	err = parse_file(file, scene);
+//	if (err != NO_ERR)
+//		return (err);
 	return (NO_ERR);
 }
 
@@ -111,19 +121,17 @@ int main(int argc, char **argv)
 	init_rt(&scene);
 	if (argc == 2)
 	{
-		if (parse_scene(argv[1], &scene) != NO_ERR)
+		if (init_scene(argv[1], &scene) != NO_ERR)
 			return (1);
 	}
 	else
 	{
-		scene.g_mockup = true;
 		scene.light_amount = 1;
 		scene.object_amount = 3;
-	}
-	allocate_objects(&scene.objects, scene.object_amount);
-	allocate_spot_lights(&scene.spot_lights, scene.light_amount);
-	if (scene.g_mockup)
+		allocate_objects(&scene.objects, scene.object_amount);
+		allocate_spot_lights(&scene.spot_lights, scene.light_amount);
 		init_mock_rt(&scene);
+	}
 
 	print_scene(scene);
 

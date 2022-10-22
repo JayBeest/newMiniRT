@@ -5,5 +5,6 @@
 
 t_err	allocate_objects(t_rt_obj_union **objects, int amount);
 t_err	allocate_spot_lights(t_rt_spot_light **spot_lights, int amount);
+t_err	allocate_scene(t_rt_scene *scene);
 
 #endif
