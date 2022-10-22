@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
 	print_scene(scene);
 
-	printf("amount of camera's: %d\namount of lights: %d\namount of objects: %d\n", scene.camera_amount, scene.light_amount, scene.object_amount);
+	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", scene.camera_amount, scene.light_amount, scene.object_amount);
 
 	return 0;
 }
