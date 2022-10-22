@@ -33,9 +33,7 @@ t_err	allocate_scene(t_rt_scene *scene)
 	if (allocate_objects(&scene->objects, scene->object_amount) != NO_ERR)
 		return (MALLOC_F);
 	if (allocate_spot_lights(&scene->spot_lights, scene->light_amount) != NO_ERR)
-	{
 		return (MALLOC_F);
-	}
 	if (allocate_cameras(&scene->cameras, scene->camera_amount) != NO_ERR)
 		return (MALLOC_F);
 	return (NO_ERR);

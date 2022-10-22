@@ -1,7 +1,8 @@
 #ifndef RT_DATA_TYPES_H
 # define RT_DATA_TYPES_H
 
-# include "stdbool.h"
+# include <stdbool.h>
+# include <MLX42.h>
 
 # define RESOLUTION_X 768
 # define RESOLUTION_Y 768
@@ -40,8 +41,8 @@ typedef struct s_rt_color
 
 typedef struct s_rt_resolution
 {
-	unsigned int		x;
-	unsigned int		y;
+	int					x;
+	int					y;
 }			t_rt_resolution;
 
 typedef struct s_rt_vector
@@ -123,5 +124,32 @@ typedef struct s_rt_scene
 	int					light_amount;
 	int					camera_amount;
 }				t_rt_scene;
+
+typedef struct s_rt_mlx
+{
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+	mlx_image_t *text;
+}		t_rt_mlx;
+
+typedef struct s_minirt
+{
+	t_rt_mlx	mlx;
+	t_rt_scene	scene;
+}		t_mini_rt;
+
+typedef struct s_mult_pixel
+{
+	int	min_x;
+	int	max_x;
+	int	min_y;
+	int	max_y;
+}		t_mult_pixel;
+
+typedef struct s_multipt
+{
+	t_mini_rt	*rt;
+	int 		id;
+}		t_pthr_arg;
 
 #endif

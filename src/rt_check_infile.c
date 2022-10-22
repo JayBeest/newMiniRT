@@ -54,6 +54,7 @@ t_err	count_scene(char *file, t_rt_scene *scene)
 		free(line);
 	}
 	close(fd);
+	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", scene->camera_amount, scene->light_amount, scene->object_amount);
 	//  scene complete? all objects++ accounted for?
 	return (NO_ERR);
 }

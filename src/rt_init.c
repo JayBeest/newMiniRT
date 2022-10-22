@@ -1,12 +1,26 @@
 #include <libft.h>
 #include <rt_datatypes.h>
 
-void	init_rt(t_rt_scene *scene)
+t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 {
-	ft_bzero(scene, sizeof(t_rt_scene));
+	mlx->mlx = mlx_init(resolution.x, resolution.y, "miniRT", true);
+	if (!mlx->mlx)
+		return (MLX_INIT_F);
+	mlx->img = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
+	if (!mlx->img)
+		return (MLX_NEW_IMG_F);
+	mlx->text = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
+	if (!mlx->text)
+		return (MLX_NEW_IMG_F);
+	return (NO_ERR);
+}
 
-	scene->resolution.x = RESOLUTION_X;
-	scene->resolution.y = RESOLUTION_Y;
+t_err	init_rt(t_mini_rt *mini_rt)
+{
+	ft_bzero(mini_rt, sizeof(t_mini_rt));
+	mini_rt->scene.resolution.x = RESOLUTION_X;
+	mini_rt->scene.resolution.y = RESOLUTION_Y;
+	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.resolution));
 }
 
 void	init_mock_rt(t_rt_scene *scene)
