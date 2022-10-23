@@ -66,7 +66,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 			color.r = (int)(255.999 * r);
 			color.g = 255 - (int)(255.999 * g);
 			color.b = (int)(255.999 * b);
-			rt_put_pixel(pixel, color_to_int(color), scene, mlx);
+			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y--;
