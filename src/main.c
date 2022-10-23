@@ -30,12 +30,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 //	t_rt_resolution	ratio;
 	t_rt_color		color;
 
-	if (mlx->text)
-	{
-		mlx_delete_image(mlx->mlx, mlx->text);
-		mlx->text = NULL;
-	}
-	pixel.y = scene->resolution.y - 1;
+	pixel.y = scene->size.height - 1;
 	color.a = 255;
 //	ratio.x = scene->resolution.x / 256;
 //	ratio.y = scene->resolution.y / 256;
@@ -45,10 +40,10 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	while (pixel.y >= 0)
 	{
 		pixel.x = 0;
-		while (pixel.x < scene->resolution.x)
+		while (pixel.x < scene->size.width)
 		{
-			r = (float)pixel.x / ((float)scene->resolution.x - 1);
-			g = (float)pixel.y / ((float)scene->resolution.y - 1);
+			r = (float)pixel.x / ((float)scene->size.width - 1);
+			g = (float)pixel.y / ((float)scene->size.height - 1);
 			b = scene->blue;
 			color.r = (int)(255.999 * r);
 			color.g = 255 - (int)(255.999 * g);
@@ -59,6 +54,11 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.y--;
 	}
 	char *temp = ft_itoa(color.b);
+	if (mlx->text)
+	{
+		mlx_delete_image(mlx->mlx, mlx->text);
+//		mlx->text = NULL;
+	}
 	mlx->text = mlx_put_string(mlx->mlx, temp, 50, 50);
 	free(temp);
 	usleep(16666);

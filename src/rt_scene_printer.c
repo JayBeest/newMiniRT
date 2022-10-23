@@ -6,7 +6,7 @@ void	print_color(t_rt_color color)
 	printf("color(rgba): %d %d %d %d\n", color.r, color.g, color.b, color.a);
 }
 
-void	print_coordinates(t_rt_vector coordinates)
+void	print_coordinates(t_rt_point coordinates)
 {
 	printf("coordinates: %f(x) %f(y) %f(z)\n", coordinates.x, coordinates.y, coordinates.z);
 }
@@ -100,7 +100,7 @@ void	print_objects(t_rt_obj_union *objects, int amount)
 void	print_scene(t_rt_scene scene)
 {
 	printf("		*** MiniRT Scene ***\n");
-	printf("resolution: %dx%d\n", scene.resolution.x, scene.resolution.y);
+	printf("resolution: %dx%d\n", scene.size.width, scene.size.height);
 	print_ambient_light(scene.ambient_light);
 	print_camera(scene.cameras, scene.camera_amount);
 	print_spotlights(scene.spot_lights, scene.light_amount);

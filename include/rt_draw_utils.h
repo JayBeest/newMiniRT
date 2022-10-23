@@ -14,6 +14,6 @@
 # define RT_DRAW_UTILS_H
 
 int		color_to_int(t_rt_color color);
-t_err	rt_put_pixel(t_rt_resolution pixel, int color, t_rt_scene *scene, t_rt_mlx *mlx);
+t_err	rt_put_pixel(t_rt_scene_size pixel, int color, t_rt_scene *scene, t_rt_mlx *mlx);
 
 #endif

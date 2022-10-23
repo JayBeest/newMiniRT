@@ -22,7 +22,7 @@ int	color_to_int(t_rt_color color)
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
-t_err	rt_put_pixel(t_rt_resolution pixel, int color, t_rt_scene *scene, t_rt_mlx *mlx)
+t_err	rt_put_pixel(t_rt_scene_size pixel, int color, t_rt_scene *scene, t_rt_mlx *mlx)
 {
 //	int	canvas_x;
 //	int	canvas_y;
@@ -33,6 +33,6 @@ t_err	rt_put_pixel(t_rt_resolution pixel, int color, t_rt_scene *scene, t_rt_mlx
 //		|| canvas_y >= scene->resolution.y)
 //		return (err_msg(PIXEL_OOB, ft_itoa(pixel.x), pixel.y, NULL));
 	(void)scene;
-	mlx_put_pixel(mlx->img, pixel.x, pixel.y, color);
+	mlx_put_pixel(mlx->img, pixel.width, pixel.height, color);
 	return (NO_ERR);
 }
