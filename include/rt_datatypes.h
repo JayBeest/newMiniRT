@@ -5,7 +5,7 @@
 # include <MLX42.h>
 # include <rt_alias.h>
 
-# define IMAGE_WIDTH 400
+# define IMAGE_WIDTH 512
 
 typedef enum e_err
 {

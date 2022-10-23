@@ -9,6 +9,7 @@
 #include <rt_vector_utils.h>
 #include <rt_draw_utils.h>
 #include <rt_alloc.h>
+#include <rt_time.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -27,13 +28,13 @@ int	free_scene(t_rt_scene scene, int return_value)
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
-//	t_rt_resolution	ratio;
 	t_rt_color		color;
+	t_time_stamp	start_of_frame;
+	t_msecs			time_spend;
 
+	start_of_frame = set_time();
 	pixel.y = scene->size.height - 1;
 	color.a = 255;
-//	ratio.x = scene->resolution.x / 256;
-//	ratio.y = scene->resolution.y / 256;
 	float	r;
 	float	g;
 	float	b;
@@ -61,7 +62,9 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	mlx->text = mlx_put_string(mlx->mlx, temp, 50, 50);
 	free(temp);
-	usleep(16666);
+	time_spend = ms_passed(start_of_frame);
+	printf("frame took %lu milliseconds - (%.1f fps)\n", time_spend, 1000.0f / (float)time_spend);
+	custom_sleep(16 - time_spend);
 	return (NO_ERR);
 }
 

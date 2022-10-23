@@ -16,6 +16,7 @@ SRC			=	main.c \
 				rt_scene_printer.c \
 				rt_vector_utils.c \
 				rt_draw_utils.c \
+				rt_time.c \
 				rt_error.c \
 
 HEADERS		=	rt_datatypes.h \
@@ -26,6 +27,7 @@ HEADERS		=	rt_datatypes.h \
 				rt_scene_printer.h \
 				rt_vector_utils.h \
 				rt_draw_utils.h \
+				rt_time.h \
 				rt_error.h \
 
 OBJ 		=	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
