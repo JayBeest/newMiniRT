@@ -4,8 +4,8 @@
 # include <stdbool.h>
 # include <MLX42.h>
 
-# define RESOLUTION_X 768
-# define RESOLUTION_Y 768
+# define RESOLUTION_X 512
+# define RESOLUTION_Y 512
 
 typedef enum e_err
 {

@@ -7,6 +7,7 @@
 #include <rt_parser.h>
 #include <rt_scene_printer.h>
 #include <rt_vector_utils.h>
+#include <rt_draw_utils.h>
 #include <rt_alloc.h>
 
 #include <stdio.h>
@@ -44,17 +45,31 @@ void	hook(void *arg)
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
+//	t_rt_resolution	ratio;
+	t_rt_color		color;
 
-	pixel.y = 0;
-	while (pixel.y < scene->resolution.y)
+	pixel.y = scene->resolution.y - 1;
+	color.a = 255;
+//	ratio.x = scene->resolution.x / 256;
+//	ratio.y = scene->resolution.y / 256;
+	float	r;
+	float	g;
+	float	b;
+	while (pixel.y >= 0)
 	{
 		pixel.x = 0;
 		while (pixel.x < scene->resolution.x)
 		{
-			(void)mlx;// TODO fix rt_putpixel
+			r = (float)pixel.x / ((float)scene->resolution.x - 1);
+			g = (float)pixel.y / ((float)scene->resolution.y - 1);
+			b = 0.25f;
+			color.r = (int)(255.999 * r);
+			color.g = 255 - (int)(255.999 * g);
+			color.b = (int)(255.999 * b);
+			rt_put_pixel(pixel, color_to_int(color), scene, mlx);
 			pixel.x++;
 		}
-		pixel.y++;
+		pixel.y--;
 	}
 	return (NO_ERR);
 }
@@ -84,7 +99,7 @@ int main(int argc, char **argv)
 	print_scene(mini_rt.scene);
 
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
-
+	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
