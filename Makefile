@@ -36,12 +36,11 @@ INCL_DIRS	=	include/ MLX42/include/MLX42/
 INCLUDES	=	-Ilibft $(addprefix -I, $(INCL_DIRS))
 
 UNAME_P		=	$(shell uname -p)
+UNAME_P		=	$(shell uname -p)
 
-ifeq ($(UNAME_P), i386)
-	LIB		=	-Llibft -lft -L/Users/$(USER)/.brew/opt/glfw/lib/ -lglfw -LMLX42 -lmlx42
-else
-	LIB		=	-Llibft -lft -L/opt/homebrew/opt/glfw/lib/ -lglfw -LMLX42 -lmlx42
-endif
+LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
+
+
 
 CFLAGS		=	-Wall -Werror -Wextra -pedantic -fsanitize=address -g # -std=c89 -g
 CC			=	gcc
@@ -68,12 +67,12 @@ $(BIN): $(OBJ)
 	$(VECHO)
 	$(VECHO) "\033[36mLinking binary file:     \033[0m$@ 🚨"
 	$(VECHO)
-	$(Q)$(CC) $^ $(LIB) $(CFLAGS) -o $@
+	$(Q)$(CC) $^ $(CFLAGS) -o $@ $(LIB)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(addprefix $(HEADER_DIR), $(HEADERS))
 	$(Q)mkdir -p $(@D)
 	$(VECHO) "\033[34mCompiling object file:   \033[0m$@"
-	$(Q)$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
+	$(Q)$(CC) -c $< $(CFLAGS) -o $@ $(INCLUDES)
 
 clean:
 	$(VECHO) "\033[31mRemoving object files\033[0m"
