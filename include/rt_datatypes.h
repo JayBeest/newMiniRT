@@ -123,6 +123,8 @@ typedef struct s_rt_scene
 	int					object_amount;
 	int					light_amount;
 	int					camera_amount;
+
+	float				blue;
 }				t_rt_scene;
 
 typedef struct s_rt_mlx

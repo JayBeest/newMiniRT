@@ -11,6 +11,7 @@
 #include <rt_alloc.h>
 
 #include <stdio.h>
+#include <unistd.h>
 
 int	free_scene(t_rt_scene scene, int return_value)
 {
@@ -23,31 +24,17 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
-void	hook(void *arg)
-{
-	t_mini_rt	*mini_rt;
-	t_rt_mlx	*mlx;
-
-	mini_rt = arg;
-	mlx = &mini_rt->mlx;
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx->mlx);
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
-		mlx->img->instances[0].y -= 5;
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DOWN))
-		mlx->img->instances[0].y += 5;
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
-		mlx->img->instances[0].x -= 5;
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
-		mlx->img->instances[0].x += 5;
-}
-
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
 //	t_rt_resolution	ratio;
 	t_rt_color		color;
 
+	if (mlx->text)
+	{
+		mlx_delete_image(mlx->mlx, mlx->text);
+		mlx->text = NULL;
+	}
 	pixel.y = scene->resolution.y - 1;
 	color.a = 255;
 //	ratio.x = scene->resolution.x / 256;
@@ -62,7 +49,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			r = (float)pixel.x / ((float)scene->resolution.x - 1);
 			g = (float)pixel.y / ((float)scene->resolution.y - 1);
-			b = 0.25f;
+			b = scene->blue;
 			color.r = (int)(255.999 * r);
 			color.g = 255 - (int)(255.999 * g);
 			color.b = (int)(255.999 * b);
@@ -71,7 +58,37 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		}
 		pixel.y--;
 	}
+	char *temp = ft_itoba(color.b);
+	mlx->text = mlx_put_string(mlx->mlx, temp, 50, 50);
+	free(temp);
+	usleep(16666);
 	return (NO_ERR);
+}
+
+void	hook(void *arg)
+{
+	t_mini_rt	*mini_rt;
+	t_rt_mlx	*mlx;
+
+	mini_rt = arg;
+	mlx = &mini_rt->mlx;
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(mlx->mlx);
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
+	{
+		if (mini_rt->scene.blue < 0.995f)
+			mini_rt->scene.blue += 0.005f;
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DOWN))
+	{
+		if (mini_rt->scene.blue > 0.005f)
+			mini_rt->scene.blue -= 0.005f;
+	}
+//	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
+//		mlx->img->instances[0].x -= 5;
+//	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
+//		mlx->img->instances[0].x += 5;
+	render_scene(&mini_rt->mlx, &mini_rt->scene);
 }
 
 int main(int argc, char **argv)
@@ -101,6 +118,7 @@ int main(int argc, char **argv)
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
+//	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.text, 0, 0);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
 	mlx_terminate(mini_rt.mlx.mlx);

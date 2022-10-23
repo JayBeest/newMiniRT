@@ -20,6 +20,8 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	ft_bzero(mini_rt, sizeof(t_mini_rt));
 	mini_rt->scene.resolution.x = RESOLUTION_X;
 	mini_rt->scene.resolution.y = RESOLUTION_Y;
+	mini_rt->scene.blue = 0.25f;
+
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.resolution));
 }
 
