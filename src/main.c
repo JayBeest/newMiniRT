@@ -128,7 +128,9 @@ int main(int argc, char **argv)
 	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control the blue (up/down)", 20, 20);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.text);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.fps);
 	mlx_terminate(mini_rt.mlx.mlx);
-
-	return 0;
+	return free_scene(mini_rt.scene, 0);
 }
