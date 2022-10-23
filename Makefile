@@ -35,12 +35,20 @@ OBJ 		=	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 INCL_DIRS	=	include/ MLX42/include/MLX42/
 INCLUDES	=	-Ilibft $(addprefix -I, $(INCL_DIRS))
 
+UNAME		=	$(shell uname)
 UNAME_P		=	$(shell uname -p)
-UNAME_P		=	$(shell uname -p)
 
-LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
+ifeq ($(UNAME), Linux)
+	LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
+endif
 
+ifeq ($(UNAME_P), i386)
+	LIB		=	-Llibft -lft -L/Users/$(USER)/.brew/opt/glfw/lib/ -lglfw -LMLX42 -lmlx42
+endif
 
+ifeq ($(UNAME_P), Darwin)
+	LIB		=	-Llibft -lft -L/opt/homebrew/opt/glfw/lib/ -lglfw -LMLX42 -lmlx42
+endif
 
 CFLAGS		=	-Wall -Werror -Wextra -pedantic -fsanitize=address -g # -std=c89 -g
 CC			=	gcc
