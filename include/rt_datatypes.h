@@ -148,6 +148,7 @@ typedef struct s_rt_mlx
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	mlx_image_t *text;
+	mlx_image_t *fps;
 }		t_rt_mlx;
 
 typedef struct s_minirt
