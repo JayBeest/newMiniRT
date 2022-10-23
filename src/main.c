@@ -58,7 +58,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		}
 		pixel.y--;
 	}
-	char *temp = ft_itoba(color.b);
+	char *temp = ft_itoa(color.b);
 	mlx->text = mlx_put_string(mlx->mlx, temp, 50, 50);
 	free(temp);
 	usleep(16666);
