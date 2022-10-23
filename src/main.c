@@ -77,18 +77,23 @@ void	hook(void *arg)
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
 	{
 		if (mini_rt->scene.blue < 0.995f)
+		{
 			mini_rt->scene.blue += 0.005f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DOWN))
 	{
 		if (mini_rt->scene.blue > 0.005f)
+		{
 			mini_rt->scene.blue -= 0.005f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
 	}
 //	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
 //		mlx->img->instances[0].x -= 5;
 //	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
 //		mlx->img->instances[0].x += 5;
-	render_scene(&mini_rt->mlx, &mini_rt->scene);
 }
 
 int main(int argc, char **argv)
@@ -118,7 +123,7 @@ int main(int argc, char **argv)
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
-//	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.text, 0, 0);
+	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control the blue (up/down)", 20, 20);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
 	mlx_terminate(mini_rt.mlx.mlx);
