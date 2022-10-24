@@ -23,6 +23,11 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.size.width = IMAGE_WIDTH;
 	mini_rt->scene.size.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
 
+	mini_rt_->viewport.coordinates.x = 2.0;
+	mini_rt_->viewport.coordinates.y = viewport.coordinates.x / mini_rt->scene.aspect_ratio;
+	float radians = fov * M_PI / 180;
+	mini_rt_->viewport.coordinates.focal_lenght = viewport.coordinates.x / 2 / tan(radians / 2);
+
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.size));
 }
 

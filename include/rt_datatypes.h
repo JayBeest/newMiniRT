@@ -121,9 +121,11 @@ typedef struct s_rt_camera
 
 typedef struct s_rt_viewport
 {
+	float				width;
+	float				height;
+	float				focal_length;
 	t_rt_point			coordinates;
 	t_rt_vector			orientation;
-	float				focal_length;
 }				t_rt_viewport;
 
 typedef struct s_rt_scene

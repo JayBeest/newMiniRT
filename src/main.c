@@ -25,6 +25,23 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
+t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
+{
+	float		r;
+	float		g;
+	float		b;
+	t_rt_color	color;
+
+	r = (float)pixel.x / ((float)scene->size.width - 1);
+	g = (float)pixel.y / ((float)scene->size.height - 1);
+	b = scene->blue;
+	color.a = 255;
+	color.r = (int)(255.999 * r);
+	color.g = 255 - (int)(255.999 * g);
+	color.b = (int)(255.999 * b);
+	return (color);
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
@@ -33,26 +50,17 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_msecs			time_spend;
 
 	start_of_frame = set_time();
-	pixel.y = scene->size.height - 1;
-	color.a = 255;
-	float	r;
-	float	g;
-	float	b;
-	while (pixel.y >= 0)
+	pixel.y = 0;
+	while (pixel.y < scene->size.height)
 	{
 		pixel.x = 0;
 		while (pixel.x < scene->size.width)
 		{
-			r = (float)pixel.x / ((float)scene->size.width - 1);
-			g = (float)pixel.y / ((float)scene->size.height - 1);
-			b = scene->blue;
-			color.r = (int)(255.999 * r);
-			color.g = 255 - (int)(255.999 * g);
-			color.b = (int)(255.999 * b);
+			color = all_the_colors(pixel, scene);
 			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 			pixel.x++;
 		}
-		pixel.y--;
+		pixel.y++;
 	}
 	char	blue[32];
 	char	fps[64];
@@ -92,10 +100,6 @@ void	hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
-//	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
-//		mlx->img->instances[0].x -= 5;
-//	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
-//		mlx->img->instances[0].x += 5;
 }
 
 int main(int argc, char **argv)
