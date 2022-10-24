@@ -58,6 +58,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		while (pixel.x < scene->size.width)
 		{
 			color = all_the_colors(pixel, scene);
+//			color = trace_ray();
 			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 			pixel.x++;
 		}
