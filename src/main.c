@@ -105,14 +105,15 @@ void	hook(void *arg)
 
 void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
 {
-	float radians;
+	float	radians;
+	float	diagonal;
 
 	radians = (float)camera->fov * (float)M_PI / 180;
 	viewport->width = 2.0f;
 	viewport->height = viewport->width / aspect_ratio;
-	viewport->diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
-	viewport->focal_length = viewport->diagonal / 2 / tanf(radians / 2);
-	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, viewport->diagonal,  camera->fov, viewport->focal_length);
+	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
 }
 
 int main(int argc, char **argv)
