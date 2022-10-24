@@ -109,8 +109,8 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_rat
 	float	diagonal;
 
 	radians = (float)camera->fov * (float)M_PI / 180;
-	viewport->width = 2.0f;
-	viewport->height = viewport->width / aspect_ratio;
+	viewport->height = 2.0f;
+	viewport->width = viewport->height / aspect_ratio;
 	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);

@@ -23,7 +23,6 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.aspect_ratio = 16.0f / 9.0f;
 	mini_rt->scene.size.width = IMAGE_WIDTH;
 	mini_rt->scene.size.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
-
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.size));
 }
 
