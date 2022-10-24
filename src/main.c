@@ -54,15 +54,15 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		}
 		pixel.y--;
 	}
-	char	*temp = ft_itoa(color.b);
+	char	blue[32];
 	char	fps[64];
 	time_spend = ms_passed(start_of_frame);
-	sprintf(fps, "frame took %lu ms - (%.1f fps)\n", time_spend, 1000.0f / (float)time_spend);
-	mlx_delete_image(mlx->mlx, mlx->text);
 	mlx_delete_image(mlx->mlx, mlx->fps);
-	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->size.width - 300, scene->size.height - 50);
-	mlx->text = mlx_put_string(mlx->mlx, temp, 50, 50);
-	free(temp);
+	mlx_delete_image(mlx->mlx, mlx->text);
+	sprintf(blue, "blue: %d\n", color.b);
+	sprintf(fps, "frame took %lu ms - (%.1f fps)\n", time_spend, 1000.0f / (float)time_spend);
+	mlx->text = mlx_put_string(mlx->mlx, blue, 20, 20);
+	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->size.width - 325, scene->size.height - 50);
 	custom_sleep(16 - time_spend);
 	return (NO_ERR);
 }
