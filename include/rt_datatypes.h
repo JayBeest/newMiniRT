@@ -123,6 +123,7 @@ typedef struct s_rt_viewport
 {
 	float				width;
 	float				height;
+	float				diagonal;
 	float				focal_length;
 	t_rt_point			coordinates;
 	t_rt_vector			orientation;

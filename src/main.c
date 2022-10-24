@@ -1,3 +1,4 @@
+#include <math.h>
 #include <MLX42.h>
 #include <stdlib.h>
 #include <rt_datatypes.h>
@@ -102,6 +103,18 @@ void	hook(void *arg)
 	}
 }
 
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
+{
+	float radians;
+
+	radians = (float)camera->fov * (float)M_PI / 180;
+	viewport->width = 2.0f;
+	viewport->height = viewport->width / aspect_ratio;
+	viewport->diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = viewport->diagonal / 2 / tanf(radians / 2);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, viewport->diagonal,  camera->fov, viewport->focal_length);
+}
+
 int main(int argc, char **argv)
 {
 	t_mini_rt	mini_rt;
@@ -125,8 +138,10 @@ int main(int argc, char **argv)
 	}
 
 	print_scene(mini_rt.scene);
-
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
+
+	set_viewport(&mini_rt.scene.viewport, &mini_rt.scene.cameras[0], mini_rt.scene.aspect_ratio);
+
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
 	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control the blue (up/down)", 20, 20);
