@@ -2,7 +2,7 @@
 #include <libft.h>
 #include <rt_datatypes.h>
 
-t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_scene_size resolution)
+t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_canvas_size resolution)
 {
 	mlx->mlx = mlx_init(resolution.width, resolution.height, "miniRT", true);
 	if (!mlx->mlx)
@@ -19,16 +19,18 @@ t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_scene_size resolution)
 t_err	init_rt(t_mini_rt *mini_rt)
 {
 	ft_bzero(mini_rt, sizeof(t_mini_rt));
-	mini_rt->scene.blue = 0.25f;
+	mini_rt->scene.red = 0.5f;
+	mini_rt->scene.green = 0.7f;
+	mini_rt->scene.blue = 1.0f;
 //	mini_rt->scene.aspect_ratio = 1;
 	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
 //	mini_rt->scene.aspect_ratio = 16.0f / 9.0f;
 //	mini_rt->scene.aspect_ratio = 16.0f / 10.0f;
 //	mini_rt->scene.aspect_ratio = 21.0f / 9.0f;
 //	mini_rt->scene.aspect_ratio = 32.0f / 9.0f;
-	mini_rt->scene.size.width = IMAGE_WIDTH;
-	mini_rt->scene.size.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
-	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.size));
+	mini_rt->scene.canvas.width = IMAGE_WIDTH;
+	mini_rt->scene.canvas.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
+	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas));
 }
 
 void	init_mock_rt(t_rt_scene *scene)

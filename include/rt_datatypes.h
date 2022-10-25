@@ -47,11 +47,11 @@ typedef struct s_rt_color_aggregate
 	int					source_counter;
 }			t_rt_color_aggregate;
 
-typedef struct s_rt_scene_size
+typedef struct s_rt_canvas_size
 {
 	int					width;
 	int					height;
-}			t_rt_scene_size;
+}			t_rt_canvas_size;
 
 typedef struct s_rt_vector
 {
@@ -136,7 +136,7 @@ typedef struct s_rt_scene
 	t_rt_spot_light *	spot_lights;
 	t_rt_ambient_light	ambient_light;
 	t_rt_camera	*		cameras;
-	t_rt_scene_size		size;
+	t_rt_canvas_size	canvas;
 	t_rt_viewport		viewport;
 	int					object_amount;
 	int					light_amount;
@@ -144,6 +144,8 @@ typedef struct s_rt_scene
 
 	float				aspect_ratio;
 
+	float				red;
+	float				green;
 	float				blue;
 }				t_rt_scene;
 

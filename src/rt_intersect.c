@@ -74,38 +74,17 @@ t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_
 	int i = 0;
 	while (i < scene->object_amount)
 	{
-//		if (node == self)
-//		{
-//			intersect_result.closest_t = INFINITY;
-//			intersect_result.closest_shape = self;
-//			node = node->next;
-//			continue ;
-//		}
 		quad_result = intersect_obj(o, d, &scene->objects[i]);
-		// if (quad_result.t1 < 1000 && quad_result.t1 > 1 && quad_result.t1 == quad_result.t2)
-		// {
-		// 	// printf(RED "edge found!!\n" RESET);
-		// 	intersect_result.closest_t = quad_result.t1;
-		// 	intersect_result.closest_shape = node;
-		// }
-		// else
-		// {
 		if (quad_result.t1 > t_min && quad_result.t1 < t_max && quad_result.t1 < intersect_result.closest_t)
 		{
-//				if (node == self)
-//					intersect_result.closest_t = INFINITY;
-//				else
 			intersect_result.closest_t = quad_result.t1;
 			intersect_result.closest_obj = &scene->objects[i];
 		}
 		if (quad_result.t2 > t_min && quad_result.t2 < t_max && quad_result.t2 < intersect_result.closest_t)
 		{
-//				if (node == self)
-//					intersect_result.closest_t = INFINITY;
-//				else
 			intersect_result.closest_t = quad_result.t2;
-			intersect_result.closest_obj = &scene->objects[i];			}
-		// }
+			intersect_result.closest_obj = &scene->objects[i];
+		}
 		i++;
 	}
 	return (intersect_result);

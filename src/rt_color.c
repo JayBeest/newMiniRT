@@ -40,7 +40,7 @@ int	color_to_int(t_rt_color color)
 //	return (color);
 //}
 
-t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d)
+t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 {
 	t_rt_vector	unit_direction;
 	t_rt_vector	color_vector;
@@ -50,7 +50,7 @@ t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d)
 
 	unit_direction = unit_vector(d);
 	t = 0.5f * (unit_direction.y + 1.0f);
-	color_vector = add_vector(multip_vector((t_rt_vector){1, 1, 1}, 1.0f - t), multip_vector((t_rt_vector){0.5f, 0.7f, 1.0f}, t));
+	color_vector = add_vector(multip_vector((t_rt_vector){1, 1, 1}, 1.0f - t), multip_vector((t_rt_vector){scene->red, scene->green, scene->blue}, t));
 	color.a = 255;
 	color.r = (int)(255.999 * color_vector.x);
 	color.g = (int)(255.999 * color_vector.y);
@@ -65,8 +65,8 @@ t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
 	float		b;
 	t_rt_color	color;
 
-	r = ((float)pixel.x + (float)scene->size.width / 2) / ((float)scene->size.width - 1);
-	g = ((float)pixel.y + (float)scene->size.height / 2) / ((float)scene->size.height - 1);
+	r = ((float)pixel.x + (float)scene->canvas.width / 2) / ((float)scene->canvas.width - 1);
+	g = ((float)pixel.y + (float)scene->canvas.height / 2) / ((float)scene->canvas.height - 1);
 	b = scene->blue;
 	color.a = 255;
 	color.r = (int)(255.999 * r);

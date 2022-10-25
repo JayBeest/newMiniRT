@@ -46,4 +46,36 @@ void	hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_A))
+	{
+		if (mini_rt->scene.green < 0.95f)
+		{
+			mini_rt->scene.green += 0.05f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_D))
+	{
+		if (mini_rt->scene.green > 0.05f)
+		{
+			mini_rt->scene.green -= 0.05f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Q))
+	{
+		if (mini_rt->scene.red < 0.95f)
+		{
+			mini_rt->scene.red += 0.05f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_E))
+	{
+		if (mini_rt->scene.red > 0.05f)
+		{
+			mini_rt->scene.red -= 0.05f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
 }
