@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	else
 	{
 		mini_rt.scene.light_amount = 1;
-		mini_rt.scene.object_amount = 4;
+		mini_rt.scene.object_amount = 5;
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));
