@@ -12,7 +12,7 @@ t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
 	b = scene->blue;
 	color.a = 255;
 	color.r = (int)(255.999 * r);
-	color.g = 255 - (int)(255.999 * g);
+	color.g = (int)(255.999 * g);
 	color.b = (int)(255.999 * b);
 	return (color);
 }

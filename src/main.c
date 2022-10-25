@@ -42,7 +42,7 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_rat
 
 	radians = (float)camera->fov * (float)M_PI / 180;
 	viewport->height = 1.0f;
-	viewport->width = viewport->height / aspect_ratio;
+	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
@@ -68,7 +68,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 			if (color.r == 0 && color.g == 0 && color.b == 0 && color.a == 255)
 				color = all_the_colors(pixel, scene);
 //			color = trace_ray(scene->cameras[0].coordinates, D, scene);
-			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, pixel.y + scene->size.height / 2, color_to_int(color));
+			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, scene->size.height - (pixel.y + scene->size.height / 2), color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y++;
@@ -97,7 +97,7 @@ void	hook(void *arg)
 		mlx_close_window(mlx->mlx);
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
 	{
-		if (mini_rt->scene.cameras[0].fov < 175)
+		if (mini_rt->scene.cameras[0].fov < 180)
 		{
 			mini_rt->scene.cameras[0].fov += 5;
 			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
@@ -106,7 +106,7 @@ void	hook(void *arg)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DOWN))
 	{
-		if (mini_rt->scene.cameras[0].fov > 5)
+		if (mini_rt->scene.cameras[0].fov > 0)
 		{
 			mini_rt->scene.cameras[0].fov -= 5;
 			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 	else
 	{
 		mini_rt.scene.light_amount = 1;
-		mini_rt.scene.object_amount = 3;
+		mini_rt.scene.object_amount = 4;
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));

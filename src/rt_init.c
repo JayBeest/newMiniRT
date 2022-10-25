@@ -20,8 +20,11 @@ t_err	init_rt(t_mini_rt *mini_rt)
 {
 	ft_bzero(mini_rt, sizeof(t_mini_rt));
 	mini_rt->scene.blue = 0.25f;
+//	mini_rt->scene.aspect_ratio = 1;
+	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
 //	mini_rt->scene.aspect_ratio = 16.0f / 9.0f;
-	mini_rt->scene.aspect_ratio = 1;
+//	mini_rt->scene.aspect_ratio = 16.0f / 10.0f;
+//	mini_rt->scene.aspect_ratio = 21.0f / 9.0f;
 	mini_rt->scene.size.width = IMAGE_WIDTH;
 	mini_rt->scene.size.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.size));
@@ -70,13 +73,17 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[0].sphere.type = SPHERE;
 	scene->objects[0].sphere.coordinates = (t_rt_vector){0, -1, 3};
 	scene->objects[0].sphere.diameter = 1;
-	scene->objects[0].sphere.color = (t_rt_color){255, 0, 0, 255};
+	scene->objects[0].sphere.color = (t_rt_color){255, 0, 0, 255}; // red
 	scene->objects[1].sphere.type = SPHERE;
 	scene->objects[1].sphere.coordinates = (t_rt_vector){2, 0, 4};
-	scene->objects[1].sphere.diameter = 1;
-	scene->objects[1].sphere.color = (t_rt_color){0, 0, 255, 255};
+	scene->objects[1].sphere.diameter = 2;
+	scene->objects[1].sphere.color = (t_rt_color){0, 0, 255, 255}; // blue
 	scene->objects[2].sphere.type = SPHERE;
 	scene->objects[2].sphere.coordinates = (t_rt_vector){-2, 0, 4};
 	scene->objects[2].sphere.diameter = 1;
-	scene->objects[2].sphere.color = (t_rt_color){0, 255, 0, 255};
+	scene->objects[2].sphere.color = (t_rt_color){0, 255, 0, 255}; // green
+	scene->objects[3].sphere.type = SPHERE;
+	scene->objects[3].sphere.coordinates = (t_rt_vector){-0.5f, 0.25f, 32};
+	scene->objects[3].sphere.diameter = 2;
+	scene->objects[3].sphere.color = (t_rt_color){64, 255, 128, 255}; // green
 }
