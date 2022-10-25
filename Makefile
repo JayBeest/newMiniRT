@@ -16,6 +16,7 @@ SRC			=	main.c \
 				rt_scene_printer.c \
 				rt_vector_utils.c \
 				rt_draw_utils.c \
+				rt_color.c \
 				rt_render.c \
 				rt_render_utils.c \
 				rt_intersect.c \
@@ -31,6 +32,7 @@ HEADERS		=	rt_datatypes.h \
 				rt_vector_utils.h \
 				rt_render_utils.h \
 				rt_draw_utils.h \
+				rt_color.h \
 				rt_render.h \
 				rt_render_utils.h \
 				rt_time.h \

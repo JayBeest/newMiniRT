@@ -10,6 +10,7 @@
 #include <rt_alloc.h>
 #include <rt_vector_utils.h>
 #include <rt_draw_utils.h>
+#include <rt_color.h>
 #include <rt_render.h>
 #include <rt_render_utils.h>
 #include <rt_time.h>
@@ -28,22 +29,6 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
-t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
-{
-	float		r;
-	float		g;
-	float		b;
-	t_rt_color	color;
-
-	r = (float)pixel.x / ((float)scene->size.width - 1);
-	g = (float)pixel.y / ((float)scene->size.height - 1);
-	b = scene->blue;
-	color.a = 255;
-	color.r = (int)(255.999 * r);
-	color.g = 255 - (int)(255.999 * g);
-	color.b = (int)(255.999 * b);
-	return (color);
-}
 
 void	print_vector(t_rt_vector vector)
 {
@@ -78,9 +63,10 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		while (pixel.x < scene->size.width / 2)
 		{
 //			color = all_the_colors(pixel, scene);
-//			print_vector(canvas_to_viewport(pixel.x, pixel.y, scene));
 			t_rt_vector D = canvas_to_viewport(pixel.x, pixel.y, scene);
 			color = trace_ray((t_rt_vector){0,0,0}, D, scene);
+			if (color.r == 0 && color.g == 0 && color.b == 0 && color.a == 255)
+				color = all_the_colors(pixel, scene);
 //			color = trace_ray(scene->cameras[0].coordinates, D, scene);
 			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, pixel.y + scene->size.height / 2, color_to_int(color));
 			pixel.x++;
@@ -123,6 +109,24 @@ void	hook(void *arg)
 		if (mini_rt->scene.cameras[0].fov > 5)
 		{
 			mini_rt->scene.cameras[0].fov -= 5;
+			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+if (mlx_is_key_down(mlx->mlx, MLX_KEY_W))
+	{
+		if (mini_rt->scene.blue < 254.95f)
+		{
+			mini_rt->scene.blue += 0.05f;
+			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_S))
+	{
+		if (mini_rt->scene.blue > 0.05f)
+		{
+			mini_rt->scene.blue -= 0.05f;
 			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
