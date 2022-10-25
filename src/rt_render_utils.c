@@ -10,8 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <rt_datatypes.h>
-//#include <rt_vector_utils.h>
+#include <stdio.h>
+
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
+{
+	float	radians;
+	float	diagonal;
+
+	radians = (float)camera->fov * (float)M_PI / 180;
+	viewport->height = 1.0f;
+	viewport->width = viewport->height * aspect_ratio;
+	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+}
 
 t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 {
@@ -23,42 +37,3 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	// v = multip_vector(v, 1 / dot_product(v, v));
 	return (v);
 }
-
-//t_rt_color	multip_color(t_color_intensity intensity, t_color color)
-//{
-//	int	r;
-//	int	g;
-//	int	b;
-//	int a;
-//
-//	r = color.r * intensity.r;
-//	g = color.g * intensity.g;
-//	b = color.b * intensity.b;
-//	a = color.a * intensity.a;
-//	if (r > 255)
-//		r = 255;
-//	else if (r < 0)
-//		r = 0;
-//	if (g > 255)
-//		g = 255;
-//	else if (g < 0)
-//		g = 0;
-//	if (b > 255)
-//		b = 255;
-//	else if (b < 0)
-//		b = 0;
-//	if (a > 255)
-//		a = 255;
-//	else if (a < 0)
-//		a = 0;
-//	color.r = r;
-//	color.g = g;
-//	color.b = b;
-//	color.a = a;
-//	return (color);
-//}
-
-
-
-
-

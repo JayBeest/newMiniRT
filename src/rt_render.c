@@ -14,12 +14,15 @@
 #include <rt_datatypes.h>
 #include <rt_render_utils.h>
 #include <rt_draw_utils.h>
-#include "../include/rt_intersect.h"
+#include <rt_color.h>
+#include <rt_intersect.h>
 //#include <rt_lighting.h>
+#include <rt_time.h>
 #include <math.h>
 
 #include <pthread.h>
 #include <stdio.h>
+
 
 t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max)
 {
@@ -78,6 +81,44 @@ t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 		return ((t_rt_color){0, 0, 0, 255});
 	return (intersect_result.closest_obj->def.color);
 //	return (precalculate_light(intersect_result.closest_shape, o, d, intersect_result.closest_t, scene));
+}
+
+t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
+{
+	t_rt_resolution	pixel;
+	t_rt_color		color;
+	t_time_stamp	start_of_frame;
+	t_msecs			time_spend;
+
+	start_of_frame = set_time();
+	pixel.y = -scene->size.height / 2;
+	while (pixel.y < scene->size.height / 2)
+	{
+		pixel.x = -scene->size.width / 2;
+		while (pixel.x < scene->size.width / 2)
+		{
+//			color = all_the_colors(pixel, scene);
+			t_rt_vector D = canvas_to_viewport(pixel.x, pixel.y, scene);
+			color = trace_ray((t_rt_vector){0,0,0}, D, scene);
+			if (color.r == 0 && color.g == 0 && color.b == 0 && color.a == 255)
+				color = all_the_colors(pixel, scene);
+//			color = trace_ray(scene->cameras[0].coordinates, D, scene);
+			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, scene->size.height - (pixel.y + scene->size.height / 2), color_to_int(color));
+			pixel.x++;
+		}
+		pixel.y++;
+	}
+	char	blue[32];
+	char	fps[64];
+	time_spend = ms_passed(start_of_frame);
+	mlx_delete_image(mlx->mlx, mlx->fps);
+	mlx_delete_image(mlx->mlx, mlx->text);
+	sprintf(blue, "fov: %d\n", scene->cameras[0].fov);
+	sprintf(fps, "frame took %lu ms - (%.1f fps)\n", time_spend, 1000.0f / (float)time_spend);
+	mlx->text = mlx_put_string(mlx->mlx, blue, 20, 20);
+	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->size.width - 325, scene->size.height - 50);
+	custom_sleep(16 - time_spend);
+	return (NO_ERR);
 }
 
 //t_mult_pixel	get_multi_pix(t_scene scene, int id)

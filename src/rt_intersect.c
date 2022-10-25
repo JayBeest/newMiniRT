@@ -36,29 +36,30 @@ t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj
 	return (result);
 }
 
-//t_quad_result	intersect_plane(t_vector o, t_vector d, t_rt_shape *shape)
-//{
-//	t_quad_result	result;
-//	double			denominator;
-//
-//	result.t2 = INFINITY;
-//	denominator	= dot_product(shape->vector, d);
-//	if (denominator > EPSILON)
-//	{
-//		result.t1 = dot_product(substract_vector(shape->pos1, o), shape->vector) / denominator;
-//		if (result.t1 < 0)
-//			result.t1 = INFINITY;
-//		return (result);
-//	}
-//	result.t1 = INFINITY;
-//	return (result);
-//}
+t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
+{
+	t_quad_result	result;
+	float			denominator;
+
+	result.t2 = INFINITY;
+	denominator	= dot_product(obj->plane.orientation, d);
+	if (denominator > EPSILON)
+	{
+		result.t1 = dot_product(substract_rt_vector(obj->plane.coordinates, o), obj->plane.orientation) / denominator;
+		if (result.t1 < 0)
+			result.t1 = INFINITY;
+		return (result);
+	}
+	result.t1 = INFINITY;
+	return (result);
+}
 
 
 t_quad_result	intersect_shape(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 {
 	static t_intersect	function_pointers[NO_OBJECT] = {
-			[SPHERE] = intersect_sphere
+			[SPHERE] = intersect_sphere,
+			[PLANE] = intersect_plane
 	};
 	return (function_pointers[obj->def.type](o, d, obj));
 }

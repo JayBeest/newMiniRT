@@ -6,6 +6,7 @@
 # include <rt_alias.h>
 
 # define IMAGE_WIDTH 640
+# define EPSILON 1e-6
 
 typedef enum e_err
 {

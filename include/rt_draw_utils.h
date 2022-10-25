@@ -13,6 +13,4 @@
 #ifndef RT_DRAW_UTILS_H
 # define RT_DRAW_UTILS_H
 
-int		color_to_int(t_rt_color color);
-
 #endif

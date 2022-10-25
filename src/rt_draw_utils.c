@@ -17,7 +17,4 @@
 
 
 
-int	color_to_int(t_rt_color color)
-{
-	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
-}
+
