@@ -15,6 +15,20 @@
 
 # include <rt_intersect.h>
 
+typedef struct s_mult_pixel
+{
+	int					min_x;
+	int					max_x;
+	int					min_y;
+	int					max_y;
+}		t_mult_pixel;
+
+typedef struct s_multipt
+{
+	t_mini_rt			*rt;
+	int 				id;
+}		t_pthr_arg;
+
 t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max);
 t_rt_color			trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, t_rt_resolution pixel);
 void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio);

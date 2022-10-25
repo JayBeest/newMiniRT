@@ -100,7 +100,7 @@ void	print_objects(t_rt_obj_union *objects, int amount)
 void	print_scene(t_rt_scene scene)
 {
 	printf("		*** MiniRT Scene ***\n");
-	printf("resolution: %dx%d\n", scene.canvas.width, scene.canvas.height);
+	printf("resolution: %dx%d\n", scene.canvas.x, scene.canvas.y);
 	print_ambient_light(scene.ambient_light);
 	print_camera(scene.cameras, scene.camera_amount);
 	print_spotlights(scene.spot_lights, scene.light_amount);

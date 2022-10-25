@@ -1,7 +1,6 @@
 #include <MLX42.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
-#include <rt_render_utils.h>
 
 void	hook(void *arg)
 {
@@ -75,6 +74,22 @@ void	hook(void *arg)
 		if (mini_rt->scene.red > 0.05f)
 		{
 			mini_rt->scene.red -= 0.05f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_EQUAL))
+	{
+		if (mini_rt->scene.spot_lights[1].coordinates.y < 30)
+		{
+			mini_rt->scene.spot_lights[1].coordinates.y += 0.5f;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_MINUS))
+	{
+		if (mini_rt->scene.spot_lights[1].coordinates.y > 0)
+		{
+			mini_rt->scene.spot_lights[1].coordinates.y -= 0.5f;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
