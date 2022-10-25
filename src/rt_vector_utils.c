@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <math.h>
+#include <math.h>
 #include <rt_datatypes.h>
 
 t_rt_vector	add_vector(t_rt_vector a, t_rt_vector b)
@@ -43,6 +43,16 @@ t_rt_vector	multip_vector(t_rt_vector a, float num)
 	return (result);
 }
 
+t_rt_vector	devide_vector(t_rt_vector a, float num)
+{
+	t_rt_vector	result;
+
+	result.x = a.x / num;
+	result.y = a.y / num;
+	result.z = a.z / num;
+	return (result);
+}
+
 t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b)
 {
 	t_rt_vector	result;
@@ -51,6 +61,21 @@ t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b)
 	result.y = a.x * b.z - a.z * b.x;
 	result.z = a.x * b.y - a.y * b.x;
 	return (result);
+}
+
+float	length_squared(t_rt_vector vector)
+{
+	return (vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+}
+
+float	vector_length(t_rt_vector vector)
+{
+	return (sqrtf(length_squared(vector)));
+}
+
+t_rt_vector	unit_vector(t_rt_vector vector)
+{
+	return (devide_vector(vector, vector_length(vector)));
 }
 
 float	dot_product(t_rt_vector a, t_rt_vector b)

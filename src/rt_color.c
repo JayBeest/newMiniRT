@@ -1,4 +1,5 @@
 #include <rt_datatypes.h>
+#include <rt_vector_utils.h>
 
 int	color_to_int(t_rt_color color)
 {
@@ -39,6 +40,23 @@ int	color_to_int(t_rt_color color)
 //	return (color);
 //}
 
+t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d)
+{
+	t_rt_vector	unit_direction;
+	t_rt_vector	color_vector;
+	float		t;
+	t_rt_color	color;
+	(void)o;
+
+	unit_direction = unit_vector(d);
+	t = 0.5f * (unit_direction.y + 1.0f);
+	color_vector = add_vector(multip_vector((t_rt_vector){1, 1, 1}, 1.0f - t), multip_vector((t_rt_vector){0.5f, 0.7f, 1.0f}, t));
+	color.a = 255;
+	color.r = (int)(255.999 * color_vector.x);
+	color.g = (int)(255.999 * color_vector.y);
+	color.b = (int)(255.999 * color_vector.z);
+	return (color);
+}
 
 t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
 {

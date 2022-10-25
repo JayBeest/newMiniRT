@@ -53,7 +53,9 @@ t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, t_rt_resol
 	ft_bzero(&intersect_result, sizeof(intersect_result));
 	intersect_result = get_closest_intersection(scene, o, d, 1, INFINITY);
 	if (!intersect_result.closest_obj)
-		return (all_the_colors(pixel, scene));
+		return (y_gradient(o, d));
+//		return (all_the_colors(pixel, scene));
+	(void)pixel;
 	return (intersect_result.closest_obj->def.color);
 //	return (precalculate_light(intersect_result.closest_shape, o, d, intersect_result.closest_t, scene));
 }
