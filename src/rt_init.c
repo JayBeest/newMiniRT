@@ -1,4 +1,4 @@
-#include <math.h>
+//#include <math.h>
 #include <libft.h>
 #include <rt_datatypes.h>
 
@@ -21,11 +21,11 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	ft_bzero(mini_rt, sizeof(t_mini_rt));
 	mini_rt->scene.blue = 0.25f;
 //	mini_rt->scene.aspect_ratio = 1;
-//	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
+	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
 //	mini_rt->scene.aspect_ratio = 16.0f / 9.0f;
 //	mini_rt->scene.aspect_ratio = 16.0f / 10.0f;
 //	mini_rt->scene.aspect_ratio = 21.0f / 9.0f;
-	mini_rt->scene.aspect_ratio = 32.0f / 9.0f;
+//	mini_rt->scene.aspect_ratio = 32.0f / 9.0f;
 	mini_rt->scene.size.width = IMAGE_WIDTH;
 	mini_rt->scene.size.height = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.size));

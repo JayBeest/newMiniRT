@@ -161,25 +161,6 @@ typedef struct s_minirt
 	t_rt_scene			scene;
 }		t_mini_rt;
 
-typedef struct s_quad_abc
-{
-	float				a;
-	float				b;
-	float				c;
-}		t_quad_abc;
-
-typedef	struct s_quad_result
-{
-	float				t1;
-	float				t2;
-}		t_quad_result;
-
-typedef struct s_intersect_result
-{
-	float				closest_t;
-	t_rt_obj_union		*closest_obj;
-}				t_intersect_result;
-
 typedef struct s_mult_pixel
 {
 	int					min_x;

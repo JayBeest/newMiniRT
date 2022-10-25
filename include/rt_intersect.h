@@ -13,8 +13,28 @@
 #ifndef INTERSECT_H
 # define INTERSECT_H
 
+typedef struct s_quad_abc
+{
+	float				a;
+	float				b;
+	float				c;
+}		t_quad_abc;
+
+typedef	struct s_quad_result
+{
+	float				t1;
+	float				t2;
+}		t_quad_result;
+
+typedef struct s_intersect_result
+{
+	float				closest_t;
+	t_rt_obj_union		*closest_obj;
+}				t_intersect_result;
+
 typedef t_quad_result(*t_intersect)(t_rt_vector, t_rt_vector, t_rt_obj_union *);
 
-t_quad_result	intersect_shape(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj);
+t_quad_result		intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj);
+t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max);
 
 #endif

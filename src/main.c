@@ -1,4 +1,3 @@
-#include <math.h>
 #include <MLX42.h>
 #include <stdlib.h>
 #include <rt_datatypes.h>
@@ -9,7 +8,6 @@
 #include <rt_scene_printer.h>
 #include <rt_alloc.h>
 #include <rt_render.h>
-#include <rt_render_utils.h>
 #include <rt_hook.h>
 
 #include <stdio.h>

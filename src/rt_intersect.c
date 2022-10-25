@@ -55,11 +55,58 @@ t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 }
 
 
-t_quad_result	intersect_shape(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
+t_quad_result	intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj)
 {
 	static t_intersect	function_pointers[NO_OBJECT] = {
 			[SPHERE] = intersect_sphere,
 			[PLANE] = intersect_plane
 	};
-	return (function_pointers[obj->def.type](o, d, obj));
+	return (function_pointers[obj->def.type](origin, viewport, obj));
+}
+
+t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max)
+{
+	t_intersect_result	intersect_result;
+	t_quad_result		quad_result;
+
+	intersect_result.closest_obj = NULL;
+	intersect_result.closest_t = INFINITY;
+	int i = 0;
+	while (i < scene->object_amount)
+	{
+//		if (node == self)
+//		{
+//			intersect_result.closest_t = INFINITY;
+//			intersect_result.closest_shape = self;
+//			node = node->next;
+//			continue ;
+//		}
+		quad_result = intersect_obj(o, d, &scene->objects[i]);
+		// if (quad_result.t1 < 1000 && quad_result.t1 > 1 && quad_result.t1 == quad_result.t2)
+		// {
+		// 	// printf(RED "edge found!!\n" RESET);
+		// 	intersect_result.closest_t = quad_result.t1;
+		// 	intersect_result.closest_shape = node;
+		// }
+		// else
+		// {
+		if (quad_result.t1 > t_min && quad_result.t1 < t_max && quad_result.t1 < intersect_result.closest_t)
+		{
+//				if (node == self)
+//					intersect_result.closest_t = INFINITY;
+//				else
+			intersect_result.closest_t = quad_result.t1;
+			intersect_result.closest_obj = &scene->objects[i];
+		}
+		if (quad_result.t2 > t_min && quad_result.t2 < t_max && quad_result.t2 < intersect_result.closest_t)
+		{
+//				if (node == self)
+//					intersect_result.closest_t = INFINITY;
+//				else
+			intersect_result.closest_t = quad_result.t2;
+			intersect_result.closest_obj = &scene->objects[i];			}
+		// }
+		i++;
+	}
+	return (intersect_result);
 }

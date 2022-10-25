@@ -12,10 +12,9 @@
 
 #include <libft.h>
 #include <rt_datatypes.h>
-#include <rt_render_utils.h>
-#include <rt_draw_utils.h>
-#include <rt_color.h>
 #include <rt_intersect.h>
+#include <rt_render.h>
+#include <rt_color.h>
 //#include <rt_lighting.h>
 #include <rt_time.h>
 #include <math.h>
@@ -23,52 +22,28 @@
 #include <pthread.h>
 #include <stdio.h>
 
-
-t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max)
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
 {
-	t_intersect_result	intersect_result;
-	t_quad_result		quad_result;
+	float	radians;
+	float	diagonal;
 
-	intersect_result.closest_obj = NULL;
-	intersect_result.closest_t = INFINITY;
-	int i = 0;
-	while (i < scene->object_amount)
-	{
-//		if (node == self)
-//		{
-//			intersect_result.closest_t = INFINITY;
-//			intersect_result.closest_shape = self;
-//			node = node->next;
-//			continue ;
-//		}
-		quad_result = intersect_shape(o, d, &scene->objects[i]);
-		// if (quad_result.t1 < 1000 && quad_result.t1 > 1 && quad_result.t1 == quad_result.t2)
-		// {
-		// 	// printf(RED "edge found!!\n" RESET);
-		// 	intersect_result.closest_t = quad_result.t1;
-		// 	intersect_result.closest_shape = node;
-		// }
-		// else
-		// {
-			if (quad_result.t1 > t_min && quad_result.t1 < t_max && quad_result.t1 < intersect_result.closest_t)
-			{
-//				if (node == self)
-//					intersect_result.closest_t = INFINITY;
-//				else
-					intersect_result.closest_t = quad_result.t1;
-				intersect_result.closest_obj = &scene->objects[i];
-			}
-			if (quad_result.t2 > t_min && quad_result.t2 < t_max && quad_result.t2 < intersect_result.closest_t)
-			{
-//				if (node == self)
-//					intersect_result.closest_t = INFINITY;
-//				else
-					intersect_result.closest_t = quad_result.t2;
-				intersect_result.closest_obj = &scene->objects[i];			}
-		// }
-		i++;
-	}
-	return (intersect_result);
+	radians = (float)camera->fov * (float)M_PI / 180;
+	viewport->height = 2.0f;
+	viewport->width = viewport->height * aspect_ratio;
+	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+}
+
+t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
+{
+	t_rt_vector	v;
+
+	v.x = (float)x * scene->viewport.width / (float)scene->size.width;  //static divisions in a loop..
+	v.y = (float)y * scene->viewport.height / (float)scene->size.height;
+	v.z = scene->viewport.focal_length;
+	// v = multip_vector(v, 1 / dot_product(v, v));
+	return (v);
 }
 
 t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, t_rt_resolution pixel)

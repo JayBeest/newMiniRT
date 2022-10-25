@@ -13,7 +13,5 @@
 #ifndef RT_RENDER_UTILS_H
 # define RT_RENDER_UTILS_H
 
-void		set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio);
-t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene);
 
 #endif
