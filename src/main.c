@@ -50,6 +50,19 @@ void	print_vector(t_rt_vector vector)
 	printf("x: %f  y: %f  z: %f\n", vector.x, vector.y, vector.z);
 }
 
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
+{
+	float	radians;
+	float	diagonal;
+
+	radians = (float)camera->fov * (float)M_PI / 180;
+	viewport->height = 1.0f;
+	viewport->width = viewport->height / aspect_ratio;
+	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
@@ -79,7 +92,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	time_spend = ms_passed(start_of_frame);
 	mlx_delete_image(mlx->mlx, mlx->fps);
 	mlx_delete_image(mlx->mlx, mlx->text);
-	sprintf(blue, "blue: %d\n", color.b);
+	sprintf(blue, "fov: %d\n", scene->cameras[0].fov);
 	sprintf(fps, "frame took %lu ms - (%.1f fps)\n", time_spend, 1000.0f / (float)time_spend);
 	mlx->text = mlx_put_string(mlx->mlx, blue, 20, 20);
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->size.width - 325, scene->size.height - 50);
@@ -98,33 +111,22 @@ void	hook(void *arg)
 		mlx_close_window(mlx->mlx);
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
 	{
-		if (mini_rt->scene.blue < 0.995f)
+		if (mini_rt->scene.cameras[0].fov < 175)
 		{
-			mini_rt->scene.blue += 0.005f;
+			mini_rt->scene.cameras[0].fov += 5;
+			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DOWN))
 	{
-		if (mini_rt->scene.blue > 0.005f)
+		if (mini_rt->scene.cameras[0].fov > 5)
 		{
-			mini_rt->scene.blue -= 0.005f;
+			mini_rt->scene.cameras[0].fov -= 5;
+			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
-}
-
-void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
-{
-	float	radians;
-	float	diagonal;
-
-	radians = (float)camera->fov * (float)M_PI / 180;
-	viewport->height = 1.0f;
-	viewport->width = viewport->height / aspect_ratio;
-	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
-	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
-	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
 }
 
 int main(int argc, char **argv)
@@ -157,7 +159,7 @@ int main(int argc, char **argv)
 
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
-	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control the blue (up/down)", 20, 20);
+	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control fov (up/down)", 20, 20);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);
