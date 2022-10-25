@@ -7,9 +7,11 @@
 #include <rt_check_infile.h>
 #include <rt_parser.h>
 #include <rt_scene_printer.h>
+#include <rt_alloc.h>
 #include <rt_vector_utils.h>
 #include <rt_draw_utils.h>
-#include <rt_alloc.h>
+#include <rt_render.h>
+#include <rt_render_utils.h>
 #include <rt_time.h>
 
 #include <stdio.h>
@@ -43,6 +45,11 @@ t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
 	return (color);
 }
 
+void	print_vector(t_rt_vector vector)
+{
+	printf("x: %f  y: %f  z: %f\n", vector.x, vector.y, vector.z);
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
@@ -51,15 +58,18 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_msecs			time_spend;
 
 	start_of_frame = set_time();
-	pixel.y = 0;
-	while (pixel.y < scene->size.height)
+	pixel.y = -scene->size.height / 2;
+	while (pixel.y < scene->size.height / 2)
 	{
-		pixel.x = 0;
-		while (pixel.x < scene->size.width)
+		pixel.x = -scene->size.width / 2;
+		while (pixel.x < scene->size.width / 2)
 		{
-			color = all_the_colors(pixel, scene);
-//			color = trace_ray();
-			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
+//			color = all_the_colors(pixel, scene);
+//			print_vector(canvas_to_viewport(pixel.x, pixel.y, scene));
+			t_rt_vector D = canvas_to_viewport(pixel.x, pixel.y, scene);
+			color = trace_ray((t_rt_vector){0,0,0}, D, scene);
+//			color = trace_ray(scene->cameras[0].coordinates, D, scene);
+			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, pixel.y + scene->size.height / 2, color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y++;
@@ -110,7 +120,7 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_rat
 	float	diagonal;
 
 	radians = (float)camera->fov * (float)M_PI / 180;
-	viewport->height = 2.0f;
+	viewport->height = 1.0f;
 	viewport->width = viewport->height / aspect_ratio;
 	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
@@ -136,7 +146,8 @@ int main(int argc, char **argv)
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));
-		init_mock_rt(&mini_rt.scene);
+//		init_mock_rt(&mini_rt.scene);
+		init_new_rt(&mini_rt.scene);
 	}
 
 	print_scene(mini_rt.scene);

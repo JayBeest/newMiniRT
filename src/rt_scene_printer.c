@@ -6,7 +6,7 @@ void	print_color(t_rt_color color)
 	printf("color(rgba): %d %d %d %d\n", color.r, color.g, color.b, color.a);
 }
 
-void	print_coordinates(t_rt_point coordinates)
+void	print_coordinates(t_rt_vector coordinates)
 {
 	printf("coordinates: %f(x) %f(y) %f(z)\n", coordinates.x, coordinates.y, coordinates.z);
 }

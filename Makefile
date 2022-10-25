@@ -16,7 +16,9 @@ SRC			=	main.c \
 				rt_scene_printer.c \
 				rt_vector_utils.c \
 				rt_draw_utils.c \
+				rt_render.c \
 				rt_render_utils.c \
+				rt_intersect.c \
 				rt_time.c \
 				rt_error.c \
 
@@ -27,7 +29,9 @@ HEADERS		=	rt_datatypes.h \
 				rt_parser.h \
 				rt_scene_printer.h \
 				rt_vector_utils.h \
+				rt_render_utils.h \
 				rt_draw_utils.h \
+				rt_render.h \
 				rt_render_utils.h \
 				rt_time.h \
 				rt_error.h \
@@ -51,7 +55,7 @@ ifeq ($(UNAME), Linux)
 	LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
 endif
 
-CFLAGS		=	-Wall -Werror -Wextra -pedantic #-fsanitize=address -g # -std=c89 -g
+CFLAGS		=	-Wall -Werror -Wextra -pedantic -fsanitize=address -g # -std=c89 -g
 CC			=	gcc
 
 ifeq ("$(VERBOSE)","1")

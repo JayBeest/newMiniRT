@@ -13,7 +13,8 @@
 #ifndef RT_RENDER_H
 # define RT_RENDER_H
 
-t_intersect_result	get_closest_intersection(t_rt_shape *node, t_vector o, t_vector d, double t_min, double t_max, t_rt_shape *self);
-t_err	            render_scene(t_minirt *rt);
+t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max);
+t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene);
+//t_err	            render_scene(t_minirt *rt);
 
 #endif

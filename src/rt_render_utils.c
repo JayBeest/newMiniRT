@@ -13,13 +13,13 @@
 #include <rt_datatypes.h>
 //#include <rt_vector_utils.h>
 
-t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene scene)
+t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 {
 	t_rt_vector	v;
 
-	v.x = (float)x * scene.viewport.width / (float)scene.size.width;  //static divisions in a loop..
-	v.y = (float)y * scene.viewport.height / (float)scene.size.height;
-	v.z = scene.viewport.focal_length;
+	v.x = (float)x * scene->viewport.width / (float)scene->size.width;  //static divisions in a loop..
+	v.y = (float)y * scene->viewport.height / (float)scene->size.height;
+	v.z = scene->viewport.focal_length;
 	// v = multip_vector(v, 1 / dot_product(v, v));
 	return (v);
 }

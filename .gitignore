@@ -4,7 +4,7 @@
 # Object files
 *.o
 *.ko
-*.obj
+*.closest_obj
 *.elf
 
 # Linker output
@@ -52,6 +52,6 @@ Mkfile.old
 dkms.conf
 
 bin/
-obj/
+closest_obj/
 .idea/
 .DS_Store

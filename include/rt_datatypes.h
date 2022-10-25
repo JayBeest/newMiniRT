@@ -5,7 +5,7 @@
 # include <MLX42.h>
 # include <rt_alias.h>
 
-# define IMAGE_WIDTH 1024
+# define IMAGE_WIDTH 640
 
 typedef enum e_err
 {
@@ -28,7 +28,8 @@ typedef enum e_rt_obj_type
 {
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	NO_OBJECT
 }		t_rt_obj_type;
 
 typedef struct s_rt_color
@@ -68,7 +69,7 @@ typedef struct s_rt_obj_sphere
 {
 	t_rt_obj_type		type;
 	t_rt_color			color;
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	float				diameter;
 }				t_rt_obj_sphere;
 
@@ -76,7 +77,7 @@ typedef struct s_rt_obj_plane
 {
 	t_rt_obj_type		type;
 	t_rt_color			color;
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	t_rt_vector			orientation;
 }				t_rt_obj_plane;
 
@@ -84,7 +85,7 @@ typedef struct s_rt_obj_cylinder
 {
 	t_rt_obj_type		type;
 	t_rt_color			color;
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	t_rt_vector			orientation;
 	float				diameter;
 	float				height;
@@ -107,14 +108,14 @@ typedef struct s_rt_ambient_light
 
 typedef struct s_rt_spot_light
 {
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	float				intensity;
 	t_rt_color			color;
 }				t_rt_spot_light;
 
 typedef struct s_rt_camera
 {
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	t_rt_vector			orientation;
 	int					fov;
 }				t_rt_camera;
@@ -124,7 +125,7 @@ typedef struct s_rt_viewport
 	float				width;
 	float				height;
 	float				focal_length;
-	t_rt_point			coordinates;
+	t_rt_vector			coordinates;
 	t_rt_vector			orientation;
 }				t_rt_viewport;
 
@@ -147,42 +148,49 @@ typedef struct s_rt_scene
 
 typedef struct s_rt_mlx
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	mlx_image_t *text;
-	mlx_image_t *fps;
+	mlx_t				*mlx;
+	mlx_image_t			*img;
+	mlx_image_t 		*text;
+	mlx_image_t 		*fps;
 }		t_rt_mlx;
 
 typedef struct s_minirt
 {
-	t_rt_mlx	mlx;
-	t_rt_scene	scene;
+	t_rt_mlx			mlx;
+	t_rt_scene			scene;
 }		t_mini_rt;
+
+typedef struct s_quad_abc
+{
+	float				a;
+	float				b;
+	float				c;
+}		t_quad_abc;
 
 typedef	struct s_quad_result
 {
-	float		t1;
-	float		t2;
+	float				t1;
+	float				t2;
 }		t_quad_result;
 
 typedef struct s_intersect_result
 {
-	float			closest_t;
-	t_rt_obj_union	*obj;
+	float				closest_t;
+	t_rt_obj_union		*closest_obj;
 }				t_intersect_result;
 
 typedef struct s_mult_pixel
 {
-	int	min_x;
-	int	max_x;
-	int	min_y;
-	int	max_y;
+	int					min_x;
+	int					max_x;
+	int					min_y;
+	int					max_y;
 }		t_mult_pixel;
 
 typedef struct s_multipt
 {
-	t_mini_rt	*rt;
-	int 		id;
+	t_mini_rt			*rt;
+	int 				id;
 }		t_pthr_arg;
 
 #endif
