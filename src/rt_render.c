@@ -71,14 +71,14 @@ t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_
 	return (intersect_result);
 }
 
-t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
+t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, t_rt_resolution pixel)
 {
 	t_intersect_result	intersect_result;
 
 	ft_bzero(&intersect_result, sizeof(intersect_result));
 	intersect_result = get_closest_intersection(scene, o, d, 1, INFINITY);
 	if (!intersect_result.closest_obj)
-		return ((t_rt_color){0, 0, 0, 255});
+		return (all_the_colors(pixel, scene));
 	return (intersect_result.closest_obj->def.color);
 //	return (precalculate_light(intersect_result.closest_shape, o, d, intersect_result.closest_t, scene));
 }
@@ -97,12 +97,9 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = -scene->size.width / 2;
 		while (pixel.x < scene->size.width / 2)
 		{
-//			color = all_the_colors(pixel, scene);
 			t_rt_vector D = canvas_to_viewport(pixel.x, pixel.y, scene);
-			color = trace_ray((t_rt_vector){0,0,0}, D, scene);
-			if (color.r == 0 && color.g == 0 && color.b == 0 && color.a == 255)
-				color = all_the_colors(pixel, scene);
-//			color = trace_ray(scene->cameras[0].coordinates, D, scene);
+			color = trace_ray((t_rt_vector){0,0,0}, D, scene, pixel);
+//			color = trace_ray(scene->cameras[0].coordinates, D, scene); // needs matrix translation?
 			mlx_put_pixel(mlx->img, pixel.x +  scene->size.width / 2, scene->size.height - (pixel.y + scene->size.height / 2), color_to_int(color));
 			pixel.x++;
 		}
