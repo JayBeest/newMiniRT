@@ -33,7 +33,7 @@ t_rt_vector	substract_rt_vector(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-t_rt_vector	multip_vector(t_rt_vector a, float num)
+t_rt_vector	multip_vector(t_rt_vector a, double num)
 {
 	t_rt_vector	result;
 
@@ -43,7 +43,7 @@ t_rt_vector	multip_vector(t_rt_vector a, float num)
 	return (result);
 }
 
-t_rt_vector	devide_vector(t_rt_vector a, float num)
+t_rt_vector	devide_vector(t_rt_vector a, double num)
 {
 	t_rt_vector	result;
 
@@ -63,12 +63,12 @@ t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-float	length_squared(t_rt_vector vector)
+double	length_squared(t_rt_vector vector)
 {
 	return (vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
-float	vector_length(t_rt_vector vector)
+double	vector_length(t_rt_vector vector)
 {
 	return (sqrtf(length_squared(vector)));
 }
@@ -78,7 +78,7 @@ t_rt_vector	unit_vector(t_rt_vector vector)
 	return (devide_vector(vector, vector_length(vector)));
 }
 
-float	dot_product(t_rt_vector a, t_rt_vector b)
+double	dot_product(t_rt_vector a, t_rt_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }

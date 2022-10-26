@@ -22,7 +22,7 @@ t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj
 	t_quad_abc		quad;
 	t_quad_result	result;
 	t_rt_vector		co;
-	float 			discriminant;
+	double 			discriminant;
 
 	co = substract_rt_vector(o, obj->sphere.coordinates);
 	quad.a = dot_product(d, d);
@@ -39,7 +39,7 @@ t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj
 t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 {
 	t_quad_result	result;
-	float			denominator;
+	double			denominator;
 
 	result.t2 = INFINITY;
 	denominator	= dot_product(obj->plane.orientation, d);

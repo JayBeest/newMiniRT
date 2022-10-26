@@ -34,7 +34,7 @@ void	hook(void *arg)
 	{
 		if (mini_rt->scene.objects[1].sphere.coordinates.x < 10)
 		{
-			mini_rt->scene.objects[1].sphere.coordinates.x += 1.0f / 8;
+			mini_rt->scene.objects[1].sphere.coordinates.x += 1.0 / 8;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
@@ -42,71 +42,71 @@ void	hook(void *arg)
 	{
 		if (mini_rt->scene.objects[1].sphere.coordinates.x > -10)
 		{
-			mini_rt->scene.objects[1].sphere.coordinates.x -= 1.0f / 8;
+			mini_rt->scene.objects[1].sphere.coordinates.x -= 1.0 / 8;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_W))
 	{
-		if (mini_rt->scene.blue < 0.95f)
+		if (mini_rt->scene.blue < 0.95)
 		{
-			mini_rt->scene.blue += 0.05f;
+			mini_rt->scene.blue += 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_S))
 	{
-		if (mini_rt->scene.blue > 0.05f)
+		if (mini_rt->scene.blue > 0.05)
 		{
-			mini_rt->scene.blue -= 0.05f;
+			mini_rt->scene.blue -= 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_A))
 	{
-		if (mini_rt->scene.green < 0.95f)
+		if (mini_rt->scene.green < 0.95)
 		{
-			mini_rt->scene.green += 0.05f;
+			mini_rt->scene.green += 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_D))
 	{
-		if (mini_rt->scene.green > 0.05f)
+		if (mini_rt->scene.green > 0.05)
 		{
-			mini_rt->scene.green -= 0.05f;
+			mini_rt->scene.green -= 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Q))
 	{
-		if (mini_rt->scene.red < 0.95f)
+		if (mini_rt->scene.red < 0.95)
 		{
-			mini_rt->scene.red += 0.05f;
+			mini_rt->scene.red += 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_E))
 	{
-		if (mini_rt->scene.red > 0.05f)
+		if (mini_rt->scene.red > 0.05)
 		{
-			mini_rt->scene.red -= 0.05f;
+			mini_rt->scene.red -= 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_EQUAL))
 	{
-		if (mini_rt->scene.spot_lights[2].intensity < 0.95f)
+		if (mini_rt->scene.spot_lights[2].intensity < 0.95)
 		{
-			mini_rt->scene.spot_lights[2].intensity += 0.05f;
+			mini_rt->scene.spot_lights[2].intensity += 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_MINUS))
 	{
-		if (mini_rt->scene.spot_lights[2].intensity > 0.05f)
+		if (mini_rt->scene.spot_lights[2].intensity > 0.05)
 		{
-			mini_rt->scene.spot_lights[2].intensity -= 0.05f;
+			mini_rt->scene.spot_lights[2].intensity -= 0.05;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}

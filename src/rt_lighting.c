@@ -21,28 +21,28 @@
 
 #include <stdio.h>
 
-void	init_intensity(t_rt_color_intensity *intensity, float init, t_rt_color color)
+void	init_intensity(t_rt_color_intensity *intensity, double init, t_rt_color color)
 {
-	intensity->r = ((float)color.r / 255) * init;
-	intensity->g = ((float)color.g / 255) * init;
-	intensity->b = ((float)color.b / 255) * init;
-	intensity->a = ((float)color.a / 255) * init;
+	intensity->r = ((double)color.r / 255) * init;
+	intensity->g = ((double)color.g / 255) * init;
+	intensity->b = ((double)color.b / 255) * init;
+	intensity->a = ((double)color.a / 255) * init;
 }
 
 void	update_intensity(t_rt_color_intensity *intensity, t_rt_color_intensity add, t_rt_color color)
 {
-	intensity->r += ((float)color.r / 255) * add.r;
-	intensity->g += ((float)color.g / 255) * add.g;
-	intensity->b += ((float)color.b / 255) * add.b;
-	intensity->a += ((float)color.a / 255) * add.a;
+	intensity->r += ((double)color.r / 255) * add.r;
+	intensity->g += ((double)color.g / 255) * add.g;
+	intensity->b += ((double)color.b / 255) * add.b;
+	intensity->a += ((double)color.a / 255) * add.a;
 }
 
-t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, float factor, t_rt_color color)
+t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, double factor, t_rt_color color)
 {
-	og.r *= ((float)color.r / 255) * factor;
-	og.g *= ((float)color.g / 255) * factor;
-	og.b *= ((float)color.b / 255) * factor;
-	og.a *= ((float)color.a / 255) * factor;
+	og.r *= ((double)color.r / 255) * factor;
+	og.g *= ((double)color.g / 255) * factor;
+	og.b *= ((double)color.b / 255) * factor;
+	og.a *= ((double)color.a / 255) * factor;
 	return (og);
 }
 
@@ -52,8 +52,8 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	t_rt_color_intensity 	to_add;
 	t_rt_vector				r;
 	t_rt_vector				l;
-	float					n_dot_l;
-	float					r_dot_v;
+	double					n_dot_l;
+	double					r_dot_v;
 	t_intersect_result		shadow;
 	int i = 0;
 
@@ -109,7 +109,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	return (multip_color(intensity, obj->def.color));
 }
 
-t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_vector d, float closest_t, t_rt_scene *scene)
+t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_vector d, double closest_t, t_rt_scene *scene)
 {
 	t_rt_vector	p;
 	t_rt_vector	n;
@@ -118,7 +118,7 @@ t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_v
 	p = multip_vector(d, closest_t);
 	p = add_vector(p, o);
 	n = substract_rt_vector(p, closest_obj->def.coordinates);// coordinates??!
-	n = multip_vector(n, (float)1 / sqrtf(dot_product(n, n)));
+	n = multip_vector(n, (double)1 / sqrtf(dot_product(n, n)));
 //	if (closest_obj->specular != -1)
 //		v = multip_vector(d, -1);
 //	else

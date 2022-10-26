@@ -34,9 +34,9 @@ typedef enum e_rt_obj_type
 
 typedef struct s_rt_vector
 {
-	float				x;
-	float				y;
-	float				z;
+	double				x;
+	double				y;
+	double				z;
 }			t_rt_vector;
 
 typedef t_rt_vector t_rt_point;
@@ -60,10 +60,10 @@ typedef struct s_rt_color
 
 typedef struct s_rt_color_intensity
 {
-	float				r;
-	float				g;
-	float				b;
-	float				a;
+	double				r;
+	double				g;
+	double				b;
+	double				a;
 }			t_rt_color_intensity;
 
 typedef struct s_rt_color_aggregate
@@ -78,7 +78,7 @@ typedef struct s_rt_obj_default
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
-	float				specular;
+	double				specular;
 }			t_rt_obj_default;
 
 typedef struct s_rt_obj_sphere
@@ -86,8 +86,8 @@ typedef struct s_rt_obj_sphere
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
-	float				specular;
-	float				diameter;
+	double				specular;
+	double				diameter;
 }			t_rt_obj_sphere;
 
 typedef struct s_rt_obj_plane
@@ -95,7 +95,7 @@ typedef struct s_rt_obj_plane
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
-	float				specular;
+	double				specular;
 	t_rt_vector			orientation;
 }			t_rt_obj_plane;
 
@@ -104,10 +104,10 @@ typedef struct s_rt_obj_cylinder
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
-	float				specular;
+	double				specular;
 	t_rt_vector			orientation;
-	float				diameter;
-	float				height;
+	double				diameter;
+	double				height;
 }			t_rt_obj_cylinder;
 
 typedef union u_rt_obj_union
@@ -120,7 +120,7 @@ typedef union u_rt_obj_union
 
 typedef struct s_rt_ambient_light
 {
-	float				intensity;
+	double				intensity;
 	t_rt_color			color;
 	bool				set;
 }			t_rt_ambient_light;
@@ -128,7 +128,7 @@ typedef struct s_rt_ambient_light
 typedef struct s_rt_spot_light
 {
 	t_rt_point			coordinates;
-	float				intensity;
+	double				intensity;
 	t_rt_color			color;
 }			t_rt_spot_light;
 
@@ -141,9 +141,9 @@ typedef struct s_rt_camera
 
 typedef struct s_rt_viewport
 {
-	float				width;
-	float				height;
-	float				focal_length;
+	double				width;
+	double				height;
+	double				focal_length;
 	t_rt_point			coordinates;
 	t_rt_vector			orientation;
 	t_rt_resolution		size;
@@ -161,11 +161,11 @@ typedef struct s_rt_scene
 	int					light_amount;
 	int					camera_amount;
 
-	float				aspect_ratio;
+	double				aspect_ratio;
 
-	float				red;
-	float				green;
-	float				blue;
+	double				red;
+	double				green;
+	double				blue;
 }			t_rt_scene;
 
 typedef struct s_rt_mlx

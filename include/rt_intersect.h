@@ -15,20 +15,20 @@
 
 typedef struct s_quad_abc
 {
-	float				a;
-	float				b;
-	float				c;
+	double				a;
+	double				b;
+	double				c;
 }		t_quad_abc;
 
 typedef	struct s_quad_result
 {
-	float				t1;
-	float				t2;
+	double				t1;
+	double				t2;
 }		t_quad_result;
 
 typedef struct s_intersect_result
 {
-	float				closest_t;
+	double				closest_t;
 	t_rt_obj_union		*closest_obj;
 }				t_intersect_result;
 

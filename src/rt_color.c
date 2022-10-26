@@ -13,10 +13,10 @@ t_rt_color	multip_color(t_rt_color_intensity intensity, t_rt_color color)
 	int	b;
 	int a;
 
-	r = (int)((float)color.r * intensity.r);
-	g = (int)((float)color.g * intensity.g);
-	b = (int)((float)color.b * intensity.b);
-	a = (int)((float)color.a * intensity.a);
+	r = (int)((double)color.r * intensity.r);
+	g = (int)((double)color.g * intensity.g);
+	b = (int)((double)color.b * intensity.b);
+	a = (int)((double)color.a * intensity.a);
 	if (r > 255)
 		r = 255;
 	else if (r < 0)
@@ -44,8 +44,8 @@ t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 {
 	t_rt_vector			unit_direction;
 	t_rt_color_ratio	color_ratio;
-	float		t;
-	t_rt_color	color;
+	double				t;
+	t_rt_color			color;
 	(void)o;
 
 	unit_direction = unit_vector(d);
@@ -60,13 +60,13 @@ t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 
 t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
 {
-	float		r;
-	float		g;
-	float		b;
+	double		r;
+	double		g;
+	double		b;
 	t_rt_color	color;
 
-	r = ((float)pixel.x + (float)scene->canvas.x / 2) / ((float)scene->canvas.x - 1);
-	g = ((float)pixel.y + (float)scene->canvas.y / 2) / ((float)scene->canvas.y - 1);
+	r = ((double)pixel.x + (double)scene->canvas.x / 2) / ((double)scene->canvas.x - 1);
+	g = ((double)pixel.y + (double)scene->canvas.y / 2) / ((double)scene->canvas.y - 1);
 	b = scene->blue;
 	color.a = 255;
 	color.r = (int)(255.999 * r);

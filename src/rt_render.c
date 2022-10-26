@@ -22,12 +22,12 @@
 #include <pthread.h>
 #include <stdio.h>
 
-void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio)
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
 {
-	float	radians;
-	float	diagonal;
+	double	radians;
+	double	diagonal;
 
-	radians = (float)camera->fov * (float)M_PI / 180;
+	radians = (double)camera->fov * (double)M_PI / 180;
 	viewport->height = 2.0f;
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
@@ -39,8 +39,8 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 {
 	t_rt_vector	v;
 
-	v.x = (float)x * scene->viewport.width / (float)scene->canvas.x;  //static divisions in a loop..
-	v.y = (float)y * scene->viewport.height / (float)scene->canvas.y;
+	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
+	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
 	// v = multip_vector(v, 1 / dot_product(v, v));
 	return (v);

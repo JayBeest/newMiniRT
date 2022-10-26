@@ -15,10 +15,10 @@
 
 t_rt_vector	add_vector(t_rt_vector a, t_rt_vector b);
 t_rt_vector	substract_rt_vector(t_rt_vector a, t_rt_vector b);
-t_rt_vector	multip_vector(t_rt_vector a, float num);
+t_rt_vector	multip_vector(t_rt_vector a, double num);
 t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b);
-float		dot_product(t_rt_vector a, t_rt_vector b);
-float		length_squared(t_rt_vector vector);
+double		dot_product(t_rt_vector a, t_rt_vector b);
+double		length_squared(t_rt_vector vector);
 t_rt_vector	unit_vector(t_rt_vector vector);
 
 #endif

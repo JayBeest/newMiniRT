@@ -31,7 +31,7 @@ typedef struct s_multipt
 
 t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max);
 t_rt_color			trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, t_rt_resolution pixel);
-void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, float aspect_ratio);
+void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio);
 t_rt_vector			canvas_to_viewport(int x, int y, t_rt_scene *scene);
 t_err				render_scene(t_rt_mlx *mlx, t_rt_scene *scene);
 //t_err	            render_scene(t_minirt *rt);
