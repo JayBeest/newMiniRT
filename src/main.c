@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		mini_rt.scene.light_amount = 2;
+		mini_rt.scene.light_amount = 3;
 		mini_rt.scene.object_amount = 5;
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
-	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control fov (up/down)", 20, 20);
+	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);
 	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);

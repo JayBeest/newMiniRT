@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <MLX42.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
@@ -26,6 +27,22 @@ void	hook(void *arg)
 		{
 			mini_rt->scene.cameras[0].fov -= 1;
 			set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
+	{
+		if (mini_rt->scene.objects[1].sphere.coordinates.x < 10)
+		{
+			mini_rt->scene.objects[1].sphere.coordinates.x += 1.0f / 8;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
+	{
+		if (mini_rt->scene.objects[1].sphere.coordinates.x > -10)
+		{
+			mini_rt->scene.objects[1].sphere.coordinates.x -= 1.0f / 8;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
@@ -79,18 +96,19 @@ void	hook(void *arg)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_EQUAL))
 	{
-		if (mini_rt->scene.spot_lights[1].coordinates.y < 30)
+		if (mini_rt->scene.spot_lights[2].intensity < 0.95f)
 		{
-			mini_rt->scene.spot_lights[1].coordinates.y += 0.5f;
+			mini_rt->scene.spot_lights[2].intensity += 0.05f;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_MINUS))
 	{
-		if (mini_rt->scene.spot_lights[1].coordinates.y > 0)
+		if (mini_rt->scene.spot_lights[2].intensity > 0.05f)
 		{
-			mini_rt->scene.spot_lights[1].coordinates.y -= 0.5f;
+			mini_rt->scene.spot_lights[2].intensity -= 0.05f;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	usleep(150);
 }

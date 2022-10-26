@@ -50,10 +50,10 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 {
 	t_rt_color_intensity	intensity;
 	t_rt_color_intensity 	to_add;
-//	t_rt_vector				r;
+	t_rt_vector				r;
 	t_rt_vector				l;
 	float					n_dot_l;
-//	float					r_dot_v;
+	float					r_dot_v;
 	t_intersect_result		shadow;
 	int i = 0;
 
@@ -61,7 +61,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	init_intensity(&intensity, scene->ambient_light.intensity, scene->ambient_light.color);
 	while (i < scene->light_amount)
 	{
-//		t_rt_vector ln = substract_rt_vector(scene->spot_lights[i].coordinates, p);
+		t_rt_vector lp = substract_rt_vector(scene->spot_lights[i].coordinates, p);
 		t_rt_vector ln = substract_rt_vector(scene->spot_lights[i].coordinates, n);
 //		if (scene.lights->type == POINT_L)
 //		{
@@ -86,22 +86,22 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 			init_intensity(&to_add, scene->spot_lights[i].intensity * n_dot_l / (sqrtf(dot_product(n, n)) * sqrtf(dot_product(l, l))), scene->spot_lights[i].color);
 			update_intensity(&intensity, to_add, scene->spot_lights[i].color);
 		}
-//		if (scene.lights->specular != -1)
+//		if (scene->spot_lights[i].specular != -1)
 //		{
-//			// printf("shape_id: %d specular: %d\n", shape->id, shape->specular);
-//			if (scene.lights->type == POINT_L)
-//				l = lp;
-//
-//			r = multip_vector(n, 2);
-//			r = multip_vector(r, dot_product(n, l));
-//			r = substract_vector(r, l);
-//			r_dot_v = dot_product(r, v);
-////			(void)r_dot_v;
-//			if (r_dot_v > 0)
-//			{
-//				intens_to_add = update_multiply_intensity(intensity, pow(r_dot_v / (sqrt(dot_product(r, r)) * sqrt(dot_product(v, v))), obj->specular), scene.lights->color);
-//				update_intensity(&intensity, intens_to_add, scene.lights->color);
-//			}
+			// printf("shape_id: %d specular: %d\n", shape->id, shape->specular);
+//			if (scene->spot_lights[i].type = POINT_L)
+				l = lp;
+
+			r = multip_vector(n, 2);
+			r = multip_vector(r, dot_product(n, l));
+			r = substract_rt_vector(r, l);
+			r_dot_v = dot_product(r, v);
+//			(void)r_dot_v;
+			if (r_dot_v > 0)
+			{
+				to_add = update_multiply_intensity(intensity, powf(r_dot_v / (sqrtf(dot_product(r, r)) * sqrtf(dot_product(v, v))), obj->def.specular), scene->spot_lights[i].color);
+				update_intensity(&intensity, to_add, scene->spot_lights[i].color);
+			}
 //		}
 		i++;
 	}
