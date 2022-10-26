@@ -25,6 +25,7 @@ t_err	init_rt(t_mini_rt *mini_rt)
 //	mini_rt->scene.aspect_ratio = 1;
 //	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
 	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
+	mini_rt->scene.aspect_ratio = 9.0 / 16.0;
 //	mini_rt->scene.aspect_ratio = 16.0f / 10.0f;
 //	mini_rt->scene.aspect_ratio = 21.0f / 9.0f;
 //	mini_rt->scene.aspect_ratio = 32.0f / 9.0f;
@@ -100,7 +101,7 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[3].sphere.specular = 0.6;
 	scene->objects[3].sphere.color = (t_rt_color){64, 200, 128, 255};
 	scene->objects[4].sphere.type = SPHERE;
-	scene->objects[4].sphere.coordinates = (t_rt_vector){0, -100, -10}; // purple
+	scene->objects[4].sphere.coordinates = (t_rt_vector){0, -99, -10}; // purple
 	scene->objects[4].sphere.diameter = 195;
 	scene->objects[4].sphere.color = (t_rt_color){128, 64, 196, 255};
 	scene->objects[4].sphere.specular = 0.6;

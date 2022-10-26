@@ -62,7 +62,8 @@ int main(int argc, char **argv)
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
 	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);
-	mlx_loop_hook(mini_rt.mlx.mlx, &hook, &mini_rt);
+	mlx_resize_hook(mini_rt.mlx.mlx, &rt_resize, &mini_rt);
+	mlx_loop_hook(mini_rt.mlx.mlx, &rt_hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.text);

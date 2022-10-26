@@ -3,7 +3,27 @@
 #include <rt_datatypes.h>
 #include <rt_render.h>
 
-void	hook(void *arg)
+#include <stdio.h>
+
+void	rt_resize(int x, int y, void *arg)
+{
+	t_mini_rt			*mini_rt;
+	t_rt_mlx			*mlx;
+
+	mini_rt = arg;
+	mlx = &mini_rt->mlx;
+	(void)mlx;
+	printf("new size: %dx%d\n", x, y);
+	mini_rt->scene.canvas.x = x;
+	mini_rt->scene.canvas.y = y;
+	mini_rt->scene.aspect_ratio = (double)x / y;
+	set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
+	mlx_resize_image(mini_rt->mlx.img, x, y);
+	render_scene(&mini_rt->mlx, &mini_rt->scene);
+	usleep(500);
+}
+
+void	rt_hook(void *arg)
 {
 	t_mini_rt	*mini_rt;
 	t_rt_mlx	*mlx;
