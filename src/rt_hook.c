@@ -30,7 +30,7 @@ void	hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
 	{
 		if (mini_rt->scene.objects[1].sphere.coordinates.x < 10)
 		{
@@ -38,7 +38,7 @@ void	hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_RIGHT))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_LEFT))
 	{
 		if (mini_rt->scene.objects[1].sphere.coordinates.x > -10)
 		{
