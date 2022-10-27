@@ -85,12 +85,12 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	char	fps[32];
 	char	rgb[64];
 	time_spend = ms_passed(start_of_frame);
-	mlx_delete_image(mlx->mlx, mlx->fps);
-	mlx_delete_image(mlx->mlx, mlx->text);
-	mlx_delete_image(mlx->mlx, mlx->rgb);
 	sprintf(fov, "fov: %d", scene->cameras[0].fov);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->red), (int)(255.999 * scene->green), (int)(255.999 * scene->blue));
 	sprintf(fps, "frame took %lu ms", time_spend);
+	mlx_delete_image(mlx->mlx, mlx->fps);
+	mlx_delete_image(mlx->mlx, mlx->text);
+	mlx_delete_image(mlx->mlx, mlx->rgb);
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);

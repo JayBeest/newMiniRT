@@ -54,7 +54,6 @@ t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 	return (result);
 }
 
-
 t_quad_result	intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj)
 {
 	static t_intersect	function_pointers[NO_OBJECT] = {
@@ -75,12 +74,12 @@ t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_
 	while (i < scene->object_amount)
 	{
 		quad_result = intersect_obj(o, d, &scene->objects[i]);
-		if (quad_result.t1 > t_min && quad_result.t1 < t_max && quad_result.t1 < intersect_result.closest_t)
+		if (quad_result.t1 < intersect_result.closest_t && quad_result.t1 > t_min && quad_result.t1 < t_max)
 		{
 			intersect_result.closest_t = quad_result.t1;
 			intersect_result.closest_obj = &scene->objects[i];
 		}
-		if (quad_result.t2 > t_min && quad_result.t2 < t_max && quad_result.t2 < intersect_result.closest_t)
+		if (quad_result.t2 < intersect_result.closest_t && quad_result.t2 > t_min && quad_result.t2 < t_max)
 		{
 			intersect_result.closest_t = quad_result.t2;
 			intersect_result.closest_obj = &scene->objects[i];

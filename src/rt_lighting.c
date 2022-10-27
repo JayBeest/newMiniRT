@@ -62,10 +62,10 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	while (i < scene->light_amount)
 	{
 		t_rt_vector lp = substract_vector(scene->spot_lights[i].coordinates, p);
-		t_rt_vector ln = substract_vector(scene->spot_lights[i].coordinates, n);
+//		t_rt_vector ln = substract_vector(scene->spot_lights[i].coordinates, n);
 //		if (scene.lights->type == POINT_L)
 //		{
-			l = ln;
+			l = lp;
 			shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
 //		}
 //		else if (scene.lights->type == DIRECT_L)
@@ -79,33 +79,29 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 			continue ;
 		}
 //		if (scene.lights->type == POINT_L)
-			l = ln;
+			l = lp;
 		n_dot_l = dot_product(n, l);
 		if (n_dot_l > 0)
 		{
 			init_intensity(&to_add, scene->spot_lights[i].intensity * n_dot_l / (sqrt(dot_product(n, n)) * sqrt(dot_product(l, l))), scene->spot_lights[i].color);
 			update_intensity(&intensity, to_add, scene->spot_lights[i].color);
 		}
-//		if (scene->spot_lights[i].specular != -1)
-//		{
-			// printf("shape_id: %d specular: %d\n", shape->id, shape->specular);
+		if (obj->def.specular > 0)
+		{
 //			if (scene->spot_lights[i].type = POINT_L)
 				l = lp;
-
 			r = multiply_vector(n, 2);
 			r = multiply_vector(r, dot_product(n, l));
 			r = substract_vector(r, l);
 			r_dot_v = dot_product(r, v);
-//			(void)r_dot_v;
 			if (r_dot_v > 0)
 			{
 				to_add = update_multiply_intensity(intensity, pow(r_dot_v / (sqrt(dot_product(r, r)) * sqrt(dot_product(v, v))), obj->def.specular), scene->spot_lights[i].color);
 				update_intensity(&intensity, to_add, scene->spot_lights[i].color);
 			}
-//		}
+		}
 		i++;
 	}
-	(void)v;
 	return (multiply_color(intensity, obj->def.color));
 }
 
@@ -115,13 +111,13 @@ t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_v
 	t_rt_vector	n;
 	t_rt_vector	v;
 
-	p = multiply_vector(d, closest_t);
+	p = multiply_vector(d, closest_t); // Calc intersection
 	p = add_vector(p, o);
-	n = substract_vector(p, closest_obj->def.coordinates);// coordinates??!
-	n = multiply_vector(n, (double) 1 / sqrt(dot_product(n, n)));
-//	if (closest_obj->specular != -1)
-//		v = multiply_vector(d, -1);
-//	else
+	n = substract_vector(p, closest_obj->def.coordinates); // Calc sphere normal
+	n = multiply_vector(n, (double)1 / sqrt(dot_product(n, n)));
+	if (closest_obj->def.specular > 0)
+		v = multiply_vector(d, -1);
+	else
 		v = (t_rt_vector){0, 0, 0};
 	return (calculate_light(closest_obj, n, p, v, scene));
 }
