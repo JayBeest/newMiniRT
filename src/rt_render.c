@@ -19,7 +19,6 @@
 #include <rt_time.h>
 #include <math.h>
 
-#include <pthread.h>
 #include <stdio.h>
 
 void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)

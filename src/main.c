@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));
-//		init_mock_rt(&mini_rt.scene);
+		init_mock_rt(&mini_rt.scene);
 		init_new_rt(&mini_rt.scene);
 	}
 

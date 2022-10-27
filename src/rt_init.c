@@ -10,9 +10,9 @@ t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 	mlx->img = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
 	if (!mlx->img)
 		return (MLX_NEW_IMG_F);
-	mlx->text = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
-	if (!mlx->text)
-		return (MLX_NEW_IMG_F);
+//	mlx->text = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
+//	if (!mlx->text)
+//		return (MLX_NEW_IMG_F);
 	return (NO_ERR);
 }
 

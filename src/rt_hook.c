@@ -3,6 +3,7 @@
 #include <rt_datatypes.h>
 #include <rt_render.h>
 
+#include <pthread.h>
 #include <stdio.h>
 
 void	rt_resize(int x, int y, void *arg)
@@ -10,14 +11,13 @@ void	rt_resize(int x, int y, void *arg)
 	t_mini_rt			*mini_rt;
 	t_rt_mlx			*mlx;
 
-	if (y < 20)
+	if (y < 100 || x < 100)
 		return ;
 	mini_rt = arg;
 	mlx = &mini_rt->mlx;
 	mini_rt->scene.canvas.x = x;
 	mini_rt->scene.canvas.y = y;
 	mini_rt->scene.aspect_ratio = (double)x / y;
-	usleep(10000);
 	set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
 	mlx_resize_image(mlx->img, x, y);
 	render_scene(mlx, &mini_rt->scene);
