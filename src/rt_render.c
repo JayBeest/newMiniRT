@@ -28,10 +28,10 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 	double	diagonal;
 
 	radians = (double)camera->fov * (double)M_PI / 180;
-	viewport->height = 2.0f;
+	viewport->height = 1;
 	viewport->width = viewport->height * aspect_ratio;
-	diagonal = sqrtf(viewport->width * viewport->width + viewport->height * viewport->height);
-	viewport->focal_length = diagonal / 2 / tanf(radians / 2);
+	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tan(radians / 2);
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
 }
 
@@ -42,7 +42,7 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
 	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
-	// v = multip_vector(v, 1 / dot_product(v, v));
+	// v = multiply_vector(v, 1 / dot_product(v, v));
 	return (v);
 }
 
@@ -90,7 +90,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	mlx_delete_image(mlx->mlx, mlx->text);
 	mlx_delete_image(mlx->mlx, mlx->rgb);
 	sprintf(fov, "fov: %d", scene->cameras[0].fov);
-	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999f * scene->red), (int)(255.999f * scene->green), (int)(255.999f * scene->blue));
+	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->red), (int)(255.999 * scene->green), (int)(255.999 * scene->blue));
 	sprintf(fps, "frame took %lu ms", time_spend);
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);

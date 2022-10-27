@@ -23,12 +23,12 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.green = 0.7;
 	mini_rt->scene.blue = 1.0;
 //	mini_rt->scene.aspect_ratio = 1;
-//	mini_rt->scene.aspect_ratio = 4.0f / 3.0f;
+//	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
 	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
 	mini_rt->scene.aspect_ratio = 9.0 / 16.0;
-//	mini_rt->scene.aspect_ratio = 16.0f / 10.0f;
-//	mini_rt->scene.aspect_ratio = 21.0f / 9.0f;
-//	mini_rt->scene.aspect_ratio = 32.0f / 9.0f;
+//	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
+//	mini_rt->scene.aspect_ratio = 21.0 / 9.0;
+//	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
 	mini_rt->scene.canvas.x = IMAGE_WIDTH;
 	mini_rt->scene.canvas.y = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas));
@@ -55,7 +55,7 @@ void	init_mock_rt(t_rt_scene *scene)
 	scene->objects[1].sphere.diameter = 20;
 	scene->objects[1].sphere.color = (t_rt_color){255, 0, 0, 255};
 //	scene->objects[2].cylinder.type = CYLINDER;
-//	scene->objects[2].cylinder.coordinates = (t_rt_vector){50.0, 0.0f, 20.6};
+//	scene->objects[2].cylinder.coordinates = (t_rt_vector){50.0, 0.0, 20.6};
 //	scene->objects[2].cylinder.orientation = (t_rt_vector){0, 0, 1.0};
 //	scene->objects[2].cylinder.diameter = 14.2;
 //	scene->objects[2].cylinder.height = 21.42;

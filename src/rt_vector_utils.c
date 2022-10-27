@@ -23,7 +23,7 @@ t_rt_vector	add_vector(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-t_rt_vector	substract_rt_vector(t_rt_vector a, t_rt_vector b)
+t_rt_vector	substract_vector(t_rt_vector a, t_rt_vector b)
 {
 	t_rt_vector	result;
 
@@ -33,7 +33,7 @@ t_rt_vector	substract_rt_vector(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-t_rt_vector	multip_vector(t_rt_vector a, double num)
+t_rt_vector	multiply_vector(t_rt_vector a, double num)
 {
 	t_rt_vector	result;
 
@@ -70,7 +70,7 @@ double	length_squared(t_rt_vector vector)
 
 double	vector_length(t_rt_vector vector)
 {
-	return (sqrtf(length_squared(vector)));
+	return (sqrt(length_squared(vector)));
 }
 
 t_rt_vector	unit_vector(t_rt_vector vector)

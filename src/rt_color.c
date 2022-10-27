@@ -6,7 +6,7 @@ int	color_to_int(t_rt_color color)
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
-t_rt_color	multip_color(t_rt_color_intensity intensity, t_rt_color color)
+t_rt_color	multiply_color(t_rt_color_intensity intensity, t_rt_color color)
 {
 	int	r;
 	int	g;
@@ -49,8 +49,9 @@ t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 	(void)o;
 
 	unit_direction = unit_vector(d);
-	t = 0.5f * (unit_direction.y + 1.0f);
-	color_ratio = add_vector(multip_vector((t_rt_vector){1, 1, 1}, 1.0f - t), multip_vector((t_rt_vector){scene->red, scene->green, scene->blue}, t));
+	t = 0.5 * (unit_direction.y + 1.0);
+	color_ratio = add_vector(multiply_vector((t_rt_vector) {1, 1, 1}, 1.0 - t),
+							 multiply_vector((t_rt_vector) {scene->red, scene->green, scene->blue}, t));
 	color.a = 255;
 	color.r = (int)(255.999 * color_ratio.x);
 	color.g = (int)(255.999 * color_ratio.y);
