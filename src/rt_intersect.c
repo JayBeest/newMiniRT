@@ -27,7 +27,7 @@ t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj
 	co = substract_vector(o, obj->sphere.coordinates);
 	quad.a = dot_product(d, d);
 	quad.b = 2 * dot_product(co, d);
-	quad.c = dot_product(co, co) - obj->sphere.diameter / 2 * obj->sphere.diameter / 2; /// radius?
+	quad.c = dot_product(co, co) - obj->sphere.radius * obj->sphere.radius;
 	discriminant = quad.b * quad.b - 4 * quad.a * quad.c;
 	if (discriminant < 0)
 		return ((t_quad_result){INFINITY, INFINITY});

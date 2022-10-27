@@ -23,13 +23,10 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
-
 void	print_vector(t_rt_vector vector)
 {
 	printf("x: %f  y: %f  z: %f\n", vector.x, vector.y, vector.z);
 }
-
-
 
 int main(int argc, char **argv)
 {

@@ -58,7 +58,7 @@ void	print_sphere(t_rt_obj_sphere sphere)
 	printf("type: SPHERE\n");
 	print_coordinates(sphere.coordinates);
 	print_color(sphere.color);
-	printf("diameter: %f\n", sphere.diameter);
+	printf("radius: %f\n", sphere.radius);
 }
 
 void	print_plane(t_rt_obj_plane plane)
@@ -75,7 +75,7 @@ void	print_cylinder(t_rt_obj_cylinder cylinder)
 	print_coordinates(cylinder.coordinates);
 	print_color(cylinder.color);
 	print_orientation(cylinder.orientation);
-	printf("diameter: %f\n", cylinder.diameter);
+	printf("radius: %f\n", cylinder.radius);
 	printf("height: %f\n", cylinder.height);
 }
 

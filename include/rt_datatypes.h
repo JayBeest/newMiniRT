@@ -87,7 +87,7 @@ typedef struct s_rt_obj_sphere
 	t_rt_color			color;
 	t_rt_point			coordinates;
 	double				specular;
-	double				diameter;
+	double				radius;
 }			t_rt_obj_sphere;
 
 typedef struct s_rt_obj_plane
@@ -106,7 +106,7 @@ typedef struct s_rt_obj_cylinder
 	t_rt_point			coordinates;
 	double				specular;
 	t_rt_vector			orientation;
-	double				diameter;
+	double				radius;
 	double				height;
 }			t_rt_obj_cylinder;
 
