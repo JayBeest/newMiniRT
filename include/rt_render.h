@@ -36,10 +36,9 @@ typedef struct s_rt_ray
 	double		t_max;
 	double		t_min;
 	int			recursion_depth;
-	t_rt_point	p;
-	t_rt_point	n;
-	t_rt_point	v;
-	t_rt_point	r;
+	t_rt_point	intersection_point;
+	t_rt_point	normal;
+	t_rt_point	reverse_direction;
 
 }			t_rt_ray;
 

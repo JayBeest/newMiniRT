@@ -77,11 +77,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 			i++;
 			continue;
 		}
-		t_rt_vector lp = substract_vector(scene->spot_lights[i].coordinates, p);
-//		if (scene.lights->type == POINT_L)
-			l = lp;
-//		else if (scene.lights->type == DIRECT_L)
-//			l = scene.lights->vector;
+		l = substract_vector(scene->spot_lights[i].coordinates, p);
 		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
 		if (shadow.closest_obj && shadow.closest_obj != obj)
 		{
@@ -109,27 +105,24 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	return (multiply_color(intensity, obj->def.color));
 }
 
-t_rt_color	precalculate_light(t_intersect_result intersect_result, t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
+t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 {
-	t_rt_vector		n;
-	t_rt_vector		v;
-	t_rt_vector		p;
 	t_rt_color		local_color;
 	t_rt_color		reflected_color;
 
-	p = multiply_vector(ray.direction, intersect_result.closest_t); // Calc intersection
-	p = add_vector(p, ray.origin);
-	n = substract_vector(p, intersect_result.closest_obj->def.coordinates); // Calc sphere normal
-	n = multiply_vector(n, (double)1 / sqrt(dot_product(n, n)));
+	ray.intersection_point = multiply_vector(ray.direction, intersect_result.closest_t); // Calc intersection
+	ray.intersection_point = add_vector(ray.intersection_point, ray.origin);
+	ray.normal = substract_vector(ray.intersection_point, intersect_result.closest_obj->def.coordinates); // Calc sphere normal
+	ray.normal = multiply_vector(ray.normal, (double)1 / sqrt(dot_product(ray.normal, ray.normal)));
 	if (intersect_result.closest_obj->def.specular > 0)
-		v = multiply_vector(ray.direction, -1);
+		ray.reverse_direction = multiply_vector(ray.direction, -1);
 	else
-		v = (t_rt_vector){0, 0, 0};
-	local_color = calculate_light(intersect_result.closest_obj, n, p, v, scene);
+		ray.reverse_direction = (t_rt_vector){0, 0, 0};
+	local_color = calculate_light(intersect_result.closest_obj, ray.normal, ray.intersection_point, ray.reverse_direction, scene);
 	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
-	ray.direction = reflect_ray(multiply_vector(ray.direction, -1), n);
-	ray.origin = p;
+	ray.direction = reflect_ray(multiply_vector(ray.direction, -1), ray.normal);
+	ray.origin = ray.intersection_point;
 	ray.t_max = INFINITY;
 	ray.t_min = EPSILON;
 	reflected_color = trace_ray(ray, scene, recursion_depth - 1);

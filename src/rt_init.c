@@ -115,5 +115,5 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[5].sphere.radius = 3.6 / 2;
 	scene->objects[5].sphere.color = (t_rt_color){255, 255, 0, 255};
 	scene->objects[5].sphere.specular = 0;
-	scene->objects[5].sphere.reflective = 0.75f;
+	scene->objects[5].sphere.reflective = 0.6f;
 }
