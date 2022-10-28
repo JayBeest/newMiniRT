@@ -78,6 +78,7 @@ typedef struct s_rt_obj_default
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
+	float				reflective;
 	int					specular;
 }			t_rt_obj_default;
 
@@ -86,6 +87,7 @@ typedef struct s_rt_obj_sphere
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
+	float				reflective;
 	int					specular;
 	double				radius;
 }			t_rt_obj_sphere;
@@ -95,6 +97,7 @@ typedef struct s_rt_obj_plane
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
+	float				reflective;
 	int					specular;
 	t_rt_vector			orientation;
 }			t_rt_obj_plane;
@@ -104,6 +107,7 @@ typedef struct s_rt_obj_cylinder
 	t_rt_obj_type		type;
 	t_rt_color			color;
 	t_rt_point			coordinates;
+	float				reflective;
 	int					specular;
 	t_rt_vector			orientation;
 	double				radius;

@@ -46,6 +46,16 @@ t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, double f
 	return (og);
 }
 
+t_rt_vector	reflect_ray(t_rt_vector ray, t_rt_vector normal)
+{
+	t_rt_vector	new_ray;
+
+	new_ray = multiply_vector(normal, 2);
+	new_ray = multiply_vector(new_ray, dot_product(normal, ray));
+	new_ray = substract_vector(new_ray, ray);
+	return (new_ray);
+}
+
 t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_rt_vector v, t_rt_scene *scene)
 {
 	t_rt_color_intensity	intensity;
@@ -85,9 +95,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 		}
 		if (obj->def.specular > 0)
 		{
-			r = multiply_vector(n, 2);
-			r = multiply_vector(r, dot_product(n, l));
-			r = substract_vector(r, l);
+			r = reflect_ray(l, n);
 			r_dot_v = dot_product(r, v);
 			if (r_dot_v > 0)
 			{
@@ -100,11 +108,13 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	return (multiply_color(intensity, obj->def.color));
 }
 
-t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_vector d, double closest_t, t_rt_scene *scene)
+t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_vector d, double closest_t, t_rt_scene *scene, int recursion_depth)
 {
-	t_rt_vector	p;
-	t_rt_vector	n;
-	t_rt_vector	v;
+	t_rt_vector		p;
+	t_rt_vector		n;
+	t_rt_vector		v;
+	t_rt_color		local_color;
+	t_rt_color		reflected_color;
 
 	p = multiply_vector(d, closest_t); // Calc intersection
 	p = add_vector(p, o);
@@ -114,5 +124,10 @@ t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_v
 		v = multiply_vector(d, -1);
 	else
 		v = (t_rt_vector){0, 0, 0};
-	return (calculate_light(closest_obj, n, p, v, scene));
+	local_color = calculate_light(closest_obj, n, p, v, scene);
+	if (closest_obj->def.reflective <= 0 || recursion_depth <= 0)
+		return (local_color);
+	t_rt_vector		r = reflect_ray(multiply_vector(d, -1), n);
+	reflected_color = trace_ray(p, r, scene, recursion_depth - 1);
+	return (add_color(multiply_color((t_rt_color_intensity){closest_obj->def.reflective, closest_obj->def.reflective, closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_rt_color_intensity){1 - closest_obj->def.reflective, 1 - closest_obj->def.reflective, 1 - closest_obj->def.reflective, 1},local_color)));
 }
