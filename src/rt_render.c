@@ -45,15 +45,15 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	return (v);
 }
 
-t_rt_color	trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, int recursion_depth)
+t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 {
 	t_intersect_result	intersect_result;
 
 	ft_bzero(&intersect_result, sizeof(intersect_result));
-	intersect_result = get_closest_intersection(scene, o, d, 1, INFINITY);
+	intersect_result = get_closest_intersection(scene, ray.origin, ray.direction, ray.t_min, ray.t_max);
 	if (!intersect_result.closest_obj)
-		return (y_gradient(o, d, scene));
-	return (precalculate_light(intersect_result.closest_obj, o, d, intersect_result.closest_t, scene, recursion_depth));
+		return (y_gradient(ray.origin, ray.direction, scene));
+	return (precalculate_light(intersect_result, ray,  scene, recursion_depth));
 }
 
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
@@ -70,8 +70,8 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = -scene->canvas.x / 2;
 		while (pixel.x < scene->canvas.x / 2)
 		{
-			t_rt_vector D = canvas_to_viewport(pixel.x, pixel.y, scene);
-			color = trace_ray((t_rt_vector){0,0,0}, D, scene, 4);
+			t_rt_vector d = canvas_to_viewport(pixel.x, pixel.y, scene);
+			color = trace_ray((t_rt_ray){(t_rt_vector){0,0,0}, d, INFINITY, 1, 3, (t_rt_vector){0, 0, 0}, (t_rt_vector){0, 0, 0}, (t_rt_vector){0, 0, 0}, (t_rt_vector){0, 0, 0}}, scene, 3);
 //			color = trace_ray(scene->cameras[0].coordinates, D, scene); // needs matrix translation?
 			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
 			pixel.x++;

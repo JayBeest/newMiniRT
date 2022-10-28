@@ -21,15 +21,29 @@ typedef struct s_multi_pixel
 	int					max_x;
 	int					min_y;
 	int					max_y;
-}		t_multi_pixel;
+}			t_multi_pixel;
 
 typedef struct s_pthread_arg
 {
 	t_mini_rt			*rt;
 	int 				id;
-}		t_pthread_arg;
+}			t_pthread_arg;
 
-t_rt_color			trace_ray(t_rt_vector o, t_rt_vector d, t_rt_scene *scene, int recursion_depth);
+typedef struct s_rt_ray
+{
+	t_rt_point	origin;
+	t_rt_point	direction;
+	double		t_max;
+	double		t_min;
+	int			recursion_depth;
+	t_rt_point	p;
+	t_rt_point	n;
+	t_rt_point	v;
+	t_rt_point	r;
+
+}			t_rt_ray;
+
+t_rt_color			trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth);
 void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio);
 t_rt_vector			canvas_to_viewport(int x, int y, t_rt_scene *scene);
 t_err				render_scene(t_rt_mlx *mlx, t_rt_scene *scene);

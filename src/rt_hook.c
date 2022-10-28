@@ -146,5 +146,21 @@ void	rt_hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_7))
+	{
+		if (mini_rt->scene.spot_lights[0].coordinates.y < 20.0)
+		{
+			mini_rt->scene.spot_lights[0].coordinates.y += 0.5;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_8))
+	{
+		if (mini_rt->scene.spot_lights[0].coordinates.y > -10)
+		{
+			mini_rt->scene.spot_lights[0].coordinates.y	-= 0.5;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
 	usleep(150);
 }

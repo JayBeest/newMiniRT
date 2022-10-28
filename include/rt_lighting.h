@@ -13,6 +13,6 @@
 #ifndef RT_LIGHTING_H
 # define RT_LIGHTING_H
 
-t_rt_color	precalculate_light(t_rt_obj_union *closest_obj, t_rt_vector o, t_rt_vector d, double closest_t, t_rt_scene *scene, int recursion_depth);
+t_rt_color	precalculate_light(t_intersect_result intersect_result, t_rt_ray ray, t_rt_scene *scene, int recursion_depth);
 
 #endif
