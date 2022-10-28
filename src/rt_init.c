@@ -69,7 +69,7 @@ void	init_new_rt(t_rt_scene *scene)
 
 	scene->cameras[0].coordinates = (t_rt_vector){-50, 0, 20};
 	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
-	scene->cameras[0].fov = 135;
+	scene->cameras[0].fov = 100;
 	scene->spot_lights[0].coordinates = (t_rt_vector){0, 20, 0};
 	scene->spot_lights[0].intensity = 0.5;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};

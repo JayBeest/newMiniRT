@@ -67,24 +67,16 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 			continue;
 		}
 		t_rt_vector lp = substract_vector(scene->spot_lights[i].coordinates, p);
-//		t_rt_vector ln = substract_vector(scene->spot_lights[i].coordinates, n);
 //		if (scene.lights->type == POINT_L)
-//		{
 			l = lp;
-			shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
-//		}
 //		else if (scene.lights->type == DIRECT_L)
-//		{
 //			l = scene.lights->vector;
-//			shadow = get_closest_intersection(scene.shapes, p, l, EPSILON, INFINITY, obj);
-//		}
+		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
 		if (shadow.closest_obj && shadow.closest_obj != obj)
 		{
 			i++;
 			continue ;
 		}
-//		if (scene.lights->type == POINT_L)
-			l = lp;
 		n_dot_l = dot_product(n, l);
 		if (n_dot_l > 0)
 		{
@@ -93,8 +85,6 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 		}
 		if (obj->def.specular > 0)
 		{
-//			if (scene->spot_lights[i].type = POINT_L)
-				l = lp;
 			r = multiply_vector(n, 2);
 			r = multiply_vector(r, dot_product(n, l));
 			r = substract_vector(r, l);
