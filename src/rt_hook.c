@@ -132,17 +132,17 @@ void	rt_hook(void *arg)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_0))
 	{
-		if (mini_rt->scene.objects[2].sphere.specular < 2000)
+		if (mini_rt->scene.objects[1].sphere.specular < 2000)
 		{
-			mini_rt->scene.objects[2].sphere.specular += 5;
+			mini_rt->scene.objects[1].sphere.specular += 5;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_9))
 	{
-		if (mini_rt->scene.objects[2].sphere.specular > 0)
+		if (mini_rt->scene.objects[1].sphere.specular > 0)
 		{
-			mini_rt->scene.objects[2].sphere.specular -= 5;
+			mini_rt->scene.objects[1].sphere.specular -= 5;
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}

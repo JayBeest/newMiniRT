@@ -6,6 +6,11 @@ int	color_to_int(t_rt_color color)
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
+t_rt_color	add_color(t_rt_color a, t_rt_color b)
+{
+	return ((t_rt_color){a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a});
+}
+
 t_rt_color	multiply_color(t_rt_color_intensity intensity, t_rt_color color)
 {
 	int	r;
