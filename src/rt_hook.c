@@ -130,5 +130,21 @@ void	rt_hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_0))
+	{
+		if (mini_rt->scene.objects[2].sphere.specular < 2000)
+		{
+			mini_rt->scene.objects[2].sphere.specular += 5;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_9))
+	{
+		if (mini_rt->scene.objects[2].sphere.specular > 0)
+		{
+			mini_rt->scene.objects[2].sphere.specular -= 5;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
 	usleep(150);
 }

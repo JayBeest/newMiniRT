@@ -23,9 +23,9 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.green = 0.7;
 	mini_rt->scene.blue = 1.0;
 //	mini_rt->scene.aspect_ratio = 1;
-//	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
-	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
-	mini_rt->scene.aspect_ratio = 9.0 / 16.0;
+	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
+//	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
+//	mini_rt->scene.aspect_ratio = 9.0 / 16.0;
 //	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
 //	mini_rt->scene.aspect_ratio = 21.0 / 9.0;
 //	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
@@ -71,13 +71,13 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
 	scene->cameras[0].fov = 135;
 	scene->spot_lights[0].coordinates = (t_rt_vector){0, 20, 0};
-	scene->spot_lights[0].intensity = 0.3;
+	scene->spot_lights[0].intensity = 0.5;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};
 	scene->spot_lights[1].coordinates = (t_rt_vector){0.8, 15, -3.5};
 	scene->spot_lights[1].intensity = 0.3;
 	scene->spot_lights[1].color = (t_rt_color){255, 255, 255, 255};
 	scene->spot_lights[2].coordinates = (t_rt_vector){0, 5, -3};
-	scene->spot_lights[2].intensity = 0.1;
+	scene->spot_lights[2].intensity = 0;
 	scene->spot_lights[2].color = (t_rt_color){255, 196, 23, 255};
 
 	scene->objects[0].sphere.type = SPHERE;

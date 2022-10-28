@@ -61,6 +61,11 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	init_intensity(&intensity, scene->ambient_light.intensity, scene->ambient_light.color);
 	while (i < scene->light_amount)
 	{
+		if (scene->spot_lights[i].intensity < EPSILON)
+		{
+			i++;
+			continue;
+		}
 		t_rt_vector lp = substract_vector(scene->spot_lights[i].coordinates, p);
 //		t_rt_vector ln = substract_vector(scene->spot_lights[i].coordinates, n);
 //		if (scene.lights->type == POINT_L)
