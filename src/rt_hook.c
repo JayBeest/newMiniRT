@@ -98,6 +98,55 @@ void	rt_hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_I))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.z < 100)
+		{
+			mini_rt->scene.cameras[0].coordinates.z += CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_K))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.z > -100)
+		{
+			mini_rt->scene.cameras[0].coordinates.z -= CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_L))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.x < 100)
+		{
+			mini_rt->scene.cameras[0].coordinates.x += CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_J))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.x > -100)
+		{
+			mini_rt->scene.cameras[0].coordinates.x -= CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_U))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.y < 100)
+		{
+			mini_rt->scene.cameras[0].coordinates.y += CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_M))
+	{
+		if (mini_rt->scene.cameras[0].coordinates.y > -100)
+		{
+			mini_rt->scene.cameras[0].coordinates.y -= CAMERA_MOVE_STEP;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Q))
 	{
 		if (mini_rt->scene.red < 0.95)

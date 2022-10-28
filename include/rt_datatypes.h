@@ -7,6 +7,8 @@
 # define IMAGE_WIDTH 768
 # define EPSILON 1e-6
 
+# define CAMERA_MOVE_STEP 0.1
+
 typedef enum e_err
 {
 	NO_ERR,

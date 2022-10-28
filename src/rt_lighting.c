@@ -110,18 +110,18 @@ t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_r
 	t_rt_color		local_color;
 	t_rt_color		reflected_color;
 
-	ray.intersection_point = multiply_vector(ray.direction, intersect_result.closest_t); // Calc intersection
+	ray.intersection_point = multiply_vector(ray.destination, intersect_result.closest_t); // Calc intersection
 	ray.intersection_point = add_vector(ray.intersection_point, ray.origin);
 	ray.normal = substract_vector(ray.intersection_point, intersect_result.closest_obj->def.coordinates); // Calc sphere normal
 	ray.normal = multiply_vector(ray.normal, (double)1 / sqrt(dot_product(ray.normal, ray.normal)));
 	if (intersect_result.closest_obj->def.specular > 0)
-		ray.reverse_direction = multiply_vector(ray.direction, -1);
+		ray.reverse_direction = multiply_vector(ray.destination, -1);
 	else
 		ray.reverse_direction = (t_rt_vector){0, 0, 0};
 	local_color = calculate_light(intersect_result.closest_obj, ray.normal, ray.intersection_point, ray.reverse_direction, scene);
 	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
-	ray.direction = reflect_ray(multiply_vector(ray.direction, -1), ray.normal);
+	ray.destination = reflect_ray(multiply_vector(ray.destination, -1), ray.normal);
 	ray.origin = ray.intersection_point;
 	ray.t_max = INFINITY;
 	ray.t_min = EPSILON;

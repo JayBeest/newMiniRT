@@ -15,6 +15,8 @@
 
 # include <rt_intersect.h>
 
+# define RECURSION_DEPTH 3
+
 typedef struct s_multi_pixel
 {
 	int					min_x;
@@ -32,10 +34,9 @@ typedef struct s_pthread_arg
 typedef struct s_rt_ray
 {
 	t_rt_point	origin;
-	t_rt_point	direction;
+	t_rt_point	destination;
 	double		t_max;
 	double		t_min;
-	int			recursion_depth;
 	t_rt_point	intersection_point;
 	t_rt_point	normal;
 	t_rt_point	reverse_direction;

@@ -16,6 +16,7 @@
 #include <rt_render.h>
 #include <rt_color.h>
 #include <rt_lighting.h>
+#include <rt_vector_utils.h>
 #include <rt_time.h>
 #include <math.h>
 
@@ -41,6 +42,7 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
 	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
+//	v = substract_vector(v, scene->cameras[0].coordinates);
 	// v = multiply_vector(v, 1 / dot_product(v, v));
 	return (v);
 }
@@ -50,10 +52,22 @@ t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 	t_intersect_result	intersect_result;
 
 	ft_bzero(&intersect_result, sizeof(intersect_result));
-	intersect_result = get_closest_intersection(scene, ray.origin, ray.direction, ray.t_min, ray.t_max);
+	intersect_result = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
 	if (!intersect_result.closest_obj)
-		return (y_gradient(ray.origin, ray.direction, scene));
+		return (y_gradient(ray.origin, ray.destination, scene));
 	return (assemble_color(intersect_result, ray, scene, recursion_depth));
+}
+
+t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, double t_max)
+{
+	t_rt_ray	ray;
+
+	ft_bzero(&ray, sizeof(ray));
+	ray.origin = origin;
+	ray.destination = destination;
+	ray.t_min = t_min;
+	ray.t_max = t_max;
+	return (ray);
 }
 
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
@@ -70,9 +84,10 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = -scene->canvas.x / 2;
 		while (pixel.x < scene->canvas.x / 2)
 		{
-			t_rt_vector d = canvas_to_viewport(pixel.x, pixel.y, scene);
-			color = trace_ray((t_rt_ray){(t_rt_vector){0,0,0}, d, INFINITY, 1, 3, (t_rt_vector){0, 0, 0}, (t_rt_vector){0, 0, 0}, (t_rt_vector){0, 0, 0}}, scene, 3);
-//			color = trace_ray(scene->cameras[0].coordinates, D, scene); // needs matrix translation?
+			t_rt_point	destination = canvas_to_viewport(pixel.x, pixel.y, scene);
+			t_rt_ray 	ray = init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY);
+//			t_rt_ray 	ray = init_rt_ray((t_rt_vector) {0, 0, 0}, destination, 1, INFINITY);
+			color = trace_ray(ray, scene, 3);
 			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
 			pixel.x++;
 		}
