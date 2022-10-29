@@ -20,7 +20,13 @@
 #include <rt_time.h>
 #include <math.h>
 
+#include <rt_scene_printer.h>
 #include <stdio.h>
+
+double	degrees_to_radians(int degrees)
+{
+	return ((double)degrees * (double)M_PI / 180);
+}
 
 void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
 {
@@ -49,7 +55,7 @@ t_rt_vector rotate_vector_y(t_rt_vector original_vector, double radians)
 {
 	t_rt_vector	rotated_vector;
 
-	rotated_vector.x = original_vector.x * cos(radians) - original_vector.z * sin(radians);
+	rotated_vector.x = original_vector.x * cos(radians) + original_vector.z * sin(radians);
 	rotated_vector.y = original_vector.y;
 	rotated_vector.z = -original_vector.x * sin(radians) + original_vector.z * cos(radians);
 	return (rotated_vector);
@@ -69,9 +75,10 @@ t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation)
 {
 	t_rt_vector	rotated_vector;
 
-	rotated_vector = rotate_vector_x(original_vector, rotation.x * M_PI);
-	rotated_vector = rotate_vector_y(rotated_vector, rotation.y * M_PI);
-	rotated_vector = rotate_vector_z(rotated_vector, rotation.z * M_PI);
+	rotated_vector = rotate_vector_x(original_vector, degrees_to_radians(rotation.y * 360));
+	rotated_vector = rotate_vector_y(rotated_vector, degrees_to_radians(rotation.x * 360));
+	rotated_vector = rotate_vector_z(rotated_vector, degrees_to_radians(rotation.z * 360));
+	(void)rotation;
 	return (rotated_vector);
 }
 
@@ -82,6 +89,7 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
 	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
+//	print_orientation(scene->cameras[0].orientation);
 	v = rotate_vector(v, scene->cameras[0].orientation);
 	return (v);
 }

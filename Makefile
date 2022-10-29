@@ -62,7 +62,7 @@ ifeq ($(UNAME), Linux)
 	LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
 endif
 
-CFLAGS		=	-Wall -Werror -Wextra -pedantic -O1 #-fsanitize=address -g # -std=c89 -g
+CFLAGS		=	-Wall -Werror -Wextra -pedantic #-O1 #-fsanitize=address -g # -std=c89 -g
 CC			=	gcc
 
 ifeq ("$(VERBOSE)","1")

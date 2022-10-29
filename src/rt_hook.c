@@ -7,6 +7,7 @@
 
 #include <pthread.h>
 #include <stdio.h>
+#include <rt_scene_printer.h>
 
 void	rt_resize_hook(int x, int y, void *arg)
 {
@@ -36,11 +37,26 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 	if (e_key == MLX_MOUSE_BUTTON_LEFT && e_action == MLX_PRESS)
 	{
 		mlx_get_mouse_pos(mlx->mlx, &mouse.x, &mouse.y);
-//		printf("mouse - x: %d  y: %d\n", mouse.x, mouse.y);
-//		printf("  - converted - x: %f  y: %f\n", (double)(mini_rt->scene.canvas.x / -2 + mouse.x) / (mini_rt->scene.canvas.x / 2), (double)(mini_rt->scene.canvas.y / -2 + mouse.y) / (mini_rt->scene.canvas.y / -2));
-		mini_rt->scene.cameras[0].orientation = rotate_vector_x(mini_rt->scene.cameras[0].orientation, (double)(mini_rt->scene.canvas.x / -2 + mouse.x) / (mini_rt->scene.canvas.x / 2) * M_PI );
-		mini_rt->scene.cameras[0].orientation = rotate_vector_y(mini_rt->scene.cameras[0].orientation, (double)(mini_rt->scene.canvas.y / -2 + mouse.y) / (mini_rt->scene.canvas.y / -2) * M_PI );
-		set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
+		double	converted_x;
+		double	converted_y;
+		converted_x = (double)(mini_rt->scene.canvas.x / -2 + mouse.x) / (mini_rt->scene.canvas.x / 2);
+		converted_y = (double)(mini_rt->scene.canvas.y / -2 + mouse.y) / (mini_rt->scene.canvas.y / -2);
+		int diagonal = sqrt(mini_rt->scene.canvas.x * mini_rt->scene.canvas.x + mini_rt->scene.canvas.y * mini_rt->scene.canvas.y);
+		t_rt_resolution fov;
+		printf("diagonal: %d\n", diagonal);
+		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[0].fov;
+		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[0].fov;
+		printf("mouse - x: %d  y: %d\n", mouse.x, mouse.y);
+		printf("  - converted - x: %f  y: %f\n", converted_x, converted_y);
+		printf("  - fov - x: %d  y: %d\n", fov.x, fov.y);
+		mini_rt->scene.cameras[0].orientation.x += converted_x * fov.x / 360 / 2 ;
+		if (mini_rt->scene.cameras[0].orientation.x > 1)
+			mini_rt->scene.cameras[0].orientation.x -= 1;
+
+		mini_rt->scene.cameras[0].orientation.y += -converted_y * fov.y / 360 / 2 ;
+		if (mini_rt->scene.cameras[0].orientation.y > 1)
+			mini_rt->scene.cameras[0].orientation.y -= 1;
+		printf("camera.x = %f\ncamera.y = %f\n", mini_rt->scene.cameras[0].orientation.x, mini_rt->scene.cameras[0].orientation.y);
 		render_scene(mlx, &mini_rt->scene);
 	}
 	(void)e_key;
@@ -236,7 +252,19 @@ void	rt_hook(void *arg)
 			render_scene(&mini_rt->mlx, &mini_rt->scene);
 		}
 	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_UP))
+	{
+		mini_rt->scene.cameras[0].orientation.x += 0.01;
+		if (mini_rt->scene.cameras[0].orientation.x >= 1)
+			mini_rt->scene.cameras[0].orientation.x = 0;
+		render_scene(&mini_rt->mlx, &mini_rt->scene);
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_DOWN))
+	{
+		mini_rt->scene.cameras[0].orientation.x	-= 0.01;
+		if (mini_rt->scene.cameras[0].orientation.x <= 0)
+			mini_rt->scene.cameras[0].orientation.x = 1;
+		render_scene(&mini_rt->mlx, &mini_rt->scene);
+	}
 	usleep(150);
-
-	mini_rt
 }
