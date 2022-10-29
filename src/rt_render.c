@@ -35,6 +35,46 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
 }
 
+t_rt_vector rotate_vector_x(t_rt_vector original_vector, double radians)
+{
+	t_rt_vector	rotated_vector;
+
+	rotated_vector.x = original_vector.x;
+	rotated_vector.y = original_vector.y * cos(radians) - original_vector.z * sin(radians);
+	rotated_vector.z = original_vector.y * sin(radians) + original_vector.z * cos(radians);
+	return (rotated_vector);
+}
+
+t_rt_vector rotate_vector_y(t_rt_vector original_vector, double radians)
+{
+	t_rt_vector	rotated_vector;
+
+	rotated_vector.x = original_vector.x * cos(radians) - original_vector.z * sin(radians);
+	rotated_vector.y = original_vector.y;
+	rotated_vector.z = -original_vector.x * sin(radians) + original_vector.z * cos(radians);
+	return (rotated_vector);
+}
+
+t_rt_vector rotate_vector_z(t_rt_vector original_vector, double radians)
+{
+	t_rt_vector	rotated_vector;
+
+	rotated_vector.x = original_vector.x * cos(radians) - original_vector.y * sin(radians);
+	rotated_vector.y = original_vector.x * sin(radians) + original_vector.y * cos(radians);
+	rotated_vector.z = original_vector.z;
+	return (rotated_vector);
+}
+
+t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation)
+{
+	t_rt_vector	rotated_vector;
+
+	rotated_vector = rotate_vector_x(original_vector, rotation.x * M_PI);
+	rotated_vector = rotate_vector_y(rotated_vector, rotation.y * M_PI);
+	rotated_vector = rotate_vector_z(rotated_vector, rotation.z * M_PI);
+	return (rotated_vector);
+}
+
 t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 {
 	t_rt_vector	v;
@@ -42,8 +82,7 @@ t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
 	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
 	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
-//	v = substract_vector(v, scene->cameras[0].coordinates);
-	// v = multiply_vector(v, 1 / dot_product(v, v));
+	v = rotate_vector(v, scene->cameras[0].orientation);
 	return (v);
 }
 
@@ -70,6 +109,23 @@ t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, do
 	return (ray);
 }
 
+void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_msecs time_spend)
+{
+	char	fov[32];
+	char	fps[32];
+	char	rgb[32];
+
+	sprintf(fov, "fov: %d", scene->cameras[0].fov);
+	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
+	sprintf(fps, "frame took %lu ms", time_spend);
+	mlx_delete_image(mlx->mlx, mlx->fps);
+	mlx_delete_image(mlx->mlx, mlx->text);
+	mlx_delete_image(mlx->mlx, mlx->rgb);
+	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
+	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
+	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution	pixel;
@@ -85,27 +141,14 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		while (pixel.x < scene->canvas.x / 2)
 		{
 			t_rt_point	destination = canvas_to_viewport(pixel.x, pixel.y, scene);
-			t_rt_ray 	ray = init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY);
-//			t_rt_ray 	ray = init_rt_ray((t_rt_vector) {0, 0, 0}, destination, 1, INFINITY);
-			color = trace_ray(ray, scene, 3);
+			color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, 3);
 			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y++;
 	}
-	char	fov[32];
-	char	fps[32];
-	char	rgb[64];
 	time_spend = ms_passed(start_of_frame);
-	sprintf(fov, "fov: %d", scene->cameras[0].fov);
-	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->red), (int)(255.999 * scene->green), (int)(255.999 * scene->blue));
-	sprintf(fps, "frame took %lu ms", time_spend);
-	mlx_delete_image(mlx->mlx, mlx->fps);
-	mlx_delete_image(mlx->mlx, mlx->text);
-	mlx_delete_image(mlx->mlx, mlx->rgb);
-	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
-	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
-	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
+	render_text(mlx, scene, time_spend);
 	custom_sleep(16 - time_spend);
 	return (NO_ERR);
 }

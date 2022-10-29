@@ -163,15 +163,16 @@ typedef struct s_rt_scene
 	t_rt_camera	*		cameras;
 	t_rt_resolution		canvas;
 	t_rt_viewport		viewport;
+	t_rt_color_ratio	bg_color;
 	int					object_amount;
 	int					light_amount;
 	int					camera_amount;
 
 	double				aspect_ratio;
 
-	double				red;
-	double				green;
-	double				blue;
+//	double				red;
+//	double				green;
+//	double				blue;
 }			t_rt_scene;
 
 typedef struct s_rt_mlx

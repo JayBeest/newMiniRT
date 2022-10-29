@@ -19,9 +19,9 @@ t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 t_err	init_rt(t_mini_rt *mini_rt)
 {
 	ft_bzero(mini_rt, sizeof(t_mini_rt));
-	mini_rt->scene.red = 0.5;
-	mini_rt->scene.green = 0.7;
-	mini_rt->scene.blue = 1.0;
+	mini_rt->scene.bg_color.x = 0.5;
+	mini_rt->scene.bg_color.y = 0.7;
+	mini_rt->scene.bg_color.z = 1.0;
 //	mini_rt->scene.aspect_ratio = 1;
 	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
 //	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
@@ -70,6 +70,7 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->cameras[0].coordinates = (t_rt_vector){0, -1, -5};
 	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
 	scene->cameras[0].fov = 70;
+
 	scene->spot_lights[0].coordinates = (t_rt_vector){0, 20, 4};
 	scene->spot_lights[0].intensity = 0.5;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};
