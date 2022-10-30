@@ -4,8 +4,8 @@
 #include <rt_datatypes.h>
 #include <rt_render.h>
 #include <rt_vector_utils.h>
+#include <rt_time.h>
 
-#include <pthread.h>
 #include <stdio.h>
 #include <rt_scene_printer.h>
 
@@ -66,13 +66,31 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 
 void	rt_hook(void *arg)
 {
-	t_mini_rt	*mini_rt;
-	t_rt_mlx	*mlx;
+	t_mini_rt			*mini_rt;
+	t_rt_mlx			*mlx;
+
+
+	static size_t 		mlx_loop_counter = 0;
+//	static t_time_stamp	start_mlx_loop;
+	static t_time_stamp	previous;
+
+	t_time_stamp	current_frame_start = set_time();
+
+	if (mlx_loop_counter == 0)
+	{
+//		start_mlx_loop = current_frame_start;
+		previous = current_frame_start;
+	}
+	mlx_loop_counter++;
+
+
 
 	mini_rt = arg;
 	mlx = &mini_rt->mlx;
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx->mlx);
+
+
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
 	{
 		if (mini_rt->scene.cameras[0].fov < 180)
@@ -254,17 +272,44 @@ void	rt_hook(void *arg)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_UP))
 	{
-		mini_rt->scene.cameras[0].orientation.x += 0.01;
-		if (mini_rt->scene.cameras[0].orientation.x >= 1)
-			mini_rt->scene.cameras[0].orientation.x = 0;
+		mini_rt->scene.objects[5].sphere.reflective += 0.01f;
+		if (mini_rt->scene.objects[5].sphere.reflective > 1)
+			mini_rt->scene.objects[5].sphere.reflective = 1;
 		render_scene(&mini_rt->mlx, &mini_rt->scene);
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_DOWN))
 	{
-		mini_rt->scene.cameras[0].orientation.x	-= 0.01;
-		if (mini_rt->scene.cameras[0].orientation.x <= 0)
-			mini_rt->scene.cameras[0].orientation.x = 1;
+		mini_rt->scene.objects[5].sphere.reflective	-= 0.01f;
+		if (mini_rt->scene.objects[5].sphere.reflective < 0)
+			mini_rt->scene.objects[5].sphere.reflective = 0;
 		render_scene(&mini_rt->mlx, &mini_rt->scene);
 	}
-	usleep(150);
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_INSERT))
+	{
+		if (mini_rt->scene.recursion_depth < 50)
+		{
+			mini_rt->scene.recursion_depth += 1;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DELETE))
+	{
+		if (mini_rt->scene.recursion_depth > 0)
+		{
+			mini_rt->scene.recursion_depth	-= 1;
+			render_scene(&mini_rt->mlx, &mini_rt->scene);
+		}
+	}
+
+	t_nano	took = nano_passed(current_frame_start);
+	if (mlx_loop_counter % 20 == 0)
+	{
+		float sixty_took = (float)nano_passed(previous) / 1000;
+		printf("-------> 20 mlx_frames: %.3f ms (%.0f fps)\n", sixty_took, 20.0f / (sixty_took / 1000));
+		previous = current_frame_start;
+	}
+	if (took < 1000000 / FPS)
+	{
+		rt_sleep_nano(1000000 / FPS - took - 1000);
+	}
 }

@@ -31,6 +31,8 @@ t_err	init_rt(t_mini_rt *mini_rt)
 //	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
 	mini_rt->scene.canvas.x = IMAGE_WIDTH;
 	mini_rt->scene.canvas.y = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
+
+	mini_rt->scene.recursion_depth = 0;
 	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas));
 }
 
@@ -116,5 +118,11 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[5].sphere.radius = 3.6 / 2;
 	scene->objects[5].sphere.color = (t_rt_color){255, 255, 0, 255};
 	scene->objects[5].sphere.specular = 0;
-	scene->objects[5].sphere.reflective = 0.6f;
+	scene->objects[5].sphere.reflective = 0.4f;
+//	scene->objects[6].plane.type = PLANE;
+//	scene->objects[6].plane.coordinates = (t_rt_vector){0, -4, 0};
+//	scene->objects[6].plane.orientation = (t_rt_vector){0, 1, 0};
+//	scene->objects[6].plane.color = (t_rt_color){255, 255, 255, 255};
+//	scene->objects[6].plane.specular = 0;
+//	scene->objects[6].plane.reflective = 0;
 }

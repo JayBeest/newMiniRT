@@ -23,6 +23,8 @@
 #include <rt_scene_printer.h>
 #include <stdio.h>
 
+size_t g_frame_counter = 0;
+
 double	degrees_to_radians(int degrees)
 {
 	return ((double)degrees * (double)M_PI / 180);
@@ -117,21 +119,25 @@ t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, do
 	return (ray);
 }
 
-void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_msecs time_spend)
+void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 {
 	char	fov[32];
 	char	fps[32];
 	char	rgb[32];
+	char	ref[32];
 
 	sprintf(fov, "fov: %d", scene->cameras[0].fov);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took %lu ms", time_spend);
+	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
 	mlx_delete_image(mlx->mlx, mlx->fps);
 	mlx_delete_image(mlx->mlx, mlx->text);
 	mlx_delete_image(mlx->mlx, mlx->rgb);
+	mlx_delete_image(mlx->mlx, mlx->ref);
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
+	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
 }
 
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
@@ -139,7 +145,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_rt_resolution	pixel;
 	t_rt_color		color;
 	t_time_stamp	start_of_frame;
-	t_msecs			time_spend;
+	t_ms			time_spend;
 
 	start_of_frame = set_time();
 	pixel.y = -scene->canvas.y / 2;
@@ -149,7 +155,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		while (pixel.x < scene->canvas.x / 2)
 		{
 			t_rt_point	destination = canvas_to_viewport(pixel.x, pixel.y, scene);
-			color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, 3);
+			color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, scene->recursion_depth);
 			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
 			pixel.x++;
 		}
@@ -157,6 +163,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	time_spend = ms_passed(start_of_frame);
 	render_text(mlx, scene, time_spend);
-	custom_sleep(16 - time_spend);
+	g_frame_counter++;
+	printf("*************** FRAME COUNTER %zu\n", g_frame_counter);
 	return (NO_ERR);
 }

@@ -43,7 +43,7 @@ t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 
 	result.t2 = INFINITY;
 	denominator	= dot_product(obj->plane.orientation, d);
-	if (denominator > EPSILON)
+	if (denominator > EPSILON || denominator < -EPSILON)
 	{
 		result.t1 = dot_product(substract_vector(obj->plane.coordinates, o), obj->plane.orientation) / denominator;
 		if (result.t1 < 0)

@@ -8,21 +8,27 @@ t_time_stamp	set_time(void)
 	struct timeval	current;
 
 	gettimeofday(&current, NULL);
-	time_stamp.sec = current.tv_sec;
-	time_stamp.m_sec = current.tv_usec / 1000;
+	time_stamp.s = current.tv_sec;
+	time_stamp.nano = current.tv_usec;
+	time_stamp.ms = time_stamp.nano / 1000;
 	return (time_stamp);
 }
 
-long	ms_passed(t_time_stamp start)
+long	nano_passed(t_time_stamp start)
 {
 	struct timeval	current;
 
 	gettimeofday(&current, NULL);
-	return ((current.tv_sec - start.sec) * 1000 + \
-			(current.tv_usec / 1000 - start.m_sec));
+	return ((current.tv_sec - start.s) * 1000000 + \
+			(current.tv_usec - start.nano));
 }
 
-void	custom_sleep(t_msecs ms)
+long	ms_passed(t_time_stamp start)
+{
+	return (nano_passed(start) / 1000);
+}
+
+void	rt_sleep_ms(t_ms ms)
 {
 	t_time_stamp	start;
 
@@ -32,6 +38,17 @@ void	custom_sleep(t_msecs ms)
 	while (ms - ms_passed(start) > 0)
 	{
 		usleep(512);
+	}
+}
+
+void	rt_sleep_nano(t_nano nano)
+{
+	t_time_stamp	start;
+
+	start = set_time();
+	while (nano - nano_passed(start) > 0)
+	{
+		usleep(128);
 	}
 }
 

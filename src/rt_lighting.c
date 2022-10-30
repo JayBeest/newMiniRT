@@ -47,7 +47,7 @@ t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, double f
 	return (og);
 }
 
-t_rt_vector	reflect_ray(t_rt_vector ray, t_rt_vector normal)
+t_rt_vector	reflect_sphere(t_rt_vector ray, t_rt_vector normal) // one also needed for plane and others I think
 {
 	t_rt_vector	new_ray;
 
@@ -79,7 +79,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 		}
 		l = substract_vector(scene->spot_lights[i].coordinates, p);
 		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
-		if (shadow.closest_obj && shadow.closest_obj != obj)
+		if (shadow.closest_obj)
 		{
 			i++;
 			continue ;
@@ -92,7 +92,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 		}
 		if (obj->def.specular > 0)
 		{
-			r = reflect_ray(l, n);
+			r = reflect_sphere(l, n);
 			r_dot_v = dot_product(r, v);
 			if (r_dot_v > 0)
 			{
@@ -121,7 +121,7 @@ t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_r
 	local_color = calculate_light(intersect_result.closest_obj, ray.normal, ray.intersection_point, ray.reverse_direction, scene);
 	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
-	ray.destination = reflect_ray(multiply_vector(ray.destination, -1), ray.normal);
+	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
 	ray.origin = ray.intersection_point;
 	ray.t_max = INFINITY;
 	ray.t_min = EPSILON;

@@ -8,6 +8,7 @@
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1
+# define FPS 60
 
 typedef enum e_err
 {
@@ -173,6 +174,7 @@ typedef struct s_rt_scene
 //	double				red;
 //	double				green;
 //	double				blue;
+	int					recursion_depth;
 }			t_rt_scene;
 
 typedef struct s_rt_mlx
@@ -182,6 +184,7 @@ typedef struct s_rt_mlx
 	mlx_image_t 		*text;
 	mlx_image_t 		*fps;
 	mlx_image_t 		*rgb;
+	mlx_image_t			*ref;
 }			t_rt_mlx;
 
 typedef struct s_mini_rt
