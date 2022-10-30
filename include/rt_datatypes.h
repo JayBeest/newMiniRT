@@ -8,7 +8,7 @@
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1
-# define FPS 60
+# define FPS 30
 
 typedef enum e_err
 {

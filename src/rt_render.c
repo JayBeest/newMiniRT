@@ -36,7 +36,7 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 	double	diagonal;
 
 	radians = (double)camera->fov * (double)M_PI / 180;
-	viewport->height = 2.0;
+	viewport->height = viewport->height;
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
