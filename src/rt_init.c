@@ -1,4 +1,3 @@
-//#include <math.h>
 #include <libft.h>
 #include <rt_datatypes.h>
 

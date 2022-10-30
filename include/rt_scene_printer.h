@@ -1,6 +1,7 @@
 #ifndef RT_SCENE_PRINTER_H
 # define RT_SCENE_PRINTER_H
 
+void	print_vector(t_rt_vector vector);
 void	print_color(t_rt_color color);
 void	print_coordinates(t_rt_vector coordinates);
 void	print_orientation(t_rt_vector orientation);

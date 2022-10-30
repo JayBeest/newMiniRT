@@ -14,10 +14,8 @@
 #include <libft.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
-#include <rt_render_utils.h>
 #include <rt_vector_utils.h>
 #include <rt_intersect.h>
-#include <rt_draw_utils.h>
 #include <rt_color.h>
 
 #include <stdio.h>

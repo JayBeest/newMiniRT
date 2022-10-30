@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <rt_datatypes.h>
 
+void	print_vector(t_rt_vector vector)
+{
+	printf("x: %f  y: %f  z: %f\n", vector.x, vector.y, vector.z);
+}
+
 void	print_color(t_rt_color color)
 {
 	printf("color(rgba): %d %d %d %d\n", color.r, color.g, color.b, color.a);

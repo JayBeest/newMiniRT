@@ -1,9 +1,7 @@
-#include <unistd.h>
 #include <math.h>
 #include <MLX42.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
-#include <rt_vector_utils.h>
 #include <rt_controls.h>
 #include <rt_time.h>
 
