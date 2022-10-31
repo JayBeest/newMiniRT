@@ -106,11 +106,7 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[1].sphere.radius = 2.0 / 2;
 	scene->objects[1].sphere.color = (t_rt_color){0, 0, 255, 255};
 	scene->objects[1].sphere.specular = 0; //5;
-<<<<<<< HEAD
-	scene->objects[1].sphere.reflective = 0.3f;
-=======
-	scene->objects[1].sphere.reflective = 0.4f;
->>>>>>> 466f6537e473577072cec212094dc665d5224d26
+	scene->objects[1].sphere.reflective = 0.35f;
 	scene->objects[1].sphere.metal_fuzz = 0;
 	scene->objects[2].sphere.type = SPHERE;
 	scene->objects[2].sphere.coordinates = (t_rt_vector){-2, 0, 4}; // green
