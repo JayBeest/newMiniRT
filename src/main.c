@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));
-		init_mock_rt(&mini_rt.scene);
+//		init_mock_rt(&mini_rt.scene);
 		init_new_rt(&mini_rt.scene);
 	}
 
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
 
 	set_viewport(&mini_rt.scene.viewport, &mini_rt.scene.cameras[0], mini_rt.scene.aspect_ratio);
-
+	printf("viewport set..\n");
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
-	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
+	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, -1, -1);
 	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);
 	mlx_resize_hook(mini_rt.mlx.mlx, &rt_resize_hook, &mini_rt);
 	mlx_mouse_hook(mini_rt.mlx.mlx, &rt_mouse_hook, &mini_rt);
@@ -63,6 +63,10 @@ int main(int argc, char **argv)
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.text);
 	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.fps);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.rgb);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.fps);
+	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.ref);
+
 	mlx_terminate(mini_rt.mlx.mlx);
 	return free_scene(mini_rt.scene, 0);
 }

@@ -120,8 +120,7 @@ t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, do
 	return (ray);
 }
 
-void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
-{
+void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	char	fov[32];
 	char	fps[32];
 	char	rgb[32];
@@ -131,10 +130,14 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took %lu ms", time_spend);
 	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
-	mlx_delete_image(mlx->mlx, mlx->fps);
-	mlx_delete_image(mlx->mlx, mlx->text);
-	mlx_delete_image(mlx->mlx, mlx->rgb);
-	mlx_delete_image(mlx->mlx, mlx->ref);
+	if (mlx->fps)
+		mlx_delete_image(mlx->mlx, mlx->fps);
+	if (mlx->text)
+		mlx_delete_image(mlx->mlx, mlx->text);
+	if (mlx->rgb)
+		mlx_delete_image(mlx->mlx, mlx->rgb);
+	if (mlx->ref)
+		mlx_delete_image(mlx->mlx, mlx->ref);
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
@@ -157,7 +160,7 @@ t_rt_color 	multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
 
 	ft_bzero(&aggregate, sizeof(t_rt_color_aggregate));
 	int	i = 0;
-	while (i < MULTI_SAMPLE)
+	while (i < scene->msaa)
 	{
 		double u = pixel.x + random_double();
 		double v = pixel.y + random_double();
@@ -176,17 +179,17 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_ms					time_spend;
 
 	start_of_frame = set_time();
-	pixel.y = -scene->canvas.y / 2;
-	while (pixel.y < scene->canvas.y / 2)
+	pixel.y = -(scene->canvas.y) / 2;
+	while (pixel.y < (scene->canvas.y) / 2 + 1)
 	{
-		pixel.x = -scene->canvas.x / 2;
-		while (pixel.x < scene->canvas.x / 2)
+		pixel.x = -(scene->canvas.x) / 2;
+		while (pixel.x < (scene->canvas.x) / 2 + 1)
 		{
-			if (MULTI_SAMPLE > 0)
+			if (scene->msaa > 0)
 				color = multi_sample(scene, pixel);
 			else
-				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);
-			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
+				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);//			if (pixel.x + scene->canvas.x / 2 >= scene->canvas.x || pixel.x + scene->canvas.x / 2 < 0)
+			mlx_put_pixel(mlx->img, pixel.x + (scene->canvas.x) / 2, scene->canvas.y - (pixel.y + (scene->canvas.y) / 2), color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y++;

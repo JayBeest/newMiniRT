@@ -1,5 +1,3 @@
-###               auto-generated Makefile               ###
-
 NAME		=	miniRT
 
 SRC_DIR		=	src/

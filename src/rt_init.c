@@ -1,12 +1,17 @@
 #include <libft.h>
 #include <rt_datatypes.h>
 
+#include <stdio.h>
+
 t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 {
 	mlx->mlx = mlx_init(resolution.x, resolution.y, "miniRT", true);
 	if (!mlx->mlx)
 		return (MLX_INIT_F);
-	mlx->img = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
+	mlx->img = mlx_new_image(mlx->mlx, resolution.x + 4, resolution.y + 4);
+
+	printf("\nNEW IMAGE SIZE - x: %d y: %d\n\n", resolution.x, resolution.y);
+
 	if (!mlx->img)
 		return (MLX_NEW_IMG_F);
 //	mlx->text = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
@@ -28,12 +33,18 @@ t_err	init_rt(t_mini_rt *mini_rt)
 //	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
 //	mini_rt->scene.aspect_ratio = 21.0 / 9.0;
 //	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
-	mini_rt->scene.canvas.x = IMAGE_WIDTH;
+	mini_rt->scene.canvas.x = IMAGE_WIDTH + IMAGE_WIDTH % 2;
 	mini_rt->scene.canvas.y = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
+	mini_rt->scene.canvas.y += mini_rt->scene.canvas.y % 2;
 	mini_rt->scene.viewport.height = 2.0f;
 
 	mini_rt->scene.recursion_depth = 0;
-	return (rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas));
+	mini_rt->scene.msaa = MULTI_SAMPLE;
+	rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas);
+//	mini_rt->scene.canvas.x = IMAGE_WIDTH;
+//	mini_rt->scene.canvas.y = (IMAGE_WIDTH / mini_rt->scene.aspect_ratio);
+	return (NO_ERR);
+
 }
 
 void	init_mock_rt(t_rt_scene *scene)
@@ -95,7 +106,7 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[1].sphere.radius = 2.0 / 2;
 	scene->objects[1].sphere.color = (t_rt_color){0, 0, 255, 255};
 	scene->objects[1].sphere.specular = 0; //5;
-	scene->objects[1].sphere.reflective = 0.1f;
+	scene->objects[1].sphere.reflective = 0.3f;
 	scene->objects[1].sphere.metal_fuzz = 0;
 	scene->objects[2].sphere.type = SPHERE;
 	scene->objects[2].sphere.coordinates = (t_rt_vector){-2, 0, 4}; // green
@@ -123,11 +134,11 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[5].sphere.radius = 3.6 / 2;
 	scene->objects[5].sphere.color = (t_rt_color){255, 255, 0, 255};
 	scene->objects[5].sphere.specular = 0;
-	scene->objects[5].sphere.reflective = 0.4f;
-	scene->objects[5].sphere.metal_fuzz = 1;
+	scene->objects[5].sphere.reflective = 0.7f;
+	scene->objects[5].sphere.metal_fuzz = 0;
 //	scene->objects[6].plane.type = PLANE;
 //	scene->objects[6].plane.coordinates = (t_rt_vector){0, -4, 0};
-//	scene->objects[6].plane.orientation = (t_rt_vector){0, 1, 0};
+//	scene->objects[6].plane.orientation = (t_rt_vector){1, 1, 0};
 //	scene->objects[6].plane.color = (t_rt_color){255, 255, 255, 255};
 //	scene->objects[6].plane.specular = 0;
 //	scene->objects[6].plane.reflective = 0;

@@ -197,7 +197,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			scene->objects[5].sphere.reflective = 0;
 		render_scene(mlx, scene);
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_INSERT))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_5))
 	{
 		if (scene->recursion_depth < 50)
 		{
@@ -205,7 +205,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DELETE))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_6))
 	{
 		if (scene->recursion_depth > 0)
 		{
@@ -244,6 +244,22 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			scene->viewport.height	-= 0.05;
 			scene->viewport.width	-= 0.05 * scene->aspect_ratio;
+			render_scene(mlx, scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_HOME))
+	{
+		if (scene->msaa < 100)
+		{
+			scene->msaa += 10;
+			render_scene(mlx, scene);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_END))
+	{
+		if (scene->msaa > 10)
+		{
+			scene->msaa	-= 10;
 			render_scene(mlx, scene);
 		}
 	}
