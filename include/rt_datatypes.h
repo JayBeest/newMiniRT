@@ -4,12 +4,12 @@
 # include <stdbool.h>
 # include <MLX42.h>
 
-# define IMAGE_WIDTH 1000
+# define IMAGE_WIDTH 768
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1
 # define FPS 30
-# define MULTI_SAMPLE 100
+# define MSAA 0
 
 typedef enum e_err
 {

@@ -157,7 +157,7 @@ t_rt_color 	multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
 
 	ft_bzero(&aggregate, sizeof(t_rt_color_aggregate));
 	int	i = 0;
-	while (i < MULTI_SAMPLE)
+	while (i < MSAA)
 	{
 		double u = pixel.x + random_double();
 		double v = pixel.y + random_double();
@@ -182,7 +182,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = -scene->canvas.x / 2;
 		while (pixel.x < scene->canvas.x / 2)
 		{
-			if (MULTI_SAMPLE > 0)
+			if (MSAA > 0)
 				color = multi_sample(scene, pixel);
 			else
 				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);
