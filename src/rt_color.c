@@ -1,14 +1,60 @@
 #include <rt_datatypes.h>
 #include <rt_vector_utils.h>
 
+#include <rt_scene_printer.h>
+
 int	color_to_int(t_rt_color color)
 {
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
+t_rt_color_intensity color_to_intensity(t_rt_color color)
+{
+	t_rt_color_intensity	intensity;
+
+	intensity.r = (double)color.r / 255;
+	intensity.g = (double)color.g / 255;
+	intensity.b = (double)color.b / 255;
+	intensity.a = (double)color.a / 255;
+	return (intensity);
+}
+
+int	aggregate_to_int(t_rt_color_aggregate agg)
+{
+	t_rt_color	color;
+
+	double scale = 1.0 / (double)agg.source_counter;
+	color.r = (unsigned char)((double)agg.intensity.r * scale * 255.999);
+	color.g = (unsigned char)((double)agg.intensity.g * scale * 255.999);
+	color.b = (unsigned char)((double)agg.intensity.b * scale * 255.999);
+	color.a = (unsigned char)((double)agg.intensity.a * scale * 255.999);
+	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
+}
+
+t_rt_color	aggregate_to_color(t_rt_color_aggregate agg)
+{
+	t_rt_color	color;
+
+	double scale = 1.0 / (double)agg.source_counter;
+	color.r = (unsigned char)((double)agg.intensity.r * scale * 255.999);
+	color.g = (unsigned char)((double)agg.intensity.g * scale * 255.999);
+	color.b = (unsigned char)((double)agg.intensity.b * scale * 255.999);
+	color.a = (unsigned char)((double)agg.intensity.a * scale * 255.999);
+	return (color);
+}
+
 t_rt_color	add_color(t_rt_color a, t_rt_color b)
 {
 	return ((t_rt_color){a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a});
+}
+
+void	add_to_aggregate(t_rt_color_aggregate *agg, t_rt_color_intensity to_add)
+{
+	agg->intensity.r = agg->intensity.r + to_add.r;
+	agg->intensity.g = agg->intensity.g + to_add.g;
+	agg->intensity.b = agg->intensity.b + to_add.b;
+	agg->intensity.a = agg->intensity.a + to_add.a;
+	agg->source_counter++;
 }
 
 t_rt_color	multiply_color(t_rt_color_intensity intensity, t_rt_color color)

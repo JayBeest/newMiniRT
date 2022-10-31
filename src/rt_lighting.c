@@ -19,6 +19,7 @@
 #include <rt_color.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 
 void	init_intensity(t_rt_color_intensity *intensity, double init, t_rt_color color)
 {
@@ -53,6 +54,16 @@ t_rt_vector	reflect_sphere(t_rt_vector ray, t_rt_vector normal) // one also need
 	new_ray = multiply_vector(new_ray, dot_product(normal, ray));
 	new_ray = substract_vector(new_ray, ray);
 	return (new_ray);
+}
+
+t_rt_vector	random_unit_vector()
+{
+	t_rt_vector	random;
+
+	random.x = (double)rand() / RAND_MAX;
+	random.y = (double)rand() / RAND_MAX;
+	random.z = (double)rand() / RAND_MAX;
+	return (random);
 }
 
 t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_rt_vector v, t_rt_scene *scene)
@@ -120,6 +131,7 @@ t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_r
 	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
 	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
+	ray.destination = add_vector(ray.destination, multiply_vector(random_unit_vector(), intersect_result.closest_obj->def.metal_fuzz));
 	ray.origin = ray.intersection_point;
 	ray.t_max = INFINITY;
 	ray.t_min = EPSILON;

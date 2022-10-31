@@ -4,11 +4,12 @@
 # include <stdbool.h>
 # include <MLX42.h>
 
-# define IMAGE_WIDTH 768
+# define IMAGE_WIDTH 1000
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1
 # define FPS 30
+# define MULTI_SAMPLE 100
 
 typedef enum e_err
 {
@@ -71,8 +72,8 @@ typedef struct s_rt_color_intensity
 
 typedef struct s_rt_color_aggregate
 {
-	t_rt_color_ratio	ratios;
-	int					source_counter;
+	t_rt_color_intensity	intensity;
+	unsigned long		source_counter;
 }			t_rt_color_aggregate;
 
 
@@ -82,6 +83,7 @@ typedef struct s_rt_obj_default
 	t_rt_color			color;
 	t_rt_point			coordinates;
 	float				reflective;
+	float				metal_fuzz;
 	int					specular;
 }			t_rt_obj_default;
 
@@ -91,6 +93,7 @@ typedef struct s_rt_obj_sphere
 	t_rt_color			color;
 	t_rt_point			coordinates;
 	float				reflective;
+	float				metal_fuzz;
 	int					specular;
 	double				radius;
 }			t_rt_obj_sphere;
@@ -101,6 +104,7 @@ typedef struct s_rt_obj_plane
 	t_rt_color			color;
 	t_rt_point			coordinates;
 	float				reflective;
+	float				metal_fuzz;
 	int					specular;
 	t_rt_vector			orientation;
 }			t_rt_obj_plane;
@@ -111,6 +115,7 @@ typedef struct s_rt_obj_cylinder
 	t_rt_color			color;
 	t_rt_point			coordinates;
 	float				reflective;
+	float				metal_fuzz;
 	int					specular;
 	t_rt_vector			orientation;
 	double				radius;

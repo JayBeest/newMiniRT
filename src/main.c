@@ -11,6 +11,7 @@
 #include <rt_hook.h>
 
 #include <stdio.h>
+#include <time.h>
 
 int	free_scene(t_rt_scene scene, int return_value)
 {
@@ -27,6 +28,7 @@ int main(int argc, char **argv)
 {
 	t_mini_rt	mini_rt;
 
+	srand(time(NULL));
 	init_rt(&mini_rt);
 	if (argc == 2)
 	{

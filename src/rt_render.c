@@ -22,6 +22,7 @@
 
 #include <rt_scene_printer.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 size_t g_frame_counter = 0;
 
@@ -84,11 +85,11 @@ t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation)
 	return (rotated_vector);
 }
 
-t_rt_vector	canvas_to_viewport(int x, int y, t_rt_scene *scene)
+t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
 {
 	t_rt_vector	v;
 
-	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop..
+	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop
 	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
 	v.z = scene->viewport.focal_length;
 //	print_orientation(scene->cameras[0].orientation);
@@ -140,12 +141,39 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
 }
 
+double	random_double(void)
+{
+	return rand() / (RAND_MAX + 1.0);
+}
+
+double random_double_in(double min, double max)
+{
+	return (min + (max - min) * random_double());
+}
+
+t_rt_color 	multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
+{
+	t_rt_color_aggregate	aggregate;
+
+	ft_bzero(&aggregate, sizeof(t_rt_color_aggregate));
+	int	i = 0;
+	while (i < MULTI_SAMPLE)
+	{
+		double u = pixel.x + random_double();
+		double v = pixel.y + random_double();
+		t_rt_point	destination = canvas_to_viewport(u, v, scene);
+		add_to_aggregate(&aggregate, color_to_intensity(trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, scene->recursion_depth)));
+		i++;
+	}
+	return (aggregate_to_color(aggregate));
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
-	t_rt_resolution	pixel;
-	t_rt_color		color;
-	t_time_stamp	start_of_frame;
-	t_ms			time_spend;
+	t_rt_resolution			pixel;
+	t_rt_color				color;
+	t_time_stamp			start_of_frame;
+	t_ms					time_spend;
 
 	start_of_frame = set_time();
 	pixel.y = -scene->canvas.y / 2;
@@ -154,8 +182,10 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = -scene->canvas.x / 2;
 		while (pixel.x < scene->canvas.x / 2)
 		{
-			t_rt_point	destination = canvas_to_viewport(pixel.x, pixel.y, scene);
-			color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, scene->recursion_depth);
+			if (MULTI_SAMPLE > 0)
+				color = multi_sample(scene, pixel);
+			else
+				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);
 			mlx_put_pixel(mlx->img, pixel.x + scene->canvas.x / 2, scene->canvas.y - (pixel.y + scene->canvas.y / 2), color_to_int(color));
 			pixel.x++;
 		}

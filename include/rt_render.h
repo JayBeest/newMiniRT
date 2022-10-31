@@ -45,7 +45,7 @@ typedef struct s_rt_ray
 
 t_rt_color			trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth);
 void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio);
-t_rt_vector			canvas_to_viewport(int x, int y, t_rt_scene *scene);
+t_rt_vector			canvas_to_viewport(double x, double y, t_rt_scene *scene);
 t_err				render_scene(t_rt_mlx *mlx, t_rt_scene *scene);
 
 t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation);

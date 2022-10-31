@@ -213,7 +213,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_INSERT))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_C))
 	{
 		if (scene->recursion_depth < 50)
 		{
@@ -221,7 +221,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_DELETE))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_V))
 	{
 		if (scene->recursion_depth > 0)
 		{
@@ -231,19 +231,19 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Z))
 	{
-		if (scene->viewport.height < 30)
+		if (scene->viewport.height < 3)
 		{
-			scene->viewport.height += 0.1;
-			scene->viewport.width += 0.1 * scene->aspect_ratio;
+			scene->viewport.height += 0.05;
+			scene->viewport.width += 0.05 * scene->aspect_ratio;
 			render_scene(mlx, scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_X))
 	{
-		if (scene->viewport.height > 0.2)
+		if (scene->viewport.height > 0.05)
 		{
-			scene->viewport.height	-= 0.1;
-			scene->viewport.width	-= 0.1 * scene->aspect_ratio;
+			scene->viewport.height	-= 0.05;
+			scene->viewport.width	-= 0.05 * scene->aspect_ratio;
 			render_scene(mlx, scene);
 		}
 	}
