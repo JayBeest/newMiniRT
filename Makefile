@@ -11,12 +11,14 @@ SRC			=	main.c \
 				rt_check_infile.c \
 				rt_alloc.c \
 				rt_parser.c \
+				rt_math_utils.c \
 				rt_scene_printer.c \
 				rt_vector_utils.c \
 				rt_draw_utils.c \
 				rt_color.c \
 				rt_render.c \
 				rt_render_utils.c \
+				rt_rotate.c \
 				rt_intersect.c \
 				rt_lighting.c \
 				rt_hook.c \
@@ -29,9 +31,11 @@ HEADERS		=	rt_datatypes.h \
 				rt_check_infile.h \
 				rt_alloc.h \
 				rt_parser.h \
+				rt_math_utils.h \
 				rt_scene_printer.h \
 				rt_vector_utils.h \
 				rt_render_utils.h \
+				rt_rotate.h \
 				rt_draw_utils.h \
 				rt_color.h \
 				rt_render.h \

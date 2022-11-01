@@ -1,6 +1,8 @@
 #include <rt_datatypes.h>
 #include <rt_render.h>
 
+#include <unistd.h>
+
 void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
@@ -257,10 +259,19 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_END))
 	{
-		if (scene->msaa > 10)
+		if (scene->msaa > 0)
 		{
 			scene->msaa	-= 10;
 			render_scene(mlx, scene);
 		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F1))
+	{
+		if (scene->hud)
+			scene->hud = 0;
+		else
+			scene->hud = 1;
+		render_scene(mlx, scene);
+		usleep(100000);
 	}
 }

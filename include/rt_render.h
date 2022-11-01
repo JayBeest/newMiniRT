@@ -48,8 +48,4 @@ void				set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect
 t_rt_vector			canvas_to_viewport(double x, double y, t_rt_scene *scene);
 t_err				render_scene(t_rt_mlx *mlx, t_rt_scene *scene);
 
-t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation);
-t_rt_vector rotate_vector_x(t_rt_vector original_vector, double radians);
-t_rt_vector rotate_vector_y(t_rt_vector original_vector, double radians);
-
 #endif

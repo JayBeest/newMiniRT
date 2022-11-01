@@ -181,6 +181,7 @@ typedef struct s_rt_scene
 //	double				blue;
 	int					recursion_depth;
 	int					msaa;
+	int					hud;
 }			t_rt_scene;
 
 typedef struct s_rt_mlx
@@ -191,6 +192,7 @@ typedef struct s_rt_mlx
 	mlx_image_t 		*fps;
 	mlx_image_t 		*rgb;
 	mlx_image_t			*ref;
+	mlx_image_t			*msaa;
 }			t_rt_mlx;
 
 typedef struct s_mini_rt

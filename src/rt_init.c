@@ -41,8 +41,7 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.recursion_depth = 0;
 	mini_rt->scene.msaa = MULTI_SAMPLE;
 	rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas);
-//	mini_rt->scene.canvas.x = IMAGE_WIDTH;
-//	mini_rt->scene.canvas.y = (IMAGE_WIDTH / mini_rt->scene.aspect_ratio);
+	mini_rt->scene.hud = 1;
 	return (NO_ERR);
 
 }

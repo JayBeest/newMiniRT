@@ -24,6 +24,22 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
+void	clean_images(t_rt_mlx *mlx)
+{
+	if (mlx->img)
+		mlx_delete_image(mlx->mlx, mlx->img);
+	if (mlx->text)
+		mlx_delete_image(mlx->mlx, mlx->text);
+	if (mlx->fps)
+		mlx_delete_image(mlx->mlx, mlx->fps);
+	if (mlx->rgb)
+		mlx_delete_image(mlx->mlx, mlx->rgb);
+	if (mlx->img)
+		mlx_delete_image(mlx->mlx, mlx->ref);
+	if (mlx->img)
+		mlx_delete_image(mlx->mlx, mlx->msaa);
+}
+
 int main(int argc, char **argv)
 {
 	t_mini_rt	mini_rt;
@@ -60,13 +76,7 @@ int main(int argc, char **argv)
 	mlx_mouse_hook(mini_rt.mlx.mlx, &rt_mouse_hook, &mini_rt);
 	mlx_loop_hook(mini_rt.mlx.mlx, &rt_hook, &mini_rt);
 	mlx_loop(mini_rt.mlx.mlx);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.img);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.text);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.fps);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.rgb);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.fps);
-	mlx_delete_image(mini_rt.mlx.mlx, mini_rt.mlx.ref);
-
+	clean_images(&mini_rt.mlx);
 	mlx_terminate(mini_rt.mlx.mlx);
 	return free_scene(mini_rt.scene, 0);
 }

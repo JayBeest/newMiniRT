@@ -12,11 +12,14 @@
 
 #include <libft.h>
 #include <rt_datatypes.h>
+#include <rt_math_utils.h>
 #include <rt_intersect.h>
 #include <rt_render.h>
+#include <rt_render_utils.h>
 #include <rt_color.h>
 #include <rt_lighting.h>
 #include <rt_vector_utils.h>
+#include <rt_rotate.h>
 #include <rt_time.h>
 #include <math.h>
 
@@ -25,11 +28,6 @@
 #include <stdlib.h>
 
 size_t g_frame_counter = 0;
-
-double	degrees_to_radians(int degrees)
-{
-	return ((double)degrees * (double)M_PI / 180);
-}
 
 void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
 {
@@ -42,47 +40,6 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
-}
-
-t_rt_vector rotate_vector_x(t_rt_vector original_vector, double radians)
-{
-	t_rt_vector	rotated_vector;
-
-	rotated_vector.x = original_vector.x;
-	rotated_vector.y = original_vector.y * cos(radians) - original_vector.z * sin(radians);
-	rotated_vector.z = original_vector.y * sin(radians) + original_vector.z * cos(radians);
-	return (rotated_vector);
-}
-
-t_rt_vector rotate_vector_y(t_rt_vector original_vector, double radians)
-{
-	t_rt_vector	rotated_vector;
-
-	rotated_vector.x = original_vector.x * cos(radians) + original_vector.z * sin(radians);
-	rotated_vector.y = original_vector.y;
-	rotated_vector.z = -original_vector.x * sin(radians) + original_vector.z * cos(radians);
-	return (rotated_vector);
-}
-
-t_rt_vector rotate_vector_z(t_rt_vector original_vector, double radians)
-{
-	t_rt_vector	rotated_vector;
-
-	rotated_vector.x = original_vector.x * cos(radians) - original_vector.y * sin(radians);
-	rotated_vector.y = original_vector.x * sin(radians) + original_vector.y * cos(radians);
-	rotated_vector.z = original_vector.z;
-	return (rotated_vector);
-}
-
-t_rt_vector	rotate_vector(t_rt_vector original_vector, t_rt_vector rotation)
-{
-	t_rt_vector	rotated_vector;
-
-	rotated_vector = rotate_vector_x(original_vector, degrees_to_radians(rotation.y * 360));
-	rotated_vector = rotate_vector_y(rotated_vector, degrees_to_radians(rotation.x * 360));
-	rotated_vector = rotate_vector_z(rotated_vector, degrees_to_radians(rotation.z * 360));
-	(void)rotation;
-	return (rotated_vector);
 }
 
 t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
@@ -108,28 +65,19 @@ t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 	return (assemble_color(intersect_result, ray, scene, recursion_depth));
 }
 
-t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, double t_max)
-{
-	t_rt_ray	ray;
-
-	ft_bzero(&ray, sizeof(ray));
-	ray.origin = origin;
-	ray.destination = destination;
-	ray.t_min = t_min;
-	ray.t_max = t_max;
-	return (ray);
-}
 
 void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	char	fov[32];
 	char	fps[32];
 	char	rgb[32];
 	char	ref[32];
+	char	msaa[32];
 
 	sprintf(fov, "fov: %d", scene->cameras[0].fov);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took %lu ms", time_spend);
 	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
+	sprintf(msaa, "multisampling: %dx", scene->msaa);
 	if (mlx->fps)
 		mlx_delete_image(mlx->mlx, mlx->fps);
 	if (mlx->text)
@@ -138,23 +86,18 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 		mlx_delete_image(mlx->mlx, mlx->rgb);
 	if (mlx->ref)
 		mlx_delete_image(mlx->mlx, mlx->ref);
+	if (mlx->msaa)
+		mlx_delete_image(mlx->mlx, mlx->msaa);
+	if (!scene->hud)
+		return ;
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
 	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
+	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
 
-double	random_double(void)
-{
-	return rand() / (RAND_MAX + 1.0);
-}
-
-double random_double_in(double min, double max)
-{
-	return (min + (max - min) * random_double());
-}
-
-t_rt_color 	multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
+t_rt_color 	rand_multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
 {
 	t_rt_color_aggregate	aggregate;
 
@@ -186,7 +129,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		while (pixel.x < (scene->canvas.x) / 2 + 1)
 		{
 			if (scene->msaa > 0)
-				color = multi_sample(scene, pixel);
+				color = rand_multi_sample(scene, pixel);
 			else
 				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);//			if (pixel.x + scene->canvas.x / 2 >= scene->canvas.x || pixel.x + scene->canvas.x / 2 < 0)
 			mlx_put_pixel(mlx->img, pixel.x + (scene->canvas.x) / 2, scene->canvas.y - (pixel.y + (scene->canvas.y) / 2), color_to_int(color));
