@@ -13,7 +13,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			scene->cameras[0].fov += 1;
 			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -23,7 +23,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			scene->cameras[0].fov -= 1;
 			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -239,6 +239,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			scene->viewport.height += 0.05;
 			scene->viewport.width += 0.05 * scene->aspect_ratio;
+			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -248,6 +249,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		{
 			scene->viewport.height	-= 0.05;
 			scene->viewport.width	-= 0.05 * scene->aspect_ratio;
+			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}

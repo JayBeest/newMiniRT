@@ -67,6 +67,8 @@ t_rt_vector	random_unit_vector()
 	return (random);
 }
 
+
+
 t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_rt_vector v, t_rt_scene *scene)
 {
 	t_rt_color_intensity	intensity;
