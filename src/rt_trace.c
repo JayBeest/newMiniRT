@@ -13,8 +13,9 @@
 #include <math.h>
 #include <libft.h>
 #include <rt_datatypes.h>
-#include <rt_render.h>
 #include <rt_vector_utils.h>
+#include <rt_render.h>
+#include <rt_trace.h>
 #include <rt_intersect.h>
 #include <rt_color.h>
 
@@ -81,17 +82,12 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	init_intensity(&intensity, scene->ambient_light.intensity, scene->ambient_light.color);
 	while (i < scene->light_amount)
 	{
-		if (scene->spot_lights[i].intensity < EPSILON)
+		l = substract_vector(scene->spot_lights[i].coordinates, p);
+		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
+		if (scene->spot_lights[i].intensity < EPSILON || shadow.closest_obj)
 		{
 			i++;
 			continue;
-		}
-		l = substract_vector(scene->spot_lights[i].coordinates, p);
-		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
-		if (shadow.closest_obj)
-		{
-			i++;
-			continue ;
 		}
 		n_dot_l = dot_product(n, l);
 		if (n_dot_l > 0)
@@ -114,11 +110,26 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_
 	return (multiply_color(intensity, obj->def.color));
 }
 
-t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
+t_rt_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_rt_scene *scene, int recursion_depth)
+{
+	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
+	ray.destination = add_vector(ray.destination, multiply_vector(random_unit_vector(), intersect_result.closest_obj->def.metal_fuzz));
+	ray.origin = ray.intersection_point;
+	ray.t_max = INFINITY;
+	ray.t_min = EPSILON;
+	return (trace_ray(ray, scene, recursion_depth - 1));
+}
+
+t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 {
 	t_rt_color		local_color;
 	t_rt_color		reflected_color;
+	t_intersect_result	intersect_result;
 
+	ft_bzero(&intersect_result, sizeof(intersect_result));
+	intersect_result = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
+	if (!intersect_result.closest_obj)
+		return (y_gradient(ray.origin, ray.destination, scene));
 	ray.intersection_point = multiply_vector(ray.destination, intersect_result.closest_t); // Calc intersection
 	ray.intersection_point = add_vector(ray.intersection_point, ray.origin);
 	ray.normal = substract_vector(ray.intersection_point, intersect_result.closest_obj->def.coordinates); // Calc sphere normal
@@ -130,11 +141,6 @@ t_rt_color	assemble_color(t_intersect_result intersect_result, t_rt_ray ray, t_r
 	local_color = calculate_light(intersect_result.closest_obj, ray.normal, ray.intersection_point, ray.reverse_direction, scene);
 	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
-	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
-	ray.destination = add_vector(ray.destination, multiply_vector(random_unit_vector(), intersect_result.closest_obj->def.metal_fuzz));
-	ray.origin = ray.intersection_point;
-	ray.t_max = INFINITY;
-	ray.t_min = EPSILON;
-	reflected_color = trace_ray(ray, scene, recursion_depth - 1);
+	reflected_color = trace_reflection(ray, intersect_result, scene, recursion_depth);
 	return (add_color(multiply_color((t_rt_color_intensity){intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_rt_color_intensity){1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1},local_color)));
 }

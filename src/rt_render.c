@@ -12,20 +12,15 @@
 
 #include <libft.h>
 #include <rt_datatypes.h>
-#include <rt_math_utils.h>
-#include <rt_intersect.h>
 #include <rt_render.h>
 #include <rt_render_utils.h>
+#include <rt_msaa.h>
 #include <rt_color.h>
-#include <rt_lighting.h>
-#include <rt_vector_utils.h>
+#include <rt_trace.h>
 #include <rt_rotate.h>
 #include <rt_time.h>
 #include <math.h>
-
-#include <rt_scene_printer.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 size_t g_frame_counter = 0;
 
@@ -39,7 +34,7 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
-	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
 }
 
 t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
@@ -53,18 +48,6 @@ t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
 	v = rotate_vector(v, scene->cameras[0].orientation);
 	return (v);
 }
-
-t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
-{
-	t_intersect_result	intersect_result;
-
-	ft_bzero(&intersect_result, sizeof(intersect_result));
-	intersect_result = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
-	if (!intersect_result.closest_obj)
-		return (y_gradient(ray.origin, ray.destination, scene));
-	return (assemble_color(intersect_result, ray, scene, recursion_depth));
-}
-
 
 void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	char	fov[32];
@@ -95,23 +78,6 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
 	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
-}
-
-t_rt_color 	rand_multi_sample(t_rt_scene *scene, t_rt_resolution pixel)
-{
-	t_rt_color_aggregate	aggregate;
-
-	ft_bzero(&aggregate, sizeof(t_rt_color_aggregate));
-	int	i = 0;
-	while (i < scene->msaa)
-	{
-		double u = pixel.x + random_double();
-		double v = pixel.y + random_double();
-		t_rt_point	destination = canvas_to_viewport(u, v, scene);
-		add_to_aggregate(&aggregate, color_to_intensity(trace_ray(init_rt_ray(scene->cameras[0].coordinates, destination, 1, INFINITY), scene, scene->recursion_depth)));
-		i++;
-	}
-	return (aggregate_to_color(aggregate));
 }
 
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
