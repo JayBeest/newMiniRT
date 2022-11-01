@@ -20,8 +20,7 @@ void	rt_resize_hook(int x, int y, void *arg)
 	mini_rt->scene.canvas.x = x;
 	mini_rt->scene.canvas.y = y;
 	mini_rt->scene.aspect_ratio = (double)x / y;
-	set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
-	set_viewport_ratio(&mini_rt->scene);
+	set_viewport(&mini_rt->scene, mini_rt->scene.aspect_ratio);
 	mlx_resize_image(mlx->img, x, y);
 	render_scene(mlx, &mini_rt->scene);
 }
@@ -44,8 +43,8 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 		int diagonal = sqrt(mini_rt->scene.canvas.x * mini_rt->scene.canvas.x + mini_rt->scene.canvas.y * mini_rt->scene.canvas.y);
 		t_rt_resolution fov;
 //		printf("diagonal: %d\n", diagonal);
-		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[0].fov;
-		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[0].fov;
+		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;
+		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;
 //		printf("mouse - x: %d  y: %d\n", mouse.x, mouse.y);
 //		printf("  - converted - x: %f  y: %f\n", converted_x, converted_y);
 //		printf("  - fov - x: %d  y: %d\n", fov.x, fov.y);

@@ -1,4 +1,5 @@
 #include <rt_datatypes.h>
+#include <rt_time.h>
 #include <rt_render.h>
 
 #include <unistd.h>
@@ -7,13 +8,15 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx->mlx);
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ENTER))
+			render_scene(mlx, scene);
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_UP))
 	{
 		if (scene->cameras[0].fov < 180)
 		{
 			scene->cameras[0].fov += 1;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+			set_viewport(scene, scene->aspect_ratio);
+//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -22,8 +25,8 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		if (scene->cameras[0].fov > 0)
 		{
 			scene->cameras[0].fov -= 1;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+			set_viewport(scene, scene->aspect_ratio);
+//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -201,7 +204,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			scene->objects[5].sphere.reflective = 0;
 		render_scene(mlx, scene);
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_5))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_6))
 	{
 		if (scene->recursion_depth < 50)
 		{
@@ -209,7 +212,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_6))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_5))
 	{
 		if (scene->recursion_depth > 0)
 		{
@@ -235,19 +238,19 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Z))
 	{
-		if (scene->viewport.height < 3)
+		if (scene->cameras[0].zoom_level < 15)
 		{
-			scene->viewport.height += 0.05;
-			scene->viewport.width += 0.05 * scene->aspect_ratio;
+			scene->cameras[0].zoom_level++;
+			set_viewport(scene, scene->aspect_ratio);
 			render_scene(mlx, scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_X))
 	{
-		if (scene->viewport.height > 0.05)
+		if (scene->cameras[0].zoom_level > 0)
 		{
-			scene->viewport.height	-= 0.05;
-			scene->viewport.width	-= 0.05 * scene->aspect_ratio;
+			scene->cameras[0].zoom_level--;
+			set_viewport(scene, scene->aspect_ratio);
 			render_scene(mlx, scene);
 		}
 	}
@@ -255,15 +258,30 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	{
 		if (scene->msaa < 100)
 		{
-			scene->msaa += 10;
-			render_scene(mlx, scene);
+			scene->msaa += 1;
+			render_text(mlx, scene, (t_ms)0);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_END))
 	{
 		if (scene->msaa > 0)
 		{
-			scene->msaa	-= 10;
+			scene->msaa	-= 1;
+			render_text(mlx, scene, (t_ms)0);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_BACKSPACE))
+	{
+		if (scene->bare_toggle)
+		{
+			scene->bare_toggle = false;
+			usleep(50000);
+			render_scene(mlx, scene);
+		}
+		else
+		{
+			scene->bare_toggle = true;
+			usleep(50000);
 			render_scene(mlx, scene);
 		}
 	}
@@ -273,6 +291,42 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			scene->hud = 0;
 		else
 			scene->hud = 1;
+		render_scene(mlx, scene);
+		usleep(100000);
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F1))
+	{
+		if (scene->hud)
+			scene->hud = 0;
+		else
+			scene->hud = 1;
+		render_scene(mlx, scene);
+		usleep(100000);
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F2))
+	{
+		if (scene->spot_lights[0].toggle)
+			scene->spot_lights[0].toggle = false;
+		else
+			scene->spot_lights[0].toggle = true;
+		render_scene(mlx, scene);
+		usleep(100000);
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F3))
+	{
+		if (scene->spot_lights[1].toggle)
+			scene->spot_lights[1].toggle = false;
+		else
+			scene->spot_lights[1].toggle = true;
+		render_scene(mlx, scene);
+		usleep(100000);
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F4))
+	{
+		if (scene->spot_lights[2].toggle)
+			scene->spot_lights[2].toggle = false;
+		else
+			scene->spot_lights[2].toggle = true;
 		render_scene(mlx, scene);
 		usleep(100000);
 	}

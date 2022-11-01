@@ -8,6 +8,7 @@
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1
+# define CAMERA_ZOOM_FACTOR 1.5
 # define FPS 30
 # define MULTI_SAMPLE 0
 
@@ -142,6 +143,7 @@ typedef struct s_rt_spot_light
 	t_rt_point			coordinates;
 	double				intensity;
 	t_rt_color			color;
+	bool				toggle;
 }			t_rt_spot_light;
 
 typedef struct s_rt_camera
@@ -149,6 +151,7 @@ typedef struct s_rt_camera
 	t_rt_point			coordinates;
 	t_rt_vector			orientation;
 	int					fov;
+	int					zoom_level;
 }			t_rt_camera;
 
 typedef struct s_rt_viewport
@@ -184,6 +187,7 @@ typedef struct s_rt_scene
 	int					recursion_depth;
 	int					msaa;
 	int					hud;
+	bool				bare_toggle;
 }			t_rt_scene;
 
 typedef struct s_rt_mlx
