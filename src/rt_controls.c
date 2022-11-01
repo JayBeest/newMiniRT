@@ -15,7 +15,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		if (scene->cameras[0].fov < 180)
 		{
 			scene->cameras[0].fov += 1;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
+			set_viewport(scene, scene->aspect_ratio);
 //			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
@@ -25,7 +25,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		if (scene->cameras[0].fov > 0)
 		{
 			scene->cameras[0].fov -= 1;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
+			set_viewport(scene, scene->aspect_ratio);
 //			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
@@ -241,8 +241,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		if (scene->cameras[0].zoom_level < 15)
 		{
 			scene->cameras[0].zoom_level++;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+			set_viewport(scene, scene->aspect_ratio);
 			render_scene(mlx, scene);
 		}
 	}
@@ -251,8 +250,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 		if (scene->cameras[0].zoom_level > 0)
 		{
 			scene->cameras[0].zoom_level--;
-			set_viewport(&scene->viewport, &scene->cameras[0], scene->aspect_ratio);
-			set_viewport_ratio(scene);
+			set_viewport(scene, scene->aspect_ratio);
 			render_scene(mlx, scene);
 		}
 	}

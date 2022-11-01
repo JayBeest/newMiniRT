@@ -57,26 +57,28 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
 
-void	set_viewport_ratio(t_rt_scene *scene)
+void	set_viewport_ratio(t_rt_viewport *viewport, t_rt_resolution canvas)
 {
-	scene->viewport.x_ratio = scene->viewport.width / (double)scene->canvas.x;
-	scene->viewport.y_ratio = scene->viewport.height / (double)scene->canvas.y;
-	printf("viewport/canvas ratios - x: %f y: %f\n", scene->viewport.x_ratio, scene->viewport.y_ratio);
+	viewport->x_ratio = viewport->width / (double)canvas.x;
+	viewport->y_ratio = viewport->height / (double)canvas.y;
+	printf("viewport/canvas ratios - x: %f y: %f\n", viewport->x_ratio, viewport->y_ratio);
 }
 
-void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
+void	set_viewport(t_rt_scene *scene, double aspect_ratio)
 {
-	double	radians;
-	double	diagonal;
-	int		i;
+	t_rt_viewport	*viewport;
+	int				i;
+	double			diagonal;
+	double			radians;
 
-	radians = (double)camera->fov * (double)M_PI / 180;
+	viewport = &scene->viewport;
+	radians = (double)scene->cameras[0].fov * (double)M_PI / 180;
 	viewport->height = 2;
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
 //	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
-	i = camera->zoom_level;
+	i = scene->cameras[0].zoom_level;
 	if (i == 0)
 		return ;
 	while (i > 0)
@@ -85,6 +87,7 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 		viewport->width = viewport->height * aspect_ratio;
 		i--;
 	}
+	set_viewport_ratio(viewport, scene->canvas);
 }
 
 t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)

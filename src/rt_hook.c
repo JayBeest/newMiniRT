@@ -20,8 +20,7 @@ void	rt_resize_hook(int x, int y, void *arg)
 	mini_rt->scene.canvas.x = x;
 	mini_rt->scene.canvas.y = y;
 	mini_rt->scene.aspect_ratio = (double)x / y;
-	set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
-	set_viewport_ratio(&mini_rt->scene);
+	set_viewport(&mini_rt->scene, mini_rt->scene.aspect_ratio);
 	mlx_resize_image(mlx->img, x, y);
 	render_scene(mlx, &mini_rt->scene);
 }

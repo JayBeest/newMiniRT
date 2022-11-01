@@ -45,8 +45,7 @@ typedef struct s_rt_ray
 }			t_rt_ray;
 
 void			render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend);
-void			set_viewport_ratio(t_rt_scene *scene);
-void			set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio);
+void			set_viewport(t_rt_scene *scene, double aspect_ratio);
 t_rt_vector		canvas_to_viewport(double x, double y, t_rt_scene *scene);
 t_err			render_scene(t_rt_mlx *mlx, t_rt_scene *scene);
 
