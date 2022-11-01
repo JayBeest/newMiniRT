@@ -67,46 +67,57 @@ t_rt_vector	random_unit_vector()
 	return (random);
 }
 
+void	add_diffuse_light(t_rt_color_intensity *intensity, t_rt_spot_light *light, t_rt_vector n, t_rt_vector l)
+{
+	double					n_dot_l;
+	t_rt_color_intensity 	to_add;
 
+	n_dot_l = dot_product(n, l);
+	if (n_dot_l > 0)
+	{
+		init_intensity(&to_add, light->intensity * n_dot_l / (sqrt(dot_product(n, n)) * sqrt(dot_product(l, l))), light->color);
+		update_intensity(intensity, to_add, light->color);
+	}
+}
 
-t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_vector n, t_rt_vector p, t_rt_vector v, t_rt_scene *scene)
+void	add_specular_light(t_rt_color_intensity *intensity, t_rt_spot_light *light,t_rt_ray ray, t_rt_vector l)
+{
+	t_rt_color_intensity 	to_add;
+	double					r_dot_v;
+	t_rt_vector				r;
+
+	{
+		r = reflect_sphere(l, ray.normal);
+		r_dot_v = dot_product(r, ray.reverse_direction);
+		if (r_dot_v > 0)
+		{
+			to_add = update_multiply_intensity(*intensity, pow(r_dot_v / (sqrt(dot_product(r, r)) * sqrt(dot_product(ray.reverse_direction, ray.reverse_direction))), (int)ray.t_max), light->color);
+			update_intensity(intensity, to_add, light->color);
+		}
+	}
+}
+
+t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_ray ray, t_rt_scene *scene)
 {
 	t_rt_color_intensity	intensity;
-	t_rt_color_intensity 	to_add;
-	t_rt_vector				r;
 	t_rt_vector				l;
-	double					n_dot_l;
-	double					r_dot_v;
-	t_intersect_result		shadow;
-	int i = 0;
+	int						i;
 
-	ft_bzero(&shadow, sizeof(t_intersect_result));
+	i = 0;
 	init_intensity(&intensity, scene->ambient_light.intensity, scene->ambient_light.color);
 	while (i < scene->light_amount)
 	{
-		l = substract_vector(scene->spot_lights[i].coordinates, p);
-		shadow = get_closest_intersection(scene, p, l, EPSILON, 1);
-		if (scene->spot_lights[i].intensity < EPSILON || shadow.closest_obj)
+		l = substract_vector(scene->spot_lights[i].coordinates, ray.intersection_point);
+		if (!scene->spot_lights[i].toggle || scene->spot_lights[i].intensity < EPSILON || \
+			(get_closest_intersection(scene, ray.intersection_point, l, EPSILON, 1)).closest_obj) // == shadow or light out
 		{
 			i++;
 			continue;
 		}
-		n_dot_l = dot_product(n, l);
-		if (n_dot_l > 0)
-		{
-			init_intensity(&to_add, scene->spot_lights[i].intensity * n_dot_l / (sqrt(dot_product(n, n)) * sqrt(dot_product(l, l))), scene->spot_lights[i].color);
-			update_intensity(&intensity, to_add, scene->spot_lights[i].color);
-		}
+		add_diffuse_light(&intensity, &scene->spot_lights[i], ray.normal, l);
+		ray.t_max = obj->def.specular; // 'hack' for add_specular_light()
 		if (obj->def.specular > 0)
-		{
-			r = reflect_sphere(l, n);
-			r_dot_v = dot_product(r, v);
-			if (r_dot_v > 0)
-			{
-				to_add = update_multiply_intensity(intensity, pow(r_dot_v / (sqrt(dot_product(r, r)) * sqrt(dot_product(v, v))), obj->def.specular), scene->spot_lights[i].color);
-				update_intensity(&intensity, to_add, scene->spot_lights[i].color);
-			}
-		}
+			add_specular_light(&intensity, &scene->spot_lights[i], ray, l);
 		i++;
 	}
 	return (multiply_color(intensity, obj->def.color));
@@ -140,8 +151,8 @@ t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
 		ray.reverse_direction = multiply_vector(ray.destination, -1);
 	else
 		ray.reverse_direction = (t_rt_vector){0, 0, 0};
-	local_color = calculate_light(intersect_result.closest_obj, ray.normal, ray.intersection_point, ray.reverse_direction, scene);
-	if (intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
+	local_color = calculate_light(intersect_result.closest_obj, ray, scene);
+	if (scene->bare_toggle || intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
 		return (local_color);
 	reflected_color = trace_reflection(ray, intersect_result, scene, recursion_depth);
 	return (add_color(multiply_color((t_rt_color_intensity){intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_rt_color_intensity){1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1},local_color)));

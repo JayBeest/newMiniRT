@@ -42,6 +42,7 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.msaa = MULTI_SAMPLE;
 	rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas);
 	mini_rt->scene.hud = 1;
+	mini_rt->scene.bare_toggle = true;
 	return (NO_ERR);
 
 }
@@ -54,6 +55,7 @@ void	init_mock_rt(t_rt_scene *scene)
 	scene->cameras[0].coordinates = (t_rt_vector){-50, 0, 20};
 	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
 	scene->cameras[0].fov = 70;
+	scene->cameras[0].zoom_level = 1;
 	scene->spot_lights[0].coordinates = (t_rt_vector){-40, 0, 30};
 	scene->spot_lights[0].intensity = 0.7;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};
@@ -82,6 +84,7 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->cameras[0].coordinates = (t_rt_vector){0, -1, -5};
 	scene->cameras[0].orientation = (t_rt_vector){0, 0, 0};
 	scene->cameras[0].fov = 70;
+	scene->cameras[0].zoom_level = 0;
 
 	scene->spot_lights[0].coordinates = (t_rt_vector){0, 20, 4};
 	scene->spot_lights[0].intensity = 0.5;
@@ -98,8 +101,8 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[0].sphere.radius = 1.0 / 2;
 	scene->objects[0].sphere.color = (t_rt_color){255, 0, 0, 255};
 	scene->objects[0].sphere.specular = 0; //500;
-	scene->objects[0].sphere.reflective = 0.1f;
-	scene->objects[0].sphere.metal_fuzz = 0.7f;
+	scene->objects[0].sphere.reflective = 0.5f;
+	scene->objects[0].sphere.metal_fuzz = 0.1f;
 	scene->objects[1].sphere.type = SPHERE;
 	scene->objects[1].sphere.coordinates = (t_rt_vector){2, 1, 3}; // blue
 	scene->objects[1].sphere.radius = 2.0 / 2;

@@ -25,18 +25,19 @@
 
 size_t g_frame_counter = 0;
 
-void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
+void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
+{
 	char	fov[32];
 	char	fps[32];
 	char	rgb[32];
 	char	ref[32];
 	char	msaa[32];
 
-	sprintf(fov, "fov: %d", scene->cameras[0].fov);
+	sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[0].fov, 1 + CAMERA_ZOOM_FACTOR * scene->cameras[0].zoom_level - 1);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took %lu ms", time_spend);
 	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
-	sprintf(msaa, "multisampling: %dx", scene->msaa);
+	sprintf(msaa, "multisampling:  %dx", scene->msaa);
 	if (mlx->fps)
 		mlx_delete_image(mlx->mlx, mlx->fps);
 	if (mlx->text)
@@ -51,7 +52,7 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 		return ;
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
-	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 50);
+	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 70);
 	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
@@ -67,13 +68,23 @@ void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ra
 {
 	double	radians;
 	double	diagonal;
+	int		i;
 
 	radians = (double)camera->fov * (double)M_PI / 180;
-	viewport->height = viewport->height;
+	viewport->height = 2;
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
 //	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+	i = camera->zoom_level;
+	if (i == 0)
+		return ;
+	while (i > 0)
+	{
+		viewport->height /= CAMERA_ZOOM_FACTOR;
+		viewport->width = viewport->height * aspect_ratio;
+		i--;
+	}
 }
 
 t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
@@ -102,7 +113,7 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		pixel.x = 0;
 		while (pixel.x < scene->canvas.x)
 		{
-			if (scene->msaa > 0)
+			if (scene->msaa > 0 && !scene->bare_toggle)
 				color = rand_multi_sample(scene, pixel);
 			else
 				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, \

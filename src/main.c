@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	printf("viewport set..\n");
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
-	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);
+//	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);
 	mlx_resize_hook(mini_rt.mlx.mlx, &rt_resize_hook, &mini_rt);
 	mlx_mouse_hook(mini_rt.mlx.mlx, &rt_mouse_hook, &mini_rt);
 	mlx_loop_hook(mini_rt.mlx.mlx, &rt_hook, &mini_rt);
