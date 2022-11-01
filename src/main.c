@@ -63,12 +63,9 @@ int main(int argc, char **argv)
 //		init_mock_rt(&mini_rt.scene);
 		init_new_rt(&mini_rt.scene);
 	}
-
 	print_scene(mini_rt.scene);
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
-
 	set_viewport(&mini_rt.scene, mini_rt.scene.aspect_ratio);
-	printf("viewport set..\n");
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);
 //	mini_rt.mlx.text = mlx_put_string(mini_rt.mlx.mlx, "Control: fov (up/down) rgb (WASDQE) light (PLUS/MINUS)", 20, 20);

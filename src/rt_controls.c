@@ -247,7 +247,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_X))
 	{
-		if (scene->cameras[0].zoom_level > 0)
+		if (scene->cameras[0].zoom_level > 1)
 		{
 			scene->cameras[0].zoom_level--;
 			set_viewport(scene, scene->aspect_ratio);

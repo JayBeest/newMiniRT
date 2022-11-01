@@ -4,7 +4,7 @@
 # include <stdbool.h>
 # include <MLX42.h>
 
-# define IMAGE_WIDTH 512
+# define IMAGE_WIDTH 768
 # define EPSILON 1e-6
 
 # define CAMERA_MOVE_STEP 0.1

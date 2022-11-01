@@ -33,7 +33,10 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 	char	ref[32];
 	char	msaa[32];
 
-	sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[0].fov, 1 + CAMERA_ZOOM_FACTOR * scene->cameras[0].zoom_level - 1);
+	if (scene->cameras[0].zoom_level == 1)
+		sprintf(fov, "fov: %d", scene->cameras[0].fov);
+	else
+		sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[0].fov, (scene->cameras[0].zoom_level - 1) * CAMERA_ZOOM_FACTOR);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took %lu ms", time_spend);
 	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
@@ -79,7 +82,7 @@ void	set_viewport(t_rt_scene *scene, double aspect_ratio)
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
 	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  scene->cameras[0].fov, viewport->focal_length);
 	i = scene->cameras[0].zoom_level;
-	while (i > 0)
+	while (i > 1)
 	{
 		viewport->height /= CAMERA_ZOOM_FACTOR;
 		viewport->width = viewport->height * aspect_ratio;
