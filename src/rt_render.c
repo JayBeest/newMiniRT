@@ -24,31 +24,6 @@
 
 size_t g_frame_counter = 0;
 
-void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
-{
-	double	radians;
-	double	diagonal;
-
-	radians = (double)camera->fov * (double)M_PI / 180;
-	viewport->height = viewport->height;
-	viewport->width = viewport->height * aspect_ratio;
-	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
-	viewport->focal_length = diagonal / 2 / tan(radians / 2);
-//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
-}
-
-t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
-{
-	t_rt_vector	v;
-
-	v.x = (double)x * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop
-	v.y = (double)y * scene->viewport.height / (double)scene->canvas.y;
-	v.z = scene->viewport.focal_length;
-//	print_orientation(scene->cameras[0].orientation);
-	v = rotate_vector(v, scene->cameras[0].orientation);
-	return (v);
-}
-
 void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	char	fov[32];
 	char	fps[32];
@@ -80,6 +55,31 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
 
+void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
+{
+	double	radians;
+	double	diagonal;
+
+	radians = (double)camera->fov * (double)M_PI / 180;
+	viewport->height = viewport->height;
+	viewport->width = viewport->height * aspect_ratio;
+	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tan(radians / 2);
+//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+}
+
+t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
+{
+	t_rt_vector	v;
+
+	v.x = ((double)x - scene->canvas.x / 2) * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop
+	v.y = 1 - ((double)y - scene->canvas.y / 2) * scene->viewport.height / (double)scene->canvas.y;
+	v.z = scene->viewport.focal_length;
+//	print_orientation(scene->cameras[0].orientation);
+	v = rotate_vector(v, scene->cameras[0].orientation);
+	return (v);
+}
+
 t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution			pixel;
@@ -88,17 +88,21 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_ms					time_spend;
 
 	start_of_frame = set_time();
-	pixel.y = -(scene->canvas.y) / 2;
-	while (pixel.y < (scene->canvas.y) / 2 + 1)
+//	pixel.y = -(scene->canvas.y) / 2;
+	pixel.y = 0;
+//	while (pixel.y < (scene->canvas.y) / 2 + 1)
+	while (pixel.y < scene->canvas.y)
 	{
-		pixel.x = -(scene->canvas.x) / 2;
-		while (pixel.x < (scene->canvas.x) / 2 + 1)
+//		pixel.x = -(scene->canvas.x) / 2;
+		pixel.x = 0;
+//		while (pixel.x < (scene->canvas.x) / 2 + 1)
+		while (pixel.x < scene->canvas.x)
 		{
 			if (scene->msaa > 0)
 				color = rand_multi_sample(scene, pixel);
 			else
 				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);//			if (pixel.x + scene->canvas.x / 2 >= scene->canvas.x || pixel.x + scene->canvas.x / 2 < 0)
-			mlx_put_pixel(mlx->img, pixel.x + (scene->canvas.x) / 2, scene->canvas.y - (pixel.y + (scene->canvas.y) / 2), color_to_int(color));
+			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 			pixel.x++;
 		}
 		pixel.y++;
