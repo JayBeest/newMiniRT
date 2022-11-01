@@ -3,12 +3,13 @@
 
 #include <stdio.h>
 
+
 t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 {
 	mlx->mlx = mlx_init(resolution.x, resolution.y, "miniRT", true);
 	if (!mlx->mlx)
 		return (MLX_INIT_F);
-	mlx->img = mlx_new_image(mlx->mlx, resolution.x + 4, resolution.y + 4);
+	mlx->img = mlx_new_image(mlx->mlx, resolution.x, resolution.y);
 
 	printf("\nNEW IMAGE SIZE - x: %d y: %d\n\n", resolution.x, resolution.y);
 
@@ -33,9 +34,8 @@ t_err	init_rt(t_mini_rt *mini_rt)
 //	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
 //	mini_rt->scene.aspect_ratio = 21.0 / 9.0;
 //	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
-	mini_rt->scene.canvas.x = IMAGE_WIDTH + IMAGE_WIDTH % 2;
+	mini_rt->scene.canvas.x = IMAGE_WIDTH;
 	mini_rt->scene.canvas.y = IMAGE_WIDTH / mini_rt->scene.aspect_ratio;
-	mini_rt->scene.canvas.y += mini_rt->scene.canvas.y % 2;
 	mini_rt->scene.viewport.height = 2.0f;
 
 	mini_rt->scene.recursion_depth = 0;

@@ -13,17 +13,16 @@ void	rt_resize_hook(int x, int y, void *arg)
 	t_mini_rt			*mini_rt;
 	t_rt_mlx			*mlx;
 
-	if (y < 100 || x < 100)
-		return ;
+//	if (y < 100 || x < 100)
+//		return ;
 	mini_rt = arg;
 	mlx = &mini_rt->mlx;
-	x += x % 2;
-	y += y % 2;
 	mini_rt->scene.canvas.x = x;
 	mini_rt->scene.canvas.y = y;
 	mini_rt->scene.aspect_ratio = (double)x / y;
 	set_viewport(&mini_rt->scene.viewport, &mini_rt->scene.cameras[0], mini_rt->scene.aspect_ratio);
-	mlx_resize_image(mlx->img, x + 4, y + 4);
+	set_viewport_ratio(&mini_rt->scene);
+	mlx_resize_image(mlx->img, x, y);
 	render_scene(mlx, &mini_rt->scene);
 }
 
