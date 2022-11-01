@@ -10,14 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include <libft.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
 
 #include <stdio.h>
-
-
 
 t_rt_ray	init_rt_ray(t_rt_point origin, t_rt_point destination, double t_min, double t_max)
 {

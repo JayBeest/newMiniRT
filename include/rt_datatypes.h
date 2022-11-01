@@ -158,7 +158,9 @@ typedef struct s_rt_viewport
 	double				focal_length;
 	t_rt_point			coordinates;
 	t_rt_vector			orientation;
-	t_rt_resolution		size;
+//	t_rt_resolution		size;
+	double				x_ratio;
+	double				y_ratio;
 }			t_rt_viewport;
 
 typedef struct s_rt_scene

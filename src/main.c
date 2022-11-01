@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 	printf("\namount of camera's: %d\namount of lights: %d\namount of objects: %d\n", mini_rt.scene.camera_amount, mini_rt.scene.light_amount, mini_rt.scene.object_amount);
 
 	set_viewport(&mini_rt.scene.viewport, &mini_rt.scene.cameras[0], mini_rt.scene.aspect_ratio);
+	set_viewport_ratio(&mini_rt.scene);
 	printf("viewport set..\n");
 	render_scene(&mini_rt.mlx, &mini_rt.scene);
 	mlx_image_to_window(mini_rt.mlx.mlx, mini_rt.mlx.img, 0, 0);

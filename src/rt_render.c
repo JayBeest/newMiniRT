@@ -12,6 +12,7 @@
 
 #include <libft.h>
 #include <rt_datatypes.h>
+#include <rt_init.h>
 #include <rt_render.h>
 #include <rt_render_utils.h>
 #include <rt_msaa.h>
@@ -55,6 +56,13 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend) {
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
 
+void	set_viewport_ratio(t_rt_scene *scene)
+{
+	scene->viewport.x_ratio = scene->viewport.width / (double)scene->canvas.x;
+	scene->viewport.y_ratio = scene->viewport.height / (double)scene->canvas.y;
+	printf("viewport/canvas ratios - x: %f y: %f\n", scene->viewport.x_ratio, scene->viewport.y_ratio);
+}
+
 void	set_viewport(t_rt_viewport *viewport, t_rt_camera *camera, double aspect_ratio)
 {
 	double	radians;
@@ -72,8 +80,8 @@ t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
 {
 	t_rt_vector	v;
 
-	v.x = ((double)x - scene->canvas.x / 2) * scene->viewport.width / (double)scene->canvas.x;  //static divisions in a loop
-	v.y = 1 - ((double)y - scene->canvas.y / 2) * scene->viewport.height / (double)scene->canvas.y;
+	v.x = ((double)x - (double)scene->canvas.x / 2) * scene->viewport.x_ratio;
+	v.y = (1 - ((double)y - (double)scene->canvas.y / 2)) * scene->viewport.y_ratio;
 	v.z = scene->viewport.focal_length;
 //	print_orientation(scene->cameras[0].orientation);
 	v = rotate_vector(v, scene->cameras[0].orientation);
@@ -88,20 +96,17 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 	t_ms					time_spend;
 
 	start_of_frame = set_time();
-//	pixel.y = -(scene->canvas.y) / 2;
 	pixel.y = 0;
-//	while (pixel.y < (scene->canvas.y) / 2 + 1)
 	while (pixel.y < scene->canvas.y)
 	{
-//		pixel.x = -(scene->canvas.x) / 2;
 		pixel.x = 0;
-//		while (pixel.x < (scene->canvas.x) / 2 + 1)
 		while (pixel.x < scene->canvas.x)
 		{
 			if (scene->msaa > 0)
 				color = rand_multi_sample(scene, pixel);
 			else
-				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);//			if (pixel.x + scene->canvas.x / 2 >= scene->canvas.x || pixel.x + scene->canvas.x / 2 < 0)
+				color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, \
+				canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), scene, scene->recursion_depth);
 			mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 			pixel.x++;
 		}

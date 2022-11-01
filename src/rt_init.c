@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+
 t_err	rt_mlx_init(t_rt_mlx *mlx, t_rt_resolution resolution)
 {
 	mlx->mlx = mlx_init(resolution.x, resolution.y, "miniRT", true);
