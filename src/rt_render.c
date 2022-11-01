@@ -77,10 +77,8 @@ void	set_viewport(t_rt_scene *scene, double aspect_ratio)
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
-//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  camera->fov, viewport->focal_length);
+	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal,  scene->cameras[0].fov, viewport->focal_length);
 	i = scene->cameras[0].zoom_level;
-	if (i == 0)
-		return ;
 	while (i > 0)
 	{
 		viewport->height /= CAMERA_ZOOM_FACTOR;
