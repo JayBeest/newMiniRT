@@ -29,12 +29,12 @@ typedef	struct s_quad_result
 typedef struct s_intersect_result
 {
 	double				closest_t;
-	t_rt_obj_union		*closest_obj;
+	t_obj_union		*closest_obj;
 }				t_intersect_result;
 
-typedef t_quad_result(*t_intersect)(t_rt_vector, t_rt_vector, t_rt_obj_union *);
+typedef t_quad_result(*t_intersect)(t_vector, t_vector, t_obj_union *);
 
-t_quad_result		intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj);
-t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max);
+t_quad_result		intersect_obj(t_vector origin, t_vector viewport, t_obj_union *obj);
+t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, t_vector d, double t_min, double t_max);
 
 #endif

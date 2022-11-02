@@ -1,16 +1,14 @@
 #include <rt_datatypes.h>
 #include <rt_vector_utils.h>
 
-#include <rt_scene_printer.h>
-
-int	color_to_int(t_rt_color color)
+int	color_to_int(t_color color)
 {
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
-t_rt_color_intensity color_to_intensity(t_rt_color color)
+t_color_intensity color_to_intensity(t_color color)
 {
-	t_rt_color_intensity	intensity;
+	t_color_intensity	intensity;
 
 	intensity.r = (double)color.r / 255;
 	intensity.g = (double)color.g / 255;
@@ -19,9 +17,9 @@ t_rt_color_intensity color_to_intensity(t_rt_color color)
 	return (intensity);
 }
 
-int	aggregate_to_int(t_rt_color_aggregate agg)
+int	aggregate_to_int(t_color_aggregate agg)
 {
-	t_rt_color	color;
+	t_color	color;
 
 	double scale = 1.0 / (double)agg.source_counter;
 	color.r = (unsigned char)((double)agg.intensity.r * scale * 255.999);
@@ -31,9 +29,9 @@ int	aggregate_to_int(t_rt_color_aggregate agg)
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
-t_rt_color	aggregate_to_color(t_rt_color_aggregate agg)
+t_color	aggregate_to_color(t_color_aggregate agg)
 {
-	t_rt_color	color;
+	t_color	color;
 
 	double scale = 1.0 / (double)agg.source_counter;
 	color.r = (unsigned char)((double)agg.intensity.r * scale * 255.999);
@@ -43,12 +41,12 @@ t_rt_color	aggregate_to_color(t_rt_color_aggregate agg)
 	return (color);
 }
 
-t_rt_color	add_color(t_rt_color a, t_rt_color b)
+t_color	add_color(t_color a, t_color b)
 {
-	return ((t_rt_color){a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a});
+	return ((t_color){a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a});
 }
 
-void	add_to_aggregate(t_rt_color_aggregate *agg, t_rt_color_intensity to_add)
+void	add_to_aggregate(t_color_aggregate *agg, t_color_intensity to_add)
 {
 	agg->intensity.r = agg->intensity.r + to_add.r;
 	agg->intensity.g = agg->intensity.g + to_add.g;
@@ -57,7 +55,7 @@ void	add_to_aggregate(t_rt_color_aggregate *agg, t_rt_color_intensity to_add)
 	agg->source_counter++;
 }
 
-t_rt_color	multiply_color(t_rt_color_intensity intensity, t_rt_color color)
+t_color	multiply_color(t_color_intensity intensity, t_color color)
 {
 	int	r;
 	int	g;
@@ -91,18 +89,18 @@ t_rt_color	multiply_color(t_rt_color_intensity intensity, t_rt_color color)
 	return (color);
 }
 
-t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
+t_color	y_gradient(t_vector o, t_vector d, t_scene *scene)
 {
-	t_rt_vector			unit_direction;
-	t_rt_color_ratio	color_ratio;
+	t_vector			unit_direction;
+	t_color_ratio	color_ratio;
 	double				t;
-	t_rt_color			color;
+	t_color			color;
 	(void)o;
 
 	unit_direction = unit_vector(d);
 	t = 0.5 * (unit_direction.y + 1.0);
-	color_ratio = add_vector(multiply_vector((t_rt_vector) {1, 1, 1}, 1.0 - t),
-							 multiply_vector((t_rt_vector) {scene->bg_color.x, scene->bg_color.y, scene->bg_color.z}, t));
+	color_ratio = add_vector(multiply_vector((t_vector) {1, 1, 1}, 1.0 - t),
+							 multiply_vector((t_vector) {scene->bg_color.x, scene->bg_color.y, scene->bg_color.z}, t));
 	color.a = 255;
 	color.r = (int)(255.999 * color_ratio.x);
 	color.g = (int)(255.999 * color_ratio.y);
@@ -110,12 +108,12 @@ t_rt_color	y_gradient(t_rt_vector o, t_rt_vector d, t_rt_scene *scene)
 	return (color);
 }
 
-t_rt_color	all_the_colors(t_rt_resolution pixel, t_rt_scene *scene)
+t_color	all_the_colors(t_resolution pixel, t_scene *scene)
 {
 	double		r;
 	double		g;
 	double		b;
-	t_rt_color	color;
+	t_color	color;
 
 	r = ((double)pixel.x + (double)scene->canvas.x / 2) / ((double)scene->canvas.x - 1);
 	g = ((double)pixel.y + (double)scene->canvas.y / 2) / ((double)scene->canvas.y - 1);

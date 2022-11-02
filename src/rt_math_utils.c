@@ -1,9 +1,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-double	degrees_to_radians(int degrees)
+double	deg_to_rad(int deg)
 {
-	return ((double)degrees * (double)M_PI / 180);
+	return ((double)deg * (double)M_PI / 180);
 }
 
 double	random_double(void)

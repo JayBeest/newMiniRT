@@ -13,9 +13,9 @@
 #include <math.h>
 #include <rt_datatypes.h>
 
-t_rt_vector	add_vector(t_rt_vector a, t_rt_vector b)
+t_vector	add_vector(t_vector a, t_vector b)
 {
-	t_rt_vector	result;
+	t_vector	result;
 
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;
@@ -23,9 +23,9 @@ t_rt_vector	add_vector(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-t_rt_vector	substract_vector(t_rt_vector a, t_rt_vector b)
+t_vector	substract_vector(t_vector a, t_vector b)
 {
-	t_rt_vector	result;
+	t_vector	result;
 
 	result.x = a.x - b.x;
 	result.y = a.y - b.y;
@@ -33,9 +33,9 @@ t_rt_vector	substract_vector(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-t_rt_vector	multiply_vector(t_rt_vector a, double num)
+t_vector	multiply_vector(t_vector a, double num)
 {
-	t_rt_vector	result;
+	t_vector	result;
 
 	result.x = a.x * num;
 	result.y = a.y * num;
@@ -43,9 +43,9 @@ t_rt_vector	multiply_vector(t_rt_vector a, double num)
 	return (result);
 }
 
-t_rt_vector	devide_vector(t_rt_vector a, double num)
+t_vector	devide_vector(t_vector a, double num)
 {
-	t_rt_vector	result;
+	t_vector	result;
 
 	result.x = a.x / num;
 	result.y = a.y / num;
@@ -53,9 +53,9 @@ t_rt_vector	devide_vector(t_rt_vector a, double num)
 	return (result);
 }
 
-t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b)
+t_vector	cross_product(t_vector a, t_vector b)
 {
-	t_rt_vector	result;
+	t_vector	result;
 
 	result.x = a.y * b.z - a.z * b.y;
 	result.y = a.x * b.z - a.z * b.x;
@@ -63,22 +63,22 @@ t_rt_vector	cross_product(t_rt_vector a, t_rt_vector b)
 	return (result);
 }
 
-double	length_squared(t_rt_vector vector)
+double	length_squared(t_vector vector)
 {
 	return (vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
-double	vector_length(t_rt_vector vector)
+double	vector_length(t_vector vector)
 {
 	return (sqrt(length_squared(vector)));
 }
 
-t_rt_vector	unit_vector(t_rt_vector vector)
+t_vector	unit_vector(t_vector vector)
 {
 	return (devide_vector(vector, vector_length(vector)));
 }
 
-double	dot_product(t_rt_vector a, t_rt_vector b)
+double	dot_product(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }

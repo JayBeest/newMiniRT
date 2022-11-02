@@ -1,34 +1,34 @@
 #include <stdio.h>
 #include <rt_datatypes.h>
 
-void	print_vector(t_rt_vector vector)
+void	print_vector(t_vector vector)
 {
 	printf("x: %f  y: %f  z: %f\n", vector.x, vector.y, vector.z);
 }
 
-void	print_color(t_rt_color color)
+void	print_color(t_color color)
 {
 	printf("color(rgba): %d %d %d %d\n", color.r, color.g, color.b, color.a);
 }
 
-void	print_coordinates(t_rt_vector coordinates)
+void	print_coordinates(t_vector coordinates)
 {
 	printf("coordinates: %f(x) %f(y) %f(z)\n", coordinates.x, coordinates.y, coordinates.z);
 }
 
-void	print_orientation(t_rt_vector orientation)
+void	print_orientation(t_vector orientation)
 {
 	printf("orientation: %f(x) %f(y) %f(z)\n", orientation.x, orientation.y, orientation.z);
 }
 
-void	print_ambient_light(t_rt_ambient_light ambient)
+void	print_ambient_light(t_ambient_light ambient)
 {
 	printf("	- Ambient light -\n");
 	printf("intensity: %f\n", ambient.intensity);
 	print_color(ambient.color);
 }
 
-void	print_camera(t_rt_camera *camera, int amount)
+void	print_camera(t_camera *camera, int amount)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ void	print_camera(t_rt_camera *camera, int amount)
 	}
 }
 
-void	print_spotlights(t_rt_spot_light *spotlights, int amount)
+void	print_spotlights(t_spot_light *spotlights, int amount)
 {
 	int i;
 
@@ -58,7 +58,7 @@ void	print_spotlights(t_rt_spot_light *spotlights, int amount)
 	}
 }
 
-void	print_sphere(t_rt_obj_sphere sphere)
+void	print_sphere(t_obj_sphere sphere)
 {
 	printf("type: SPHERE\n");
 	print_coordinates(sphere.coordinates);
@@ -66,7 +66,7 @@ void	print_sphere(t_rt_obj_sphere sphere)
 	printf("radius: %f\n", sphere.radius);
 }
 
-void	print_plane(t_rt_obj_plane plane)
+void	print_plane(t_obj_plane plane)
 {
 	printf("type: PLANE\n");
 	print_coordinates(plane.coordinates);
@@ -74,7 +74,7 @@ void	print_plane(t_rt_obj_plane plane)
 	print_orientation(plane.orientation);
 }
 
-void	print_cylinder(t_rt_obj_cylinder cylinder)
+void	print_cylinder(t_obj_cylinder cylinder)
 {
 	printf("type: CYLINDER\n");
 	print_coordinates(cylinder.coordinates);
@@ -84,7 +84,7 @@ void	print_cylinder(t_rt_obj_cylinder cylinder)
 	printf("height: %f\n", cylinder.height);
 }
 
-void	print_objects(t_rt_obj_union *objects, int amount)
+void	print_objects(t_obj_union *objects, int amount)
 {
 	int i;
 
@@ -102,7 +102,7 @@ void	print_objects(t_rt_obj_union *objects, int amount)
 	}
 }
 
-void	print_scene(t_rt_scene scene)
+void	print_scene(t_scene scene)
 {
 	printf("		*** MiniRT Scene ***\n");
 	printf("resolution: %dx%d\n", scene.canvas.x, scene.canvas.y);

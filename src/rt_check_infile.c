@@ -6,7 +6,7 @@
 #include <rt_datatypes.h>
 #include <rt_error.h>
 
-t_err	count_ambient(t_rt_scene *scene, char *line)
+t_err	count_ambient(t_scene *scene, char *line)
 {
 	if (scene->ambient_light.set == true)
 		return (err_msg(AMBIENT_SET, __FILE__, __LINE__, line));
@@ -14,7 +14,7 @@ t_err	count_ambient(t_rt_scene *scene, char *line)
 	return (NO_ERR);
 }
 
-t_err	count_in_line(char *line, t_rt_scene *scene)
+t_err	count_in_line(char *line, t_scene *scene)
 {
 	printf("parsing line: %s$\n", line);
 	line = ft_skipspace(line);
@@ -35,7 +35,7 @@ t_err	count_in_line(char *line, t_rt_scene *scene)
 	return (NO_ERR);
 }
 
-t_err	count_scene(char *file, t_rt_scene *scene)
+t_err	count_scene(char *file, t_scene *scene)
 {
 	int		fd;
 	char	*line;

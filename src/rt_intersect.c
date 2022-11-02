@@ -17,11 +17,11 @@
 
 #include <stdio.h>
 
-t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
+t_quad_result	intersect_sphere(t_vector o, t_vector d, t_obj_union *obj)
 {
 	t_quad_abc		quad;
 	t_quad_result	result;
-	t_rt_vector		co;
+	t_vector		co;
 	double 			discriminant;
 
 	co = substract_vector(o, obj->sphere.coordinates);
@@ -36,7 +36,7 @@ t_quad_result	intersect_sphere(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj
 	return (result);
 }
 
-t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
+t_quad_result	intersect_plane(t_vector o, t_vector d, t_obj_union *obj)
 {
 	t_quad_result	result;
 	double			denominator;
@@ -54,7 +54,7 @@ t_quad_result	intersect_plane(t_rt_vector o, t_rt_vector d, t_rt_obj_union *obj)
 	return (result);
 }
 
-t_quad_result	intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_union *obj)
+t_quad_result	intersect_obj(t_vector origin, t_vector viewport, t_obj_union *obj)
 {
 	static t_intersect	function_pointers[NO_OBJECT] = {
 			[SPHERE] = intersect_sphere,
@@ -63,7 +63,7 @@ t_quad_result	intersect_obj(t_rt_vector origin, t_rt_vector viewport, t_rt_obj_u
 	return (function_pointers[obj->def.type](origin, viewport, obj));
 }
 
-t_intersect_result	get_closest_intersection(t_rt_scene *scene, t_rt_vector o, t_rt_vector d, double t_min, double t_max)
+t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, t_vector d, double t_min, double t_max)
 {
 	t_intersect_result	intersect_result;
 	t_quad_result		quad_result;

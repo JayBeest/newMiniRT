@@ -51,4 +51,3 @@ void	rt_sleep_nano(t_nano nano)
 		usleep(128);
 	}
 }
-

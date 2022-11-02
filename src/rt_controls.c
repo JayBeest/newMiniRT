@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
+void	rt_controls(t_mlx *mlx, t_scene *scene)
 {
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx->mlx);

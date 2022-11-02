@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <time.h>
 
-int	free_scene(t_rt_scene scene, int return_value)
+int	free_scene(t_scene scene, int return_value)
 {
 	if (scene.objects != NULL)
 		free(scene.objects);
@@ -24,7 +24,7 @@ int	free_scene(t_rt_scene scene, int return_value)
 	return (return_value);
 }
 
-void	clean_images(t_rt_mlx *mlx)
+void	clean_images(t_mlx *mlx)
 {
 	if (mlx->img)
 		mlx_delete_image(mlx->mlx, mlx->img);

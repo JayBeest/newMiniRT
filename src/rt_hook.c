@@ -11,7 +11,7 @@
 void	rt_resize_hook(int x, int y, void *arg)
 {
 	t_mini_rt			*mini_rt;
-	t_rt_mlx			*mlx;
+	t_mlx			*mlx;
 
 //	if (y < 100 || x < 100)
 //		return ;
@@ -28,8 +28,8 @@ void	rt_resize_hook(int x, int y, void *arg)
 void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key e_modifier, void *arg)
 {
 	t_mini_rt			*mini_rt;
-	t_rt_mlx			*mlx;
-	t_rt_resolution		mouse;
+	t_mlx			*mlx;
+	t_resolution		mouse;
 
 	mini_rt = arg;
 	mlx = &mini_rt->mlx;
@@ -41,7 +41,7 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 		converted_x = (double)(mini_rt->scene.canvas.x / -2 + mouse.x) / (mini_rt->scene.canvas.x / 2);
 		converted_y = (double)(mini_rt->scene.canvas.y / -2 + mouse.y) / (mini_rt->scene.canvas.y / -2);
 		int diagonal = sqrt(mini_rt->scene.canvas.x * mini_rt->scene.canvas.x + mini_rt->scene.canvas.y * mini_rt->scene.canvas.y);
-		t_rt_resolution fov;
+		t_resolution fov;
 //		printf("diagonal: %d\n", diagonal);
 		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;
 		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;

@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	init_intensity(t_rt_color_intensity *intensity, double init, t_rt_color color)
+void	init_intensity(t_color_intensity *intensity, double init, t_color color)
 {
 	intensity->r = ((double)color.r / 255) * init;
 	intensity->g = ((double)color.g / 255) * init;
@@ -30,7 +30,7 @@ void	init_intensity(t_rt_color_intensity *intensity, double init, t_rt_color col
 	intensity->a = ((double)color.a / 255) * init;
 }
 
-void	update_intensity(t_rt_color_intensity *intensity, t_rt_color_intensity add, t_rt_color color)
+void	update_intensity(t_color_intensity *intensity, t_color_intensity add, t_color color)
 {
 	intensity->r += ((double)color.r / 255) * add.r;
 	intensity->g += ((double)color.g / 255) * add.g;
@@ -38,7 +38,7 @@ void	update_intensity(t_rt_color_intensity *intensity, t_rt_color_intensity add,
 	intensity->a += ((double)color.a / 255) * add.a;
 }
 
-t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, double factor, t_rt_color color)
+t_color_intensity	update_multiply_intensity(t_color_intensity og, double factor, t_color color)
 {
 	og.r *= ((double)color.r / 255) * factor;
 	og.g *= ((double)color.g / 255) * factor;
@@ -47,9 +47,9 @@ t_rt_color_intensity	update_multiply_intensity(t_rt_color_intensity og, double f
 	return (og);
 }
 
-t_rt_vector	reflect_sphere(t_rt_vector ray, t_rt_vector normal) // one also needed for plane and others I think
+t_vector	reflect_sphere(t_vector ray, t_vector normal) // one also needed for plane and others I think
 {
-	t_rt_vector	new_ray;
+	t_vector	new_ray;
 
 	new_ray = multiply_vector(normal, 2);
 	new_ray = multiply_vector(new_ray, dot_product(normal, ray));
@@ -57,9 +57,9 @@ t_rt_vector	reflect_sphere(t_rt_vector ray, t_rt_vector normal) // one also need
 	return (new_ray);
 }
 
-t_rt_vector	random_unit_vector()
+t_vector	rnd_scalar()
 {
-	t_rt_vector	random;
+	t_vector	random;
 
 	random.x = (double)rand() / RAND_MAX;
 	random.y = (double)rand() / RAND_MAX;
@@ -67,10 +67,10 @@ t_rt_vector	random_unit_vector()
 	return (random);
 }
 
-void	add_diffuse_light(t_rt_color_intensity *intensity, t_rt_spot_light *light, t_rt_vector n, t_rt_vector l)
+void	add_diffuse_light(t_color_intensity *intensity, t_spot_light *light, t_vector n, t_vector l)
 {
 	double					n_dot_l;
-	t_rt_color_intensity 	to_add;
+	t_color_intensity 	to_add;
 
 	n_dot_l = dot_product(n, l);
 	if (n_dot_l > 0)
@@ -80,11 +80,11 @@ void	add_diffuse_light(t_rt_color_intensity *intensity, t_rt_spot_light *light, 
 	}
 }
 
-void	add_specular_light(t_rt_color_intensity *intensity, t_rt_spot_light *light,t_rt_ray ray, t_rt_vector l)
+void	add_specular_light(t_color_intensity *intensity, t_spot_light *light, t_rt_ray ray, t_vector l)
 {
-	t_rt_color_intensity 	to_add;
+	t_color_intensity 	to_add;
 	double					r_dot_v;
-	t_rt_vector				r;
+	t_vector				r;
 
 	{
 		r = reflect_sphere(l, ray.normal);
@@ -97,10 +97,10 @@ void	add_specular_light(t_rt_color_intensity *intensity, t_rt_spot_light *light,
 	}
 }
 
-t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_ray ray, t_rt_scene *scene)
+t_color	calculate_light(t_obj_union *obj, t_rt_ray ray, t_scene *scene)
 {
-	t_rt_color_intensity	intensity;
-	t_rt_vector				l;
+	t_color_intensity	intensity;
+	t_vector				l;
 	int						i;
 
 	i = 0;
@@ -112,7 +112,7 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_ray ray, t_rt_scene *scene)
 			(get_closest_intersection(scene, ray.intersection_point, l, EPSILON, 1)).closest_obj) // == shadow or light out
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		add_diffuse_light(&intensity, &scene->spot_lights[i], ray.normal, l);
 		ray.t_max = obj->def.specular; // 'hack' for add_specular_light()
@@ -123,37 +123,38 @@ t_rt_color	calculate_light(t_rt_obj_union *obj, t_rt_ray ray, t_rt_scene *scene)
 	return (multiply_color(intensity, obj->def.color));
 }
 
-t_rt_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_rt_scene *scene, int recursion_depth)
+t_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_scene *scene, int recursion_depth)
 {
 	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
-	ray.destination = add_vector(ray.destination, multiply_vector(random_unit_vector(), intersect_result.closest_obj->def.metal_fuzz));
+	ray.destination = add_vector(ray.destination, multiply_vector(rnd_scalar(), intersect_result.closest_obj->def.metal_fuzz));
 	ray.origin = ray.intersection_point;
 	ray.t_max = INFINITY;
 	ray.t_min = EPSILON;
 	return (trace_ray(ray, scene, recursion_depth - 1));
 }
 
-t_rt_color	trace_ray(t_rt_ray ray, t_rt_scene *scene, int recursion_depth)
+t_color	trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth)
 {
-	t_rt_color		local_color;
-	t_rt_color		reflected_color;
-	t_intersect_result	intersect_result;
+	t_color			local_color;
+	t_color			reflected_color;
+	t_intersect_result	ir;
 
-	ft_bzero(&intersect_result, sizeof(intersect_result));
-	intersect_result = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
-	if (!intersect_result.closest_obj)
+	ft_bzero(&ir, sizeof(ir));
+	ir = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
+	if (!ir.closest_obj)
 		return (y_gradient(ray.origin, ray.destination, scene));
-	ray.intersection_point = multiply_vector(ray.destination, intersect_result.closest_t); // Calc intersection
+	ray.intersection_point = multiply_vector(ray.destination, ir.closest_t); // Calc intersection
 	ray.intersection_point = add_vector(ray.intersection_point, ray.origin);
-	ray.normal = substract_vector(ray.intersection_point, intersect_result.closest_obj->def.coordinates); // Calc sphere normal
+	ray.normal = substract_vector(ray.intersection_point, ir.closest_obj->def.coordinates); // Calc sphere normal
 	ray.normal = multiply_vector(ray.normal, (double)1 / sqrt(dot_product(ray.normal, ray.normal)));
-	if (intersect_result.closest_obj->def.specular > 0)
+	if (ir.closest_obj->def.specular > 0)
 		ray.reverse_direction = multiply_vector(ray.destination, -1);
 	else
-		ray.reverse_direction = (t_rt_vector){0, 0, 0};
-	local_color = calculate_light(intersect_result.closest_obj, ray, scene);
-	if (scene->bare_toggle || intersect_result.closest_obj->def.reflective <= 0 || recursion_depth <= 0)
+		ray.reverse_direction = (t_vector){0, 0, 0};
+	local_color = calculate_light(ir.closest_obj, ray, scene);
+	if (scene->bare_toggle || ir.closest_obj->def.reflective <= 0 || \
+		recursion_depth <= 0)
 		return (local_color);
-	reflected_color = trace_reflection(ray, intersect_result, scene, recursion_depth);
-	return (add_color(multiply_color((t_rt_color_intensity){intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, intersect_result.closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_rt_color_intensity){1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1 - intersect_result.closest_obj->def.reflective, 1},local_color)));
+	reflected_color = trace_reflection(ray, ir, scene, recursion_depth);
+	return (add_color(multiply_color((t_color_intensity){ir.closest_obj->def.reflective, ir.closest_obj->def.reflective, ir.closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_color_intensity){1 - ir.closest_obj->def.reflective, 1 - ir.closest_obj->def.reflective, 1 - ir.closest_obj->def.reflective, 1}, local_color)));
 }

@@ -34,19 +34,20 @@ typedef struct s_pthread_arg
 
 typedef struct s_rt_ray
 {
-	t_rt_point	origin;
-	t_rt_point	destination;
+	t_point	origin;
+	t_point	destination;
 	double		t_max;
 	double		t_min;
-	t_rt_point	intersection_point;
-	t_rt_point	normal;
-	t_rt_point	reverse_direction;
+	t_point	intersection_point;
+	t_point	normal;
+	t_point	reverse_direction;
 
 }			t_rt_ray;
 
-void			render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend);
-void			set_viewport(t_rt_scene *scene, double aspect_ratio);
-t_rt_vector		canvas_to_viewport(double x, double y, t_rt_scene *scene);
-t_err			render_scene(t_rt_mlx *mlx, t_rt_scene *scene);
+void			render_text(t_mlx *mlx, t_scene *scene, t_ms time_spend);
+void			set_viewport(t_scene *scene, double aspect_ratio);
+t_vector		canvas_to_viewport(double x, double y, t_scene *scene);
+void			render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene);
+t_err			render_scene(t_mlx *mlx, t_scene *scene);
 
 #endif
