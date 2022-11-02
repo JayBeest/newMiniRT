@@ -191,14 +191,14 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_UP))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_UP) || mlx_is_key_down(mlx->mlx, MLX_KEY_2))
 	{
 		scene->objects[5].sphere.reflective += 0.01f;
 		if (scene->objects[5].sphere.reflective > 1)
 			scene->objects[5].sphere.reflective = 1;
 		render_scene(mlx, scene);
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_DOWN))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_PAGE_DOWN) || mlx_is_key_down(mlx->mlx, MLX_KEY_1))
 	{
 		scene->objects[5].sphere.reflective	-= 0.01f;
 		if (scene->objects[5].sphere.reflective < 0)
@@ -259,7 +259,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_HOME))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_HOME) || mlx_is_key_down(mlx->mlx, MLX_KEY_4))
 	{
 		if (scene->msaa < 100)
 		{
@@ -267,7 +267,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_text(mlx, scene, (t_ms)0);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_END))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_END) || mlx_is_key_down(mlx->mlx, MLX_KEY_3))
 	{
 		if (scene->msaa > 0)
 		{
