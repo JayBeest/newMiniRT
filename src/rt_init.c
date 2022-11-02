@@ -87,12 +87,15 @@ void	init_new_rt(t_scene *scene)
 	scene->cameras[0].fov = 70;
 	scene->cameras[0].zoom_level = 1;
 
+	scene->lights[0].type = POINT;
 	scene->lights[0].coordinates = (t_vector){0, 20, 4};
 	scene->lights[0].intensity = 0.4;
 	scene->lights[0].color = (t_color){255, 255, 255, 255};
+	scene->lights[1].type = POINT;
 	scene->lights[1].coordinates = (t_vector){0.8, 15, -3.5};
 	scene->lights[1].intensity = 0.3;
 	scene->lights[1].color = (t_color){255, 255, 255, 255};
+	scene->lights[2].type = POINT;
 	scene->lights[2].coordinates = (t_vector){0, 5, -3};
 	scene->lights[2].intensity = 0.1;
 	scene->lights[2].color = (t_color){255, 196, 23, 255};

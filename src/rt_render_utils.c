@@ -10,18 +10,39 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include <math.h>
 #include <rt_datatypes.h>
-#include <rt_render.h>
 
-t_rt_ray	init_rt_ray(t_point origin, t_point destination, double t_min, double t_max)
+#include <stdio.h>
+
+void	set_viewport_ratio(t_viewport *viewport, t_resolution canvas)
 {
-	t_rt_ray	ray;
+	viewport->x_ratio = viewport->width / (double)canvas.x;
+	viewport->y_ratio = viewport->height / (double)canvas.y;
+	printf("viewport/canvas ratios - x: %f y: %f\n", viewport->x_ratio, viewport->y_ratio);
+}
 
-	ft_bzero(&ray, sizeof(ray));
-	ray.origin = origin;
-	ray.destination = destination;
-	ray.t_min = t_min;
-	ray.t_max = t_max;
-	return (ray);
+void	set_viewport(t_scene *scene, double aspect_ratio)
+{
+	t_viewport	*viewport;
+	int				i;
+	double			diagonal;
+	double			radians;
+
+	viewport = &scene->viewport;
+	radians = (double)scene->cameras[scene->cc].fov * (double)M_PI / 180;
+	viewport->height = 2;
+	viewport->width = viewport->height * aspect_ratio;
+	diagonal = sqrt(viewport->width * viewport->width + \
+	viewport->height * viewport->height);
+	viewport->focal_length = diagonal / 2 / tan(radians / 2);
+//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal, scene->camera[scene->cc].fov, viewport->focal_length);
+	i = scene->cameras[scene->cc].zoom_level;
+	while (i > 1)
+	{
+		viewport->height /= CAMERA_ZOOM_FACTOR;
+		viewport->width = viewport->height * aspect_ratio;
+		i--;
+	}
+	set_viewport_ratio(viewport, scene->canvas);
 }

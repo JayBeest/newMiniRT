@@ -13,6 +13,8 @@
 #include <math.h>
 #include <rt_datatypes.h>
 
+#include <stdlib.h>
+
 t_vector	add_vector(t_vector a, t_vector b)
 {
 	t_vector	result;
@@ -81,4 +83,14 @@ t_vector	unit_vector(t_vector vector)
 double	dot_product(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+t_vector	rnd_scalar(void)
+{
+	t_vector	random;
+
+	random.x = (double)rand() / RAND_MAX;
+	random.y = (double)rand() / RAND_MAX;
+	random.z = (double)rand() / RAND_MAX;
+	return (random);
 }

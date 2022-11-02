@@ -12,9 +12,9 @@ t_err	allocate_objects(t_obj_union **objects, int amount)
 	return (NO_ERR);
 }
 
-t_err	allocate_spot_lights(t_spot_light **spot_lights, int amount)
+t_err	allocate_spot_lights(t_light **spot_lights, int amount)
 {
-	*spot_lights = ft_calloc(amount, sizeof(t_spot_light));
+	*spot_lights = ft_calloc(amount, sizeof(t_light));
 	if (!*spot_lights)
 		return (err_msg(MALLOC_F, __FILE__, __LINE__, NULL));
 	return (NO_ERR);

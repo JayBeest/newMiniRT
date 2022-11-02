@@ -6,6 +6,31 @@ int	color_to_int(t_color color)
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | color.a);
 }
 
+void	init_intensity(t_color_intensity *intensity, double init, t_color color)
+{
+	intensity->r = ((double)color.r / 255) * init;
+	intensity->g = ((double)color.g / 255) * init;
+	intensity->b = ((double)color.b / 255) * init;
+	intensity->a = ((double)color.a / 255) * init;
+}
+
+void	update_intensity(t_color_intensity *intensity, t_color_intensity add, t_color color)
+{
+	intensity->r += ((double)color.r / 255) * add.r;
+	intensity->g += ((double)color.g / 255) * add.g;
+	intensity->b += ((double)color.b / 255) * add.b;
+	intensity->a += ((double)color.a / 255) * add.a;
+}
+
+t_color_intensity	update_multiply_intensity(t_color_intensity og, double factor, t_color color)
+{
+	og.r *= ((double)color.r / 255) * factor;
+	og.g *= ((double)color.g / 255) * factor;
+	og.b *= ((double)color.b / 255) * factor;
+	og.a *= ((double)color.a / 255) * factor;
+	return (og);
+}
+
 t_color_intensity color_to_intensity(t_color color)
 {
 	t_color_intensity	intensity;

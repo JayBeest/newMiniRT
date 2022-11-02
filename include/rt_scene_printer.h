@@ -7,7 +7,7 @@ void	print_coordinates(t_vector coordinates);
 void	print_orientation(t_vector orientation);
 void	print_ambient_light(t_ambient_light ambient);
 void	print_camera(t_camera *camera, int amount);
-void	print_spotlights(t_spot_light *spotlights, int amount);
+void	print_spotlights(t_light *spotlights, int amount);
 void	print_sphere(t_obj_sphere sphere);
 void	print_plane(t_obj_plane plane);
 void	print_cylinder(t_obj_cylinder cylinder);

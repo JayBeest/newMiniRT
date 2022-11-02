@@ -13,7 +13,7 @@
 #ifndef RT_RENDER_UTILS_H
 # define RT_RENDER_UTILS_H
 
-t_rt_ray	init_rt_ray(t_point origin, t_point destination, double t_min, double t_max);
-
+void	set_viewport_ratio(t_viewport *viewport, t_resolution canvas);
+void	set_viewport(t_scene *scene, double aspect_ratio);
 
 #endif

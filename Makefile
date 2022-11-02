@@ -22,6 +22,7 @@ SRC			=	main.c \
 				rt_msaa.c \
 				rt_trace.c \
 				rt_intersect.c \
+				rt_light.c \
 				rt_hook.c \
 				rt_controls.c \
 				rt_time.c \
@@ -46,6 +47,7 @@ HEADERS		=	rt_datatypes.h \
 				rt_msaa.h \
 				rt_trace.h \
 				rt_intersect.h \
+				rt_light.h \
 				rt_hook.h \
 				rt_controls.h \
 				rt_time.h \

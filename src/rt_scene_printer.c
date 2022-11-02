@@ -43,7 +43,7 @@ void	print_camera(t_camera *camera, int amount)
 	}
 }
 
-void	print_spotlights(t_spot_light *spotlights, int amount)
+void	print_spotlights(t_light *spotlights, int amount)
 {
 	int i;
 

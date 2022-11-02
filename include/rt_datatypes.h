@@ -39,6 +39,12 @@ typedef enum e_obj_type
 	NO_OBJECT
 }			t_obj_type;
 
+typedef enum e_light_type
+{
+	POINT,
+	DIRECT
+}			t_light_type;
+
 typedef struct s_vector
 {
 	double			x;
@@ -146,11 +152,12 @@ typedef struct s_ambient_light
 
 typedef struct s_spot_light
 {
+	t_light_type	type;
 	t_point			coordinates;
 	double			intensity;
 	t_color			color;
 	bool			toggle;
-}			t_spot_light;
+}			t_light;
 
 typedef struct s_camera
 {
@@ -171,10 +178,22 @@ typedef struct s_viewport
 	double			y_ratio;
 }			t_viewport;
 
+typedef struct s_rt_ray
+{
+	t_point		origin;
+	t_point		destination;
+	double		t_max;
+	double		t_min;
+	t_point		intersection_point;
+	t_point		normal;
+	t_point		reverse_direction;
+
+}			t_rt_ray;
+
 typedef struct s_scene
 {
 	t_obj_union *	objects;
-	t_spot_light *	lights;
+	t_light *	lights;
 	t_ambient_light	ambient_light;
 	t_camera	*	cameras;
 	int				cc;

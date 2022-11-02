@@ -3,7 +3,6 @@
 #include <rt_datatypes.h>
 #include <rt_math_utils.h>
 #include <rt_render.h>
-#include <rt_render_utils.h>
 #include <rt_trace.h>
 #include <rt_color.h>
 

@@ -20,5 +20,6 @@ t_vector	cross_product(t_vector a, t_vector b);
 double		dot_product(t_vector a, t_vector b);
 double		length_squared(t_vector vector);
 t_vector	unit_vector(t_vector vector);
+t_vector	rnd_scalar(void);
 
 #endif
