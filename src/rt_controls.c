@@ -17,7 +17,6 @@ void	rt_controls(t_mlx *mlx, t_scene *scene)
 		{
 			scene->cameras[scene->cc].fov += 1;
 			set_viewport(scene, scene->aspect_ratio);
-//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}
@@ -27,7 +26,6 @@ void	rt_controls(t_mlx *mlx, t_scene *scene)
 		{
 			scene->cameras[scene->cc].fov -= 1;
 			set_viewport(scene, scene->aspect_ratio);
-//			set_viewport_ratio(scene);
 			render_scene(mlx, scene);
 		}
 	}

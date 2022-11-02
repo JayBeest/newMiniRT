@@ -1,11 +1,6 @@
 #include <pthread.h>
-#include <math.h>
 #include <rt_datatypes.h>
 #include <rt_render.h>
-#include <rt_render_utils.h>
-#include <rt_trace.h>
-#include <rt_msaa.h>
-#include <rt_color.h>
 #include <rt_thread.h>
 #include <stdio.h>
 
@@ -32,7 +27,6 @@ t_canvas_size	get_multi_pix(t_scene *scene, int id)
 	return (multi_pix);
 }
 
-
 void	*render_thread(void *a)
 {
 	t_thread_arg		*arg;
@@ -42,18 +36,6 @@ void	*render_thread(void *a)
 	arg = (t_thread_arg *)a;
 	canvas = get_multi_pix(arg->scene, arg->id);
 	return((void *)single_thread(arg->mlx, arg->scene, canvas));
-	pixel.y = canvas.min.y;
-	while (pixel.y < canvas.max.y)
-	{
-		pixel.x = canvas.min.x;
-		while (pixel.x < canvas.max.x)
-		{
-			render_pixel(pixel, arg->mlx, arg->scene);
-			pixel.x++;
-		}
-		pixel.y++;
-	}
-	return (NULL);
 }
 
 void	init_t_thread_arg(t_thread_arg *arg, t_mlx *mlx, \
