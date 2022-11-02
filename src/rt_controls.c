@@ -3,6 +3,7 @@
 #include <rt_render.h>
 
 #include <unistd.h>
+#include <stdio.h>
 
 void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 {
@@ -204,7 +205,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			scene->objects[5].sphere.reflective = 0;
 		render_scene(mlx, scene);
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_6))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_6) || mlx_is_key_down(mlx->mlx, MLX_KEY_INSERT))
 	{
 		if (scene->recursion_depth < 50)
 		{
@@ -212,28 +213,32 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			render_scene(mlx, scene);
 		}
 	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_5))
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_5) || mlx_is_key_down(mlx->mlx, MLX_KEY_DELETE))
 	{
 		if (scene->recursion_depth > 0)
 		{
 			scene->recursion_depth	-= 1;
-			render_scene(mlx, scene);
-		}
-	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_C))
-	{
-		if (scene->recursion_depth < 50)
-		{
-			scene->recursion_depth += 1;
 			render_scene(mlx, scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_V))
 	{
-		if (scene->recursion_depth > 0)
+		if (scene->thread_amount < RT_MAX_THREADS)
 		{
-			scene->recursion_depth	-= 1;
+			scene->thread_amount = scene->thread_amount * 2;
+			printf("presed YYYY, thread_amount: %d\n", scene->thread_amount);
 			render_scene(mlx, scene);
+			usleep(10000);
+		}
+	}
+	if (mlx_is_key_down(mlx->mlx, MLX_KEY_C))
+	{
+		if (scene->thread_amount > 1)
+		{
+			scene->thread_amount = scene->thread_amount / 2;
+			printf("presed YYYY, thread_amount: %d\n", scene->thread_amount);
+			render_scene(mlx, scene);
+			usleep(10000);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_Z))
@@ -284,15 +289,6 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 			usleep(50000);
 			render_scene(mlx, scene);
 		}
-	}
-	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F1))
-	{
-		if (scene->hud)
-			scene->hud = 0;
-		else
-			scene->hud = 1;
-		render_scene(mlx, scene);
-		usleep(100000);
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_F1))
 	{

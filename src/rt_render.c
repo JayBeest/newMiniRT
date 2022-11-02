@@ -22,8 +22,7 @@
 #include <rt_time.h>
 #include <math.h>
 #include <stdio.h>
-
-size_t g_frame_counter = 0;
+#include <rt_thread.h>
 
 void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 {
@@ -32,15 +31,17 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 	char	rgb[32];
 	char	ref[32];
 	char	msaa[32];
+	char	thread[32];
 
 	if (scene->cameras[0].zoom_level == 1)
 		sprintf(fov, "fov: %d", scene->cameras[0].fov);
 	else
 		sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[0].fov, (scene->cameras[0].zoom_level - 1) * CAMERA_ZOOM_FACTOR);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
-	sprintf(fps, "frame took %lu ms", time_spend);
+	sprintf(fps, "frame took: %lu ms", time_spend);
+	sprintf(thread, "render threads: %d", scene->thread_amount);
 	sprintf(ref, "recursion depth: %d", scene->recursion_depth);
-	sprintf(msaa, "multisampling:  %dx", scene->msaa);
+	sprintf(msaa, "multisampling: %dx", scene->msaa);
 	if (mlx->fps)
 		mlx_delete_image(mlx->mlx, mlx->fps);
 	if (mlx->text)
@@ -51,11 +52,14 @@ void	render_text(t_rt_mlx *mlx, t_rt_scene *scene, t_ms time_spend)
 		mlx_delete_image(mlx->mlx, mlx->ref);
 	if (mlx->msaa)
 		mlx_delete_image(mlx->mlx, mlx->msaa);
+	if (mlx->thread)
+		mlx_delete_image(mlx->mlx, mlx->thread);
 	if (!scene->hud)
 		return ;
 	mlx->text = mlx_put_string(mlx->mlx, fov, 20, 20);
 	mlx->rgb = mlx_put_string(mlx->mlx, rgb, scene->canvas.x - 150, 20);
-	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 70);
+	mlx->fps = mlx_put_string(mlx->mlx, fps, scene->canvas.x - 200, scene->canvas.y - 80);
+	mlx->thread = mlx_put_string(mlx->mlx, thread, scene->canvas.x - 200, scene->canvas.y - 50);
 	mlx->ref = mlx_put_string(mlx->mlx, ref, 20, scene->canvas.y - 50);
 	mlx->msaa = mlx_put_string(mlx->mlx, msaa, 20, scene->canvas.y - 80);
 }
@@ -103,12 +107,11 @@ t_rt_vector	canvas_to_viewport(double x, double y, t_rt_scene *scene)
 	return (v);
 }
 
-t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
+t_err	single_thread(t_rt_mlx *mlx, t_rt_scene *scene)
 {
 	t_rt_resolution			pixel;
 	t_rt_color				color;
 	t_time_stamp			start_of_frame;
-	t_ms					time_spend;
 
 	start_of_frame = set_time();
 	pixel.y = 0;
@@ -127,9 +130,15 @@ t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
 		}
 		pixel.y++;
 	}
-	time_spend = ms_passed(start_of_frame);
-	render_text(mlx, scene, time_spend);
-	g_frame_counter++;
-	printf("*************** FRAME COUNTER %zu\n", g_frame_counter);
+	render_text(mlx, scene, ms_passed(start_of_frame));
+	scene->frame_counter++;
+	printf("*************** FRAME COUNTER %zu\n", scene->frame_counter);
 	return (NO_ERR);
+}
+
+t_err	render_scene(t_rt_mlx *mlx, t_rt_scene *scene)
+{
+	if (scene->thread_amount > 1)
+		return (multi_thread(mlx, scene));
+	return (single_thread(mlx, scene));
 }

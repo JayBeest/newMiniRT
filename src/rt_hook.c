@@ -72,10 +72,10 @@ void	rt_hook(void *arg)
 	mlx_loop_counter++;
 	rt_controls(&((t_mini_rt *)arg)->mlx, &((t_mini_rt *)arg)->scene);
 	t_nano	took = nano_passed(current_frame_start);
-	if (mlx_loop_counter % 20 == 0)
+	if (mlx_loop_counter % 30 == 0)
 	{
 		float sixty_took = (float)nano_passed(previous) / 1000;
-		printf("-------> 20 mlx_frames: %.3f ms (%.0f fps)\n", sixty_took, 20.0f / (sixty_took / 1000));
+		printf("-------> 30 mlx_frames: %.3f ms (%.0f fps)\n", sixty_took, 30.0f / (sixty_took / 1000));
 		previous = current_frame_start;
 	}
 	if (took < 1000000 / FPS)

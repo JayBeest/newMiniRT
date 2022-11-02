@@ -11,6 +11,8 @@
 # define CAMERA_ZOOM_FACTOR 1.5
 # define FPS 30
 # define MULTI_SAMPLE 0
+# define RT_THREADS 4
+# define RT_MAX_THREADS 32
 
 typedef enum e_err
 {
@@ -178,6 +180,8 @@ typedef struct s_rt_scene
 	int					object_amount;
 	int					light_amount;
 	int					camera_amount;
+	unsigned long		frame_counter;
+	int					thread_amount;
 
 	double				aspect_ratio;
 
@@ -199,6 +203,7 @@ typedef struct s_rt_mlx
 	mlx_image_t 		*rgb;
 	mlx_image_t			*ref;
 	mlx_image_t			*msaa;
+	mlx_image_t			*thread;
 }			t_rt_mlx;
 
 typedef struct s_mini_rt

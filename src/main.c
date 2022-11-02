@@ -38,6 +38,8 @@ void	clean_images(t_rt_mlx *mlx)
 		mlx_delete_image(mlx->mlx, mlx->ref);
 	if (mlx->img)
 		mlx_delete_image(mlx->mlx, mlx->msaa);
+	if (mlx->thread)
+		mlx_delete_image(mlx->mlx, mlx->thread);
 }
 
 int main(int argc, char **argv)

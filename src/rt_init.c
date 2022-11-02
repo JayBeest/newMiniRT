@@ -42,7 +42,8 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.msaa = MULTI_SAMPLE;
 	rt_mlx_init(&mini_rt->mlx, mini_rt->scene.canvas);
 	mini_rt->scene.hud = 1;
-	mini_rt->scene.bare_toggle = true;
+	mini_rt->scene.bare_toggle = false;
+	mini_rt->scene.thread_amount = RT_THREADS;
 	return (NO_ERR);
 
 }
@@ -78,7 +79,7 @@ void	init_mock_rt(t_rt_scene *scene)
 
 void	init_new_rt(t_rt_scene *scene)
 {
-	scene->ambient_light.intensity = 0.2;
+	scene->ambient_light.intensity = 0.1;
 	scene->ambient_light.color = (t_rt_color){255, 255, 255, 255};
 
 	scene->cameras[0].coordinates = (t_rt_vector){0, -1, -5};
@@ -87,14 +88,17 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->cameras[0].zoom_level = 1;
 
 	scene->spot_lights[0].coordinates = (t_rt_vector){0, 20, 4};
-	scene->spot_lights[0].intensity = 0.5;
+	scene->spot_lights[0].intensity = 0.4;
 	scene->spot_lights[0].color = (t_rt_color){255, 255, 255, 255};
 	scene->spot_lights[1].coordinates = (t_rt_vector){0.8, 15, -3.5};
 	scene->spot_lights[1].intensity = 0.3;
 	scene->spot_lights[1].color = (t_rt_color){255, 255, 255, 255};
 	scene->spot_lights[2].coordinates = (t_rt_vector){0, 5, -3};
-	scene->spot_lights[2].intensity = 0;
+	scene->spot_lights[2].intensity = 0.1;
 	scene->spot_lights[2].color = (t_rt_color){255, 196, 23, 255};
+	scene->spot_lights[0].toggle = true;
+	scene->spot_lights[1].toggle = true;
+	scene->spot_lights[2].toggle = true;
 
 	scene->objects[0].sphere.type = SPHERE;
 	scene->objects[0].sphere.coordinates = (t_rt_vector){0, -1, 3}; // red

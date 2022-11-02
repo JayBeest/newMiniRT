@@ -25,6 +25,7 @@ SRC			=	main.c \
 				rt_hook.c \
 				rt_controls.c \
 				rt_time.c \
+				rt_thread.c \
 				rt_error.c \
 
 
@@ -48,6 +49,7 @@ HEADERS		=	rt_datatypes.h \
 				rt_hook.h \
 				rt_controls.h \
 				rt_time.h \
+				rt_thread.h \
 				rt_error.h \
 
 
@@ -70,7 +72,7 @@ ifeq ($(UNAME), Linux)
 	LIB		=	-Llibft -LMLX42 -lft -lmlx42 -ldl -lglfw3 -pthread -lm
 endif
 
-CFLAGS		=	-Wall -Werror -Wextra -pedantic -Ofast #-fsanitize=address -g # -std=c89 -g
+CFLAGS		=	-Wall -Werror -Wextra -pedantic -O1 #-fsanitize=address -g # -std=c89 -g
 CC			=	gcc
 
 ifeq ("$(VERBOSE)","1")
