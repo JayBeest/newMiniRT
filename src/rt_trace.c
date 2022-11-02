@@ -60,38 +60,43 @@ t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
 		multiply_color(local_amount, local)));
 }
 
-t_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_scene *scene, int recursion_depth)
+void	calculate_reflected_ray(t_rt_ray *ray, t_intersect_result *ir)
 {
-	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
-	ray.destination = add_vector(ray.destination, multiply_vector(rnd_scalar(), intersect_result.closest_obj->def.metal_fuzz));
-	ray.origin = ray.intersection_point;
-	ray.t_max = INFINITY;
-	ray.t_min = EPSILON;
-	return (trace_ray(ray, scene, recursion_depth - 1));
+	ray->destination = reflect_sphere(multiply_vector(ray->destination, -1), ray->normal);
+	ray->destination = add_vector(ray->destination, multiply_vector(rnd_scalar(), ir->closest_obj->def.metal_fuzz));
+	ray->origin = ray->intersection_point;
+	ray->t_max = INFINITY;
+	ray->t_min = EPSILON;
+}
+
+void	calculate_intersect_ray(t_rt_ray *ray, t_intersect_result *ir)
+{
+	ray->intersection_point = multiply_vector(ray->destination, ir->closest_t); // Calc intersection
+	ray->intersection_point = add_vector(ray->intersection_point, ray->origin);
+	ray->normal = substract_vector(ray->intersection_point, ir->closest_obj->def.coordinates); // Calc sphere normal
+	ray->normal = multiply_vector(ray->normal, (double)1 / sqrt(dot_product(ray->normal, ray->normal)));
+	if (ir->closest_obj->def.specular > 0)
+		ray->reverse_direction = multiply_vector(ray->destination, -1);
+	else
+		ray->reverse_direction = (t_vector){0, 0, 0};
 }
 
 t_color	trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth)
 {
-	t_color			local;
-	t_color			reflected;
+	t_color				local;
+	t_color				reflected;
 	t_intersect_result	ir;
 
 	ft_bzero(&ir, sizeof(ir));
 	ir = get_closest_intersection(scene, ray.origin, ray.destination, ray.t_min, ray.t_max);
 	if (!ir.closest_obj)
 		return (y_gradient(ray.origin, ray.destination, scene));
-	ray.intersection_point = multiply_vector(ray.destination, ir.closest_t); // Calc intersection
-	ray.intersection_point = add_vector(ray.intersection_point, ray.origin);
-	ray.normal = substract_vector(ray.intersection_point, ir.closest_obj->def.coordinates); // Calc sphere normal
-	ray.normal = multiply_vector(ray.normal, (double)1 / sqrt(dot_product(ray.normal, ray.normal)));
-	if (ir.closest_obj->def.specular > 0)
-		ray.reverse_direction = multiply_vector(ray.destination, -1);
-	else
-		ray.reverse_direction = (t_vector){0, 0, 0};
+	calculate_intersect_ray(&ray, &ir);
 	local = calculate_light(ir.closest_obj, ray, scene);
 	if (scene->bare_toggle || ir.closest_obj->def.reflective <= 0 || \
 		recursion_depth <= 0)
 		return (local);
-	reflected = trace_reflection(ray, ir, scene, recursion_depth);
+	calculate_reflected_ray(&ray, &ir);
+	reflected = trace_ray(ray, scene, recursion_depth - 1);
 	return (assemble_color(local, reflected, ir));
 }
