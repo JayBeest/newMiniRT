@@ -31,7 +31,7 @@ t_vector	reflect_sphere(t_vector ray, t_vector normal) // one also needed for pl
 	return (new_ray);
 }
 
-t_rt_ray	init_rt_ray(t_point origin, t_point destination, double t_min, double t_max)
+t_rt_ray	init_ray(t_point origin, t_point destination, double t_min, double t_max)
 {
 	t_rt_ray	ray;
 
@@ -41,16 +41,6 @@ t_rt_ray	init_rt_ray(t_point origin, t_point destination, double t_min, double t
 	ray.t_min = t_min;
 	ray.t_max = t_max;
 	return (ray);
-}
-
-t_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_scene *scene, int recursion_depth)
-{
-	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
-	ray.destination = add_vector(ray.destination, multiply_vector(rnd_scalar(), intersect_result.closest_obj->def.metal_fuzz));
-	ray.origin = ray.intersection_point;
-	ray.t_max = INFINITY;
-	ray.t_min = EPSILON;
-	return (trace_ray(ray, scene, recursion_depth - 1));
 }
 
 t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
@@ -68,6 +58,16 @@ t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
 	local_amount.a = local_amount.r;
 	return (add_color(multiply_color(reflect_amount, reflected), \
 		multiply_color(local_amount, local)));
+}
+
+t_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_scene *scene, int recursion_depth)
+{
+	ray.destination = reflect_sphere(multiply_vector(ray.destination, -1), ray.normal);
+	ray.destination = add_vector(ray.destination, multiply_vector(rnd_scalar(), intersect_result.closest_obj->def.metal_fuzz));
+	ray.origin = ray.intersection_point;
+	ray.t_max = INFINITY;
+	ray.t_min = EPSILON;
+	return (trace_ray(ray, scene, recursion_depth - 1));
 }
 
 t_color	trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth)

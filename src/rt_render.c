@@ -85,8 +85,8 @@ void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 	else
 	{
 		destination = canvas_to_viewport(pixel.x, pixel.y, scene);
-		ray = init_rt_ray(scene->cameras[scene->cc].coordinates, destination, \
-			1, INFINITY);
+		ray = init_ray(scene->cameras[scene->cc].coordinates, destination, \
+            1, INFINITY);
 		color = trace_ray(ray, scene, scene->recursion_depth);
 	}
 	mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
