@@ -41,6 +41,7 @@ void	*render_thread(void *a)
 
 	arg = (t_thread_arg *)a;
 	canvas = get_multi_pix(arg->scene, arg->id);
+	return((void *)single_thread(arg->mlx, arg->scene, canvas));
 	pixel.y = canvas.min.y;
 	while (pixel.y < canvas.max.y)
 	{
@@ -52,7 +53,6 @@ void	*render_thread(void *a)
 		}
 		pixel.y++;
 	}
-	arg->scene->frame_counter++;
 	return (NULL);
 }
 
@@ -68,10 +68,8 @@ t_err	multi_thread(t_mlx *mlx, t_scene *scene)
 {
 	pthread_t		pthread[RT_MAX_THREADS];
 	t_thread_arg	arg[RT_MAX_THREADS];
-	t_time_stamp	start_of_frame;
 	int				i;
 
-	start_of_frame = set_time();
 	i = 0;
 	while (i < scene->thread_amount)
 	{
@@ -86,6 +84,5 @@ t_err	multi_thread(t_mlx *mlx, t_scene *scene)
 		pthread_join(pthread[i], NULL);
 		i++;
 	}
-	render_text(mlx, scene, ms_passed(start_of_frame));
 	return (NO_ERR);
 }

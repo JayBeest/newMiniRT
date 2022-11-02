@@ -92,9 +92,7 @@ void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 t_err	single_thread(t_mlx *mlx, t_scene *scene, t_canvas_size canvas)
 {
 	t_resolution			pixel;
-	t_time_stamp			start_of_frame;
 
-	start_of_frame = set_time();
 	pixel.y = canvas.min.y;
 	while (pixel.y < canvas.max.y)
 	{
@@ -106,21 +104,23 @@ t_err	single_thread(t_mlx *mlx, t_scene *scene, t_canvas_size canvas)
 		}
 		pixel.y++;
 	}
-	render_text(mlx, scene, ms_passed(start_of_frame));
-	scene->frame_counter++;
-	printf("*************** FRAME COUNTER %zu\n", scene->frame_counter);
 	return (NO_ERR);
 }
 
 t_err	render_scene(t_mlx *mlx, t_scene *scene)
 {
-	t_canvas_size	new_canvas;
+	t_err			error;
+	t_time_stamp	start_of_frame;
 
+	start_of_frame = set_time();
 	if (scene->thread_amount > 1)
-		return (multi_thread(mlx, scene));
-	new_canvas.min.x = 0;
-	new_canvas.min.y = 0;
-	new_canvas.max.x = scene->canvas.x;
-	new_canvas.max.y = scene->canvas.y;
-	return (single_thread(mlx, scene, new_canvas));
+		error = multi_thread(mlx, scene);
+	else
+		error = single_thread(mlx, scene, \
+			(t_canvas_size){(t_resolution){0, 0}, \
+			(t_resolution){scene->canvas.x, scene->canvas.y}});
+	render_text(mlx, scene, ms_passed(start_of_frame));
+	scene->frame_counter++;
+	printf("*************** FRAME COUNTER %zu\n", scene->frame_counter);
+	return (error);
 }
