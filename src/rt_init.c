@@ -104,14 +104,14 @@ void	init_new_rt(t_rt_scene *scene)
 	scene->objects[0].sphere.coordinates = (t_rt_vector){0, -1, 3}; // red
 	scene->objects[0].sphere.radius = 1.0 / 2;
 	scene->objects[0].sphere.color = (t_rt_color){255, 0, 0, 255};
-	scene->objects[0].sphere.specular = 0; //500;
+	scene->objects[0].sphere.specular = 80;
 	scene->objects[0].sphere.reflective = 0.5f;
 	scene->objects[0].sphere.metal_fuzz = 0.3f;
 	scene->objects[1].sphere.type = SPHERE;
 	scene->objects[1].sphere.coordinates = (t_rt_vector){2, 1, 3}; // blue
 	scene->objects[1].sphere.radius = 2.0 / 2;
 	scene->objects[1].sphere.color = (t_rt_color){0, 0, 255, 255};
-	scene->objects[1].sphere.specular = 0; //5;
+	scene->objects[1].sphere.specular = 3;
 	scene->objects[1].sphere.reflective = 0.9f; //0.35f;
 	scene->objects[1].sphere.metal_fuzz = 0;
 	scene->objects[2].sphere.type = SPHERE;
