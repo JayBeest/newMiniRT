@@ -107,17 +107,17 @@ t_color	calculate_light(t_obj_union *obj, t_rt_ray ray, t_scene *scene)
 	init_intensity(&intensity, scene->ambient_light.intensity, scene->ambient_light.color);
 	while (i < scene->light_amount)
 	{
-		l = substract_vector(scene->spot_lights[i].coordinates, ray.intersection_point);
-		if (!scene->spot_lights[i].toggle || scene->spot_lights[i].intensity < EPSILON || \
+		l = substract_vector(scene->lights[i].coordinates, ray.intersection_point);
+		if (!scene->lights[i].toggle || scene->lights[i].intensity < EPSILON || \
 			(get_closest_intersection(scene, ray.intersection_point, l, EPSILON, 1)).closest_obj) // == shadow or light out
 		{
 			i++;
 			continue ;
 		}
-		add_diffuse_light(&intensity, &scene->spot_lights[i], ray.normal, l);
+		add_diffuse_light(&intensity, &scene->lights[i], ray.normal, l);
 		ray.t_max = obj->def.specular; // 'hack' for add_specular_light()
 		if (obj->def.specular > 0)
-			add_specular_light(&intensity, &scene->spot_lights[i], ray, l);
+			add_specular_light(&intensity, &scene->lights[i], ray, l);
 		i++;
 	}
 	return (multiply_color(intensity, obj->def.color));

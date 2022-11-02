@@ -17,8 +17,8 @@ int	free_scene(t_scene scene, int return_value)
 {
 	if (scene.objects != NULL)
 		free(scene.objects);
-	if (scene.spot_lights != NULL)
-		free(scene.spot_lights);
+	if (scene.lights != NULL)
+		free(scene.lights);
 	if (scene.cameras != NULL)
 		free(scene.cameras);
 	return (return_value);

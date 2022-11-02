@@ -43,19 +43,19 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 		int diagonal = sqrt(mini_rt->scene.canvas.x * mini_rt->scene.canvas.x + mini_rt->scene.canvas.y * mini_rt->scene.canvas.y);
 		t_resolution fov;
 //		printf("diagonal: %d\n", diagonal);
-		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;
-		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[0].fov / mini_rt->scene.cameras[0].zoom_level;
+		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[mini_rt->scene.cc].fov / mini_rt->scene.cameras[mini_rt->scene.cc].zoom_level;
+		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[mini_rt->scene.cc].fov / mini_rt->scene.cameras[mini_rt->scene.cc].zoom_level;
 //		printf("mouse - x: %d  y: %d\n", mouse.x, mouse.y);
 //		printf("  - converted - x: %f  y: %f\n", converted_x, converted_y);
 //		printf("  - fov - x: %d  y: %d\n", fov.x, fov.y);
-		mini_rt->scene.cameras[0].orientation.x += converted_x * fov.x / 360 / 2 ;
-		if (mini_rt->scene.cameras[0].orientation.x > 1)
-			mini_rt->scene.cameras[0].orientation.x -= 1;
+		mini_rt->scene.cameras[mini_rt->scene.cc].orientation.x += converted_x * fov.x / 360 / 2 ;
+		if (mini_rt->scene.cameras[mini_rt->scene.cc].orientation.x > 1)
+			mini_rt->scene.cameras[mini_rt->scene.cc].orientation.x -= 1;
 
-		mini_rt->scene.cameras[0].orientation.y += -converted_y * fov.y / 360 / 2 ;
-		if (mini_rt->scene.cameras[0].orientation.y > 1)
-			mini_rt->scene.cameras[0].orientation.y -= 1;
-//		printf("camera.x = %f\ncamera.y = %f\n", mini_rt->scene.cameras[0].orientation.x, mini_rt->scene.cameras[0].orientation.y);
+		mini_rt->scene.cameras[mini_rt->scene.cc].orientation.y += -converted_y * fov.y / 360 / 2 ;
+		if (mini_rt->scene.cameras[mini_rt->scene.cc].orientation.y > 1)
+			mini_rt->scene.cameras[mini_rt->scene.cc].orientation.y -= 1;
+//		printf("camera.x = %f\ncamera.y = %f\n", mini_rt->scene.camera[mini_rt->scene.cc].orientation.x, mini_rt->scene.camera[mini_rt->scene.cc].orientation.y);
 		render_scene(mlx, &mini_rt->scene);
 	}
 	(void)e_modifier;

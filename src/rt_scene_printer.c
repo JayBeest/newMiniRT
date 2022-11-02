@@ -108,6 +108,6 @@ void	print_scene(t_scene scene)
 	printf("resolution: %dx%d\n", scene.canvas.x, scene.canvas.y);
 	print_ambient_light(scene.ambient_light);
 	print_camera(scene.cameras, scene.camera_amount);
-	print_spotlights(scene.spot_lights, scene.light_amount);
+	print_spotlights(scene.lights, scene.light_amount);
 	print_objects(scene.objects, scene.object_amount);
 }

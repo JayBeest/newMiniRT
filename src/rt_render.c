@@ -31,10 +31,10 @@ void	render_text(t_mlx *mlx, t_scene *scene, t_ms time_spend)
 	char	msaa[32];
 	char	thread[32];
 
-	if (scene->cameras[0].zoom_level == 1)
-		sprintf(fov, "fov: %d", scene->cameras[0].fov);
+	if (scene->cameras[scene->cc].zoom_level == 1)
+		sprintf(fov, "fov: %d", scene->cameras[scene->cc].fov);
 	else
-		sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[0].fov, (scene->cameras[0].zoom_level - 1) * CAMERA_ZOOM_FACTOR);
+		sprintf(fov, "fov: %d (zoom: %.1fx)", scene->cameras[scene->cc].fov, (scene->cameras[scene->cc].zoom_level - 1) * CAMERA_ZOOM_FACTOR);
 	sprintf(rgb, "%.3d %.3d %.3d", (int)(255.999 * scene->bg_color.x), (int)(255.999 * scene->bg_color.y), (int)(255.999 * scene->bg_color.z));
 	sprintf(fps, "frame took: %lu ms", time_spend);
 	sprintf(thread, "render threads: %d", scene->thread_amount);
@@ -77,14 +77,14 @@ void	set_viewport(t_scene *scene, double aspect_ratio)
 	double			radians;
 
 	viewport = &scene->viewport;
-	radians = (double)scene->cameras[0].fov * (double)M_PI / 180;
+	radians = (double)scene->cameras[scene->cc].fov * (double)M_PI / 180;
 	viewport->height = 2;
 	viewport->width = viewport->height * aspect_ratio;
 	diagonal = sqrt(viewport->width * viewport->width + \
 	viewport->height * viewport->height);
 	viewport->focal_length = diagonal / 2 / tan(radians / 2);
-//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal, scene->cameras[0].fov, viewport->focal_length);
-	i = scene->cameras[0].zoom_level;
+//	printf("\n\nwidth: %f\nheight: %f\ndiagonal: %f\nfov: %d\nfocal length: %f\n\n", viewport->width, viewport->height, diagonal, scene->camera[scene->cc].fov, viewport->focal_length);
+	i = scene->cameras[scene->cc].zoom_level;
 	while (i > 1)
 	{
 		viewport->height /= CAMERA_ZOOM_FACTOR;
@@ -102,8 +102,8 @@ t_vector	canvas_to_viewport(double x, double y, t_scene *scene)
 	v.y = (1 - ((double)y - (double)scene->canvas.y / 2)) * \
 		scene->viewport.y_ratio;
 	v.z = scene->viewport.focal_length;
-//	print_orientation(scene->cameras[0].orientation);
-	v = rotate_vector(v, scene->cameras[0].orientation);
+//	print_orientation(scene->camera[scene->cc].orientation);
+	v = rotate_vector(v, scene->cameras[scene->cc].orientation);
 	return (v);
 }
 
@@ -115,7 +115,7 @@ void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 		color = rand_multi_sample(scene, pixel);
 	else
 	{
-		color = trace_ray(init_rt_ray(scene->cameras[0].coordinates, \
+		color = trace_ray(init_rt_ray(scene->cameras[scene->cc].coordinates, \
 			canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), \
 			scene, scene->recursion_depth);
 	}

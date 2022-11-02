@@ -174,9 +174,10 @@ typedef struct s_viewport
 typedef struct s_scene
 {
 	t_obj_union *	objects;
-	t_spot_light *	spot_lights;
+	t_spot_light *	lights;
 	t_ambient_light	ambient_light;
 	t_camera	*	cameras;
+	int				cc;
 	t_resolution	canvas;
 	t_viewport		viewport;
 	t_color_ratio	bg_color;

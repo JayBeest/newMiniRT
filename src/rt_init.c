@@ -57,9 +57,9 @@ void	init_mock_rt(t_scene *scene)
 	scene->cameras[0].orientation = (t_vector){0, 0, 0};
 	scene->cameras[0].fov = 70;
 	scene->cameras[0].zoom_level = 0;
-	scene->spot_lights[0].coordinates = (t_vector){-40, 0, 30};
-	scene->spot_lights[0].intensity = 0.7;
-	scene->spot_lights[0].color = (t_color){255, 255, 255, 255};
+	scene->lights[0].coordinates = (t_vector){-40, 0, 30};
+	scene->lights[0].intensity = 0.7;
+	scene->lights[0].color = (t_color){255, 255, 255, 255};
 
 	scene->objects[0].plane.type = PLANE;
 	scene->objects[0].plane.coordinates = (t_vector){0, 0, 0};
@@ -87,18 +87,18 @@ void	init_new_rt(t_scene *scene)
 	scene->cameras[0].fov = 70;
 	scene->cameras[0].zoom_level = 1;
 
-	scene->spot_lights[0].coordinates = (t_vector){0, 20, 4};
-	scene->spot_lights[0].intensity = 0.4;
-	scene->spot_lights[0].color = (t_color){255, 255, 255, 255};
-	scene->spot_lights[1].coordinates = (t_vector){0.8, 15, -3.5};
-	scene->spot_lights[1].intensity = 0.3;
-	scene->spot_lights[1].color = (t_color){255, 255, 255, 255};
-	scene->spot_lights[2].coordinates = (t_vector){0, 5, -3};
-	scene->spot_lights[2].intensity = 0.1;
-	scene->spot_lights[2].color = (t_color){255, 196, 23, 255};
-	scene->spot_lights[0].toggle = true;
-	scene->spot_lights[1].toggle = true;
-	scene->spot_lights[2].toggle = true;
+	scene->lights[0].coordinates = (t_vector){0, 20, 4};
+	scene->lights[0].intensity = 0.4;
+	scene->lights[0].color = (t_color){255, 255, 255, 255};
+	scene->lights[1].coordinates = (t_vector){0.8, 15, -3.5};
+	scene->lights[1].intensity = 0.3;
+	scene->lights[1].color = (t_color){255, 255, 255, 255};
+	scene->lights[2].coordinates = (t_vector){0, 5, -3};
+	scene->lights[2].intensity = 0.1;
+	scene->lights[2].color = (t_color){255, 196, 23, 255};
+	scene->lights[0].toggle = true;
+	scene->lights[1].toggle = true;
+	scene->lights[2].toggle = true;
 
 	scene->objects[0].sphere.type = SPHERE;
 	scene->objects[0].sphere.coordinates = (t_vector){0, -1, 3}; // red
