@@ -225,7 +225,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	{
 		if (scene->thread_amount < RT_MAX_THREADS)
 		{
-			scene->thread_amount = scene->thread_amount * 2;
+			scene->thread_amount++;
 			printf("presed YYYY, thread_amount: %d\n", scene->thread_amount);
 			render_scene(mlx, scene);
 			usleep(10000);
@@ -235,7 +235,7 @@ void	rt_controls(t_rt_mlx *mlx, t_rt_scene *scene)
 	{
 		if (scene->thread_amount > 1)
 		{
-			scene->thread_amount = scene->thread_amount / 2;
+			scene->thread_amount--;
 			printf("presed YYYY, thread_amount: %d\n", scene->thread_amount);
 			render_scene(mlx, scene);
 			usleep(10000);
