@@ -76,15 +76,18 @@ t_vector	canvas_to_viewport(double x, double y, t_scene *scene)
 
 void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 {
-	t_color	color;
+	t_point		destination;
+	t_rt_ray	ray;
+	t_color		color;
 
 	if (scene->msaa > 0 && !scene->bare_toggle)
 		color = rand_multi_sample(scene, pixel);
 	else
 	{
-		color = trace_ray(init_rt_ray(scene->cameras[scene->cc].coordinates, \
-			canvas_to_viewport(pixel.x, pixel.y, scene), 1, INFINITY), \
-			scene, scene->recursion_depth);
+		destination = canvas_to_viewport(pixel.x, pixel.y, scene);
+		ray = init_rt_ray(scene->cameras[scene->cc].coordinates, destination, \
+			1, INFINITY);
+		color = trace_ray(ray, scene, scene->recursion_depth);
 	}
 	mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));
 }
