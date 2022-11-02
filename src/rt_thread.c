@@ -4,7 +4,7 @@
 #include <rt_thread.h>
 #include <stdio.h>
 
-t_canvas_size	get_multi_pix(t_scene *scene, int id)
+t_canvas_size	get_multi_threaded_canvas(t_scene *scene, int id)
 {
 	t_canvas_size	multi_pix;
 
@@ -30,20 +30,11 @@ t_canvas_size	get_multi_pix(t_scene *scene, int id)
 void	*render_thread(void *a)
 {
 	t_thread_arg		*arg;
-	t_resolution		pixel;
 	t_canvas_size		canvas;
 
 	arg = (t_thread_arg *)a;
-	canvas = get_multi_pix(arg->scene, arg->id);
+	canvas = get_multi_threaded_canvas(arg->scene, arg->id);
 	return((void *)single_thread(arg->mlx, arg->scene, canvas));
-}
-
-void	init_t_thread_arg(t_thread_arg *arg, t_mlx *mlx, \
-	t_scene *scene, int index)
-{
-	arg->id = index;
-	arg->scene = scene;
-	arg->mlx = mlx;
 }
 
 t_err	multi_thread(t_mlx *mlx, t_scene *scene)
@@ -55,7 +46,9 @@ t_err	multi_thread(t_mlx *mlx, t_scene *scene)
 	i = 0;
 	while (i < scene->thread_amount)
 	{
-		init_t_thread_arg(&arg[i], mlx, scene, i);
+		arg[i].id = i;
+		arg[i].scene = scene;
+		arg[i].mlx = mlx;
 		if (pthread_create(&pthread[i], NULL, &render_thread, &arg[i]))
 			printf("pthread_create id[%d] failed\n", i);
 		i++;

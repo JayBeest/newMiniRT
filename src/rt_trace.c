@@ -53,10 +53,27 @@ t_color	trace_reflection(t_rt_ray ray, t_intersect_result intersect_result, t_sc
 	return (trace_ray(ray, scene, recursion_depth - 1));
 }
 
+t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
+{
+	t_color_intensity	reflect_amount;
+	t_color_intensity	local_amount;
+
+	reflect_amount.r = ir.closest_obj->def.reflective;
+	reflect_amount.g = reflect_amount.r;
+	reflect_amount.b = reflect_amount.r;
+	reflect_amount.a = reflect_amount.r;
+	local_amount.r = 1 - ir.closest_obj->def.reflective;
+	local_amount.g = local_amount.r;
+	local_amount.b = local_amount.r;
+	local_amount.a = local_amount.r;
+	return (add_color(multiply_color(reflect_amount, reflected), \
+		multiply_color(local_amount, local)));
+}
+
 t_color	trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth)
 {
-	t_color			local_color;
-	t_color			reflected_color;
+	t_color			local;
+	t_color			reflected;
 	t_intersect_result	ir;
 
 	ft_bzero(&ir, sizeof(ir));
@@ -71,10 +88,10 @@ t_color	trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth)
 		ray.reverse_direction = multiply_vector(ray.destination, -1);
 	else
 		ray.reverse_direction = (t_vector){0, 0, 0};
-	local_color = calculate_light(ir.closest_obj, ray, scene);
+	local = calculate_light(ir.closest_obj, ray, scene);
 	if (scene->bare_toggle || ir.closest_obj->def.reflective <= 0 || \
 		recursion_depth <= 0)
-		return (local_color);
-	reflected_color = trace_reflection(ray, ir, scene, recursion_depth);
-	return (add_color(multiply_color((t_color_intensity){ir.closest_obj->def.reflective, ir.closest_obj->def.reflective, ir.closest_obj->def.reflective, 1}, reflected_color), multiply_color((t_color_intensity){1 - ir.closest_obj->def.reflective, 1 - ir.closest_obj->def.reflective, 1 - ir.closest_obj->def.reflective, 1}, local_color)));
+		return (local);
+	reflected = trace_reflection(ray, ir, scene, recursion_depth);
+	return (assemble_color(local, reflected, ir));
 }
