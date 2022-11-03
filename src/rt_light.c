@@ -27,7 +27,7 @@ void	add_diffuse_light(t_color_intensity *intensity, t_light *light, \
 	if (n_dot_l > 0)
 	{
 		init_intensity(&to_add, light->intensity * n_dot_l / \
-		(sqrt(dot_product(n, n)) * sqrt(dot_product(l, l))), light->color);
+		(vector_length(n) * vector_length(l)), light->color);
 		update_intensity(intensity, to_add, light->color);
 	}
 }

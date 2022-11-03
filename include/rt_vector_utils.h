@@ -18,6 +18,7 @@ t_vector	substract_vector(t_vector a, t_vector b);
 t_vector	multiply_vector(t_vector a, double num);
 t_vector	cross_product(t_vector a, t_vector b);
 double		dot_product(t_vector a, t_vector b);
+double		vector_length(t_vector vector);
 double		length_squared(t_vector vector);
 t_vector	unit_vector(t_vector vector);
 t_vector	rnd_scalar(void);
