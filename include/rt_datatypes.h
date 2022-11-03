@@ -218,6 +218,7 @@ typedef struct s_scene
 	int				thread_amount;
 
 	double			aspect_ratio;
+	int				fps;
 
 	int				recursion_depth;
 	int				msaa;
