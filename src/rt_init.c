@@ -56,6 +56,7 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.hud = 1;
 	mini_rt->scene.bare_toggle = false;
 	mini_rt->scene.thread_amount = RT_THREADS;
+	mini_rt->scene.fps = FPS;
 	return (NO_ERR);
 
 }

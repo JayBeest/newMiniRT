@@ -52,7 +52,6 @@ void	rt_mouse_hook(enum mouse_key e_key, enum action e_action, enum modifier_key
 		converted_y = (double)(mini_rt->scene.canvas.y / -2 + mouse.y) / (mini_rt->scene.canvas.y / -2);
 		int diagonal = sqrt(mini_rt->scene.canvas.x * mini_rt->scene.canvas.x + mini_rt->scene.canvas.y * mini_rt->scene.canvas.y);
 		t_resolution fov;
-//		printf("diagonal: %d\n", diagonal);
 		fov.x = (double)mini_rt->scene.canvas.x / diagonal * mini_rt->scene.cameras[mini_rt->scene.cc].fov / mini_rt->scene.cameras[mini_rt->scene.cc].zoom_level;
 		fov.y = (double)mini_rt->scene.canvas.y / diagonal * mini_rt->scene.cameras[mini_rt->scene.cc].fov / mini_rt->scene.cameras[mini_rt->scene.cc].zoom_level;
 //		printf("mouse - x: %d  y: %d\n", mouse.x, mouse.y);
@@ -82,12 +81,12 @@ void	rt_hook(void *arg)
 	mlx_loop_counter++;
 	rt_controls(&((t_mini_rt *)arg)->mlx, &((t_mini_rt *)arg)->scene);
 	t_nano	took = nano_passed(current_frame_start);
-	if (mlx_loop_counter % FPS == 0)
+	if (mlx_loop_counter % ((t_mini_rt *)arg)->scene.fps == 0)
 	{
 		float sixty_took = (float)nano_passed(previous) / 1000;
-		printf("-------> %d mlx_frames: %.3f ms (%.0f fps)\n", FPS, sixty_took, (double)FPS / (sixty_took / 1000));
+		printf("-------> %d mlx_frames: %.3f ms (%.0f fps)\n", ((t_mini_rt *)arg)->scene.fps, sixty_took, (double)((t_mini_rt *)arg)->scene.fps / (sixty_took / 1000));
 		previous = current_frame_start;
 	}
-	if (took < 1000000 / FPS)
-		rt_sleep_nano(1000000 / FPS - took - 1000);
+	if (took < 1000000 / ((t_mini_rt *)arg)->scene.fps)
+		rt_sleep_nano(1000000 / ((t_mini_rt *)arg)->scene.fps - took - 1000);
 }
