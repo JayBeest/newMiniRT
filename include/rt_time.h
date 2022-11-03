@@ -1,5 +1,5 @@
-#ifndef RT_RT_TIME_H
-# define RT_RT_TIME_H
+#ifndef RT_TIME_H
+# define RT_TIME_H
 
 typedef long	t_s;
 typedef long	t_ms;

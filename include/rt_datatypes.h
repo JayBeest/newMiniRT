@@ -1,5 +1,5 @@
-#ifndef RT_DATA_TYPES_H
-# define RT_DATA_TYPES_H
+#ifndef RT_DATATYPES_H
+# define RT_DATATYPES_H
 
 # include <stdbool.h>
 # include <MLX42.h>
@@ -52,8 +52,8 @@ typedef struct s_vector
 	double			z;
 }			t_vector;
 
-typedef t_vector t_point;
-typedef t_vector t_color_ratio;
+typedef t_vector	t_point;
+typedef t_vector	t_color_ratio;
 
 typedef struct s_resolution
 {
@@ -69,10 +69,10 @@ typedef struct s_canvas_size
 
 typedef struct s_color
 {
-	unsigned char 	r;
-	unsigned char 	g;
-	unsigned char 	b;
-	unsigned char 	a;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	unsigned char	a;
 }			t_color;
 
 typedef struct s_color_intensity
@@ -88,7 +88,6 @@ typedef struct s_color_aggregate
 	t_color_intensity	intensity;
 	unsigned long		source_counter;
 }			t_color_aggregate;
-
 
 typedef struct s_obj_default
 {
@@ -192,10 +191,10 @@ typedef struct s_rt_ray
 
 typedef struct s_scene
 {
-	t_obj_union *	objects;
-	t_light *		lights;
+	t_obj_union		*objects;
+	t_light			*lights;
 	t_ambient_light	ambient_light;
-	t_camera	*	cameras;
+	t_camera		*cameras;
 	int				cc;
 	t_resolution	canvas;
 	t_viewport		viewport;
@@ -218,9 +217,9 @@ typedef struct s_mlx
 {
 	mlx_t			*mlx;
 	mlx_image_t		*img;
-	mlx_image_t 	*text;
-	mlx_image_t 	*fps;
-	mlx_image_t 	*rgb;
+	mlx_image_t		*text;
+	mlx_image_t		*fps;
+	mlx_image_t		*rgb;
 	mlx_image_t		*ref;
 	mlx_image_t		*msaa;
 	mlx_image_t		*thread;

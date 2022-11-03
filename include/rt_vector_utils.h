@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_UTILS_H
-# define VECTOR_UTILS_H
+#ifndef RT_VECTOR_UTILS_H
+# define RT_VECTOR_UTILS_H
 
 t_vector	add_vector(t_vector a, t_vector b);
 t_vector	substract_vector(t_vector a, t_vector b);
