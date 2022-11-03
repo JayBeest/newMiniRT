@@ -70,6 +70,25 @@ void	calculate_reflected_ray(t_ray *ray, t_intersect_result *ir)
 	ray->t_min = EPSILON;
 }
 
+t_vector	refract(t_vector uv, t_vector n, double etai_over_etat)
+{
+	double		cos_theta = fmin(dot_product(multiply_vector(uv, -1), n), 1.0);
+	t_vector	r_out_perp = multiply_vector(add_vector(uv, multiply_vector(n, cos_theta)), etai_over_etat);
+	t_vector	r_out_parallel = multiply_vector(n, -1 * sqrt(fabs(1.0 - length_squared(r_out_perp))));
+	return (add_vector(r_out_perp, r_out_parallel));
+}
+
+void	calculate_refracted_ray(t_ray *ray, t_intersect_result *ir)
+{
+	(void)ir;
+//	t_color_ratio	attenuation = (t_color_ratio){1.0, 1.0, 1.0};
+	double			refraction_ratio = 0.8;
+//	double			index_of_refraction = 1.5;
+	t_vector		unit_direction = unit_vector(substract_vector(ray->dest, ray->origin));
+	t_vector		refracted = refract(unit_direction, ray->normal, refraction_ratio);
+	*ray = init_ray(ray->inters_p, refracted, (t_minmax){EPSILON, INFINITY});
+}
+
 void	calculate_intersect_ray(t_ray *ray, t_intersect_result *ir)
 {
 	ray->inters_p = multiply_vector(ray->dest, ir->closest_t);
@@ -100,6 +119,7 @@ t_color	trace_ray(t_ray ray, t_scene *scene, int recursion_depth)
 	if (scene->bare_toggle || ir.closest_obj->def.reflective <= 0 || \
 		recursion_depth <= 0)
 		return (local);
+//	calculate_refracted_ray(&ray, &ir);
 	calculate_reflected_ray(&ray, &ir);
 	reflected = trace_ray(ray, scene, recursion_depth - 1);
 	return (assemble_color(local, reflected, ir));

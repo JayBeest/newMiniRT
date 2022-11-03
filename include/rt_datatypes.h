@@ -21,7 +21,7 @@
 
 # define CAMERA_MOVE_STEP 0.1
 # define CAMERA_ZOOM_FACTOR 1.5
-# define FPS 30
+# define FPS 60
 # define MULTI_SAMPLE 0
 # define RT_THREADS 4
 # define RT_MAX_THREADS 32
