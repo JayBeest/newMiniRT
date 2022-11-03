@@ -20,7 +20,8 @@ t_color 	rand_multi_sample(t_scene *scene, t_resolution pixel)
 		double u = pixel.x + random_double();
 		double v = pixel.y + random_double();
 		destination = canvas_to_viewport(u, v, scene);
-		ray = init_ray(scene->cameras[scene->cc].coordinates, destination, 1, INFINITY);
+		ray = init_ray(scene->cameras[scene->cc].coordinates, destination, \
+			(t_minmax){1, INFINITY});
 		color = trace_ray(ray, scene, scene->recursion_depth);
 		add_to_aggregate(&aggregate, color_to_intensity(color));
 		i++;

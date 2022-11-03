@@ -184,7 +184,7 @@ typedef struct s_rt_ray
 	t_point			dest;
 	double			t_max;
 	double			t_min;
-	t_point			intersection_point;
+	t_point			inters_p;
 	t_point			normal;
 	t_point			reverse_direction;
 

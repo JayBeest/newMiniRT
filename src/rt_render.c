@@ -76,9 +76,9 @@ t_vector	canvas_to_viewport(double x, double y, t_scene *scene)
 
 void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 {
-	t_point		destination;
+	t_point	destination;
 	t_ray	ray;
-	t_color		color;
+	t_color	color;
 
 	if (scene->msaa > 0 && !scene->bare_toggle)
 		color = rand_multi_sample(scene, pixel);
@@ -86,7 +86,7 @@ void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 	{
 		destination = canvas_to_viewport(pixel.x, pixel.y, scene);
 		ray = init_ray(scene->cameras[scene->cc].coordinates, destination, \
-            1, INFINITY);
+			(t_minmax){1, INFINITY});
 		color = trace_ray(ray, scene, scene->recursion_depth);
 	}
 	mlx_put_pixel(mlx->img, pixel.x, pixel.y, color_to_int(color));

@@ -21,7 +21,7 @@
 
 #include <stdlib.h>
 
-t_vector	reflect_sphere(t_vector ray, t_vector normal) // one also needed for plane and others I think
+t_vector	reflect_sphere(t_vector ray, t_vector normal)
 {
 	t_vector	new_ray;
 
@@ -31,19 +31,19 @@ t_vector	reflect_sphere(t_vector ray, t_vector normal) // one also needed for pl
 	return (new_ray);
 }
 
-t_ray	init_ray(t_point origin, t_point destination, double t_min, double t_max)
+t_ray	init_ray(t_point origin, t_point destination, t_minmax t)
 {
 	t_ray	ray;
 
 	ft_bzero(&ray, sizeof(ray));
 	ray.origin = origin;
 	ray.dest = destination;
-	ray.t_min = t_min;
-	ray.t_max = t_max;
+	ray.t_min = t.min;
+	ray.t_max = t.max;
 	return (ray);
 }
 
-t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
+t_color	assemble_color(t_color local, t_color reflected, t_intersect_result ir)
 {
 	t_color_intensity	refl;
 	t_color_intensity	loca;
@@ -63,18 +63,21 @@ t_color assemble_color(t_color local, t_color reflected, t_intersect_result ir)
 void	calculate_reflected_ray(t_ray *ray, t_intersect_result *ir)
 {
 	ray->dest = reflect_sphere(multiply_vector(ray->dest, -1), ray->normal);
-	ray->dest = add_vector(ray->dest, multiply_vector(rnd_scalar(), ir->closest_obj->def.metal_fuzz));
-	ray->origin = ray->intersection_point;
+	ray->dest = add_vector(ray->dest, multiply_vector(rnd_scalar(), \
+		ir->closest_obj->def.metal_fuzz));
+	ray->origin = ray->inters_p;
 	ray->t_max = INFINITY;
 	ray->t_min = EPSILON;
 }
 
 void	calculate_intersect_ray(t_ray *ray, t_intersect_result *ir)
 {
-	ray->intersection_point = multiply_vector(ray->dest, ir->closest_t); // Calc intersection
-	ray->intersection_point = add_vector(ray->intersection_point, ray->origin);
-	ray->normal = substract_vector(ray->intersection_point, ir->closest_obj->def.coordinates); // Calc sphere normal
-	ray->normal = multiply_vector(ray->normal, (double)1 / sqrt(dot_product(ray->normal, ray->normal)));
+	ray->inters_p = multiply_vector(ray->dest, ir->closest_t);
+	ray->inters_p = add_vector(ray->inters_p, ray->origin);
+	ray->normal = substract_vector(ray->inters_p, \
+		ir->closest_obj->def.coordinates);
+	ray->normal = multiply_vector(ray->normal, \
+		(double)1 / sqrt(dot_product(ray->normal, ray->normal)));
 	if (ir->closest_obj->def.specular > 0)
 		ray->reverse_direction = multiply_vector(ray->dest, -1);
 	else
@@ -88,7 +91,8 @@ t_color	trace_ray(t_ray ray, t_scene *scene, int recursion_depth)
 	t_intersect_result	ir;
 
 	ft_bzero(&ir, sizeof(ir));
-	ir = get_closest_intersection(scene, ray.origin, ray.dest, ray.t_min, ray.t_max);
+	ir = get_closest_intersection(scene, ray.origin, ray.dest, \
+		(t_minmax){ray.t_min, ray.t_max});
 	if (!ir.closest_obj)
 		return (y_gradient(ray.origin, ray.dest, scene));
 	calculate_intersect_ray(&ray, &ir);

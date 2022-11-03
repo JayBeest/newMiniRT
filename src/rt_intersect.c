@@ -23,10 +23,11 @@ t_quad_result	intersect_plane(t_vector o, t_vector d, t_obj_union *obj)
 	double			denominator;
 
 	result.t2 = INFINITY;
-	denominator	= dot_product(obj->plane.orientation, d);
+	denominator = dot_product(obj->plane.orientation, d);
 	if (denominator > EPSILON || denominator < -EPSILON)
 	{
-		result.t1 = dot_product(substract_vector(obj->plane.coordinates, o), obj->plane.orientation) / denominator;
+		result.t1 = dot_product(substract_vector(obj->plane.coordinates, o), \
+			obj->plane.orientation) / denominator;
 		if (result.t1 < 0)
 			result.t1 = INFINITY;
 		return (result);
@@ -40,7 +41,7 @@ t_quad_result	intersect_sphere(t_vector o, t_vector d, t_obj_union *obj)
 	t_quad_abc		quad;
 	t_quad_result	result;
 	t_vector		co;
-	double 			discriminant;
+	double			discriminant;
 
 	co = substract_vector(o, obj->sphere.coordinates);
 	quad.a = dot_product(d, d);
@@ -54,32 +55,38 @@ t_quad_result	intersect_sphere(t_vector o, t_vector d, t_obj_union *obj)
 	return (result);
 }
 
-t_quad_result	intersect_obj(t_vector origin, t_vector viewport, t_obj_union *obj)
+t_quad_result	intersect_obj(t_vector origin, t_vector viewport, \
+	t_obj_union *obj)
 {
 	static t_intersect_fun	function_pointers[NO_OBJECT] = {
-			[SPHERE] = intersect_sphere,
-			[PLANE] = intersect_plane
+	[SPHERE] = intersect_sphere,
+	[PLANE] = intersect_plane
 	};
+
 	return (function_pointers[obj->def.type](origin, viewport, obj));
 }
 
-t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, t_vector d, double t_min, double t_max)
+t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, \
+	t_vector d, t_minmax t)
 {
 	t_intersect_result	intersect_result;
 	t_quad_result		quad_result;
+	int					i;
 
 	intersect_result.closest_obj = NULL;
 	intersect_result.closest_t = INFINITY;
-	int i = 0;
+	i = 0;
 	while (i < scene->object_amount)
 	{
 		quad_result = intersect_obj(o, d, &scene->objects[i]);
-		if (quad_result.t1 < intersect_result.closest_t && quad_result.t1 > t_min && quad_result.t1 < t_max)
+		if (quad_result.t1 < intersect_result.closest_t && \
+			quad_result.t1 > t.min && quad_result.t1 < t.max)
 		{
 			intersect_result.closest_t = quad_result.t1;
 			intersect_result.closest_obj = &scene->objects[i];
 		}
-		if (quad_result.t2 < intersect_result.closest_t && quad_result.t2 > t_min && quad_result.t2 < t_max)
+		if (quad_result.t2 < intersect_result.closest_t && \
+			quad_result.t2 > t.min && quad_result.t2 < t.max)
 		{
 			intersect_result.closest_t = quad_result.t2;
 			intersect_result.closest_obj = &scene->objects[i];

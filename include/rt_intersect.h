@@ -13,6 +13,12 @@
 #ifndef INTERSECT_H
 # define INTERSECT_H
 
+typedef struct s_minmax
+{
+	double		min;
+	double		max;
+}		t_minmax;
+
 typedef struct s_quad_abc
 {
 	double			a;
@@ -35,6 +41,6 @@ typedef struct s_intersect_result
 typedef t_quad_result(*t_intersect_fun)(t_vector, t_vector, t_obj_union *);
 
 t_quad_result		intersect_obj(t_vector origin, t_vector viewport, t_obj_union *obj);
-t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, t_vector d, double t_min, double t_max);
+t_intersect_result	get_closest_intersection(t_scene *scene, t_vector o, t_vector d, t_minmax t);
 
 #endif
