@@ -18,7 +18,7 @@ void	add_diffuse_light(t_color_intensity *intensity, t_light *light, t_vector n,
 	}
 }
 
-void	add_specular_light(t_color_intensity *intensity, t_light *light, t_rt_ray ray, t_vector l)
+void	add_specular_light(t_color_intensity *intensity, t_light *light, t_ray ray, t_vector l)
 {
 	t_color_intensity 	to_add;
 	double					r_dot_v;
@@ -35,7 +35,7 @@ void	add_specular_light(t_color_intensity *intensity, t_light *light, t_rt_ray r
 	}
 }
 
-t_color	calculate_light(t_obj_union *obj, t_rt_ray ray, t_scene *scene)
+t_color	calculate_light(t_obj_union *obj, t_ray ray, t_scene *scene)
 {
 	t_color_intensity	intensity;
 	t_vector				l;

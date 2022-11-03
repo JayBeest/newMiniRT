@@ -77,7 +77,7 @@ t_vector	canvas_to_viewport(double x, double y, t_scene *scene)
 void	render_pixel(t_resolution pixel, t_mlx *mlx, t_scene *scene)
 {
 	t_point		destination;
-	t_rt_ray	ray;
+	t_ray	ray;
 	t_color		color;
 
 	if (scene->msaa > 0 && !scene->bare_toggle)

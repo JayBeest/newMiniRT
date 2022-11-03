@@ -180,20 +180,20 @@ typedef struct s_viewport
 
 typedef struct s_rt_ray
 {
-	t_point		origin;
-	t_point		destination;
-	double		t_max;
-	double		t_min;
-	t_point		intersection_point;
-	t_point		normal;
-	t_point		reverse_direction;
+	t_point			origin;
+	t_point			dest;
+	double			t_max;
+	double			t_min;
+	t_point			intersection_point;
+	t_point			normal;
+	t_point			reverse_direction;
 
-}			t_rt_ray;
+}			t_ray;
 
 typedef struct s_scene
 {
 	t_obj_union *	objects;
-	t_light *	lights;
+	t_light *		lights;
 	t_ambient_light	ambient_light;
 	t_camera	*	cameras;
 	int				cc;

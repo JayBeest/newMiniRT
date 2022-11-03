@@ -10,7 +10,7 @@ t_color 	rand_multi_sample(t_scene *scene, t_resolution pixel)
 {
 	t_color_aggregate	aggregate;
 	t_point				destination;
-	t_rt_ray			ray;
+	t_ray			ray;
 	t_color				color;
 
 	ft_bzero(&aggregate, sizeof(t_color_aggregate));

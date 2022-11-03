@@ -15,8 +15,8 @@
 
 # include <rt_intersect.h>
 
-t_rt_ray	init_ray(t_point origin, t_point destination, double t_min, double t_max);
+t_ray	init_ray(t_point origin, t_point destination, double t_min, double t_max);
 t_vector	reflect_sphere(t_vector ray, t_vector normal);
-t_color		trace_ray(t_rt_ray ray, t_scene *scene, int recursion_depth);
+t_color		trace_ray(t_ray ray, t_scene *scene, int recursion_depth);
 
 #endif
