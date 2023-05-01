@@ -187,17 +187,17 @@ void	rt_controls(t_mlx *mlx, t_scene *scene)
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_7))
 	{
-		if (scene->lights[0].coordinates.y < 20.0)
+		if (scene->lights[2].coordinates.x < 50.0)
 		{
-			scene->lights[0].coordinates.y += 0.5;
+			scene->lights[2].coordinates.x += 0.5;
 			render_scene(mlx, scene);
 		}
 	}
 	if (mlx_is_key_down(mlx->mlx, MLX_KEY_8))
 	{
-		if (scene->lights[0].coordinates.y > -10)
+		if (scene->lights[2].coordinates.x > -10)
 		{
-			scene->lights[0].coordinates.y	-= 0.5;
+			scene->lights[2].coordinates.x	-= 0.5;
 			render_scene(mlx, scene);
 		}
 	}

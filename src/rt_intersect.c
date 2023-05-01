@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/26 21:28:58 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/04/27 18:43:35 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/27 23:35:54 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_quad_result	intersect_obj(t_vector origin, t_vector viewport, \
 	static t_intersect_fun	function_pointers[NO_OBJECT] = {
 	[SPHERE] = intersect_sphere,
 	[PLANE] = intersect_plane
+	// [CYLINDER] = intersect_cylinder
 	};
 
 	return (function_pointers[obj->def.type](origin, viewport, obj));

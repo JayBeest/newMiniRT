@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 02:22:17 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/11/03 02:22:18 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/28 00:20:14 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 	else
 	{
 		mini_rt.scene.light_amount = 3;
-		mini_rt.scene.object_amount = 6;
+		mini_rt.scene.object_amount = 7;
 		mini_rt.scene.camera_amount = 1;
 		if (allocate_scene(&mini_rt.scene) != NO_ERR)
 			return (free_scene(mini_rt.scene, 1));

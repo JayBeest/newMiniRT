@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 02:22:56 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/11/03 02:22:57 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/28 00:26:44 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ t_err	init_rt(t_mini_rt *mini_rt)
 	mini_rt->scene.bg_color.y = 0.7;
 	mini_rt->scene.bg_color.z = 1.0;
 //	mini_rt->scene.aspect_ratio = 1;
-	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
+//	mini_rt->scene.aspect_ratio = 4.0 / 3.0;
 //	mini_rt->scene.aspect_ratio = 16.0 / 9.0;
 //	mini_rt->scene.aspect_ratio = 9.0 / 16.0;
-//	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
+	mini_rt->scene.aspect_ratio = 16.0 / 10.0;
 //	mini_rt->scene.aspect_ratio = 21.0 / 9.0;
 //	mini_rt->scene.aspect_ratio = 32.0 / 9.0;
 	mini_rt->scene.canvas.x = IMAGE_WIDTH;
@@ -121,8 +121,8 @@ void	init_new_rt(t_scene *scene)
 	scene->objects[0].sphere.radius = 1.0 / 2;
 	scene->objects[0].sphere.color = (t_color){255, 0, 0, 255};
 	scene->objects[0].sphere.specular = 80;
-	scene->objects[0].sphere.reflective = 0.5f;
-	scene->objects[0].sphere.metal_fuzz = 0.3f;
+	scene->objects[0].sphere.reflective = 0.6f;
+	scene->objects[0].sphere.metal_fuzz = 0;
 	scene->objects[1].sphere.type = SPHERE;
 	scene->objects[1].sphere.coordinates = (t_vector){2, 1, 3}; // blue
 	scene->objects[1].sphere.radius = 2.0 / 2;
@@ -136,7 +136,7 @@ void	init_new_rt(t_scene *scene)
 	scene->objects[2].sphere.color = (t_color){0, 255, 0, 255};
 	scene->objects[2].sphere.specular = 1000;
 	scene->objects[2].sphere.reflective = 0.3f;
-	scene->objects[2].sphere.metal_fuzz = 1;
+	scene->objects[2].sphere.metal_fuzz = 0;
 	scene->objects[3].sphere.type = SPHERE;
 	scene->objects[3].sphere.coordinates = (t_vector){-0.5, 0.25, 32}; // turquoise
 	scene->objects[3].sphere.radius = 2.0 / 2;
@@ -149,7 +149,7 @@ void	init_new_rt(t_scene *scene)
 	scene->objects[4].sphere.radius = 195.0;
 	scene->objects[4].sphere.color = (t_color){128, 64, 196, 255};
 	scene->objects[4].sphere.specular = 0;
-	scene->objects[4].sphere.reflective = 0;
+	scene->objects[4].sphere.reflective = 0.01f;
 	scene->objects[4].sphere.metal_fuzz = 0;
 	scene->objects[5].sphere.type = SPHERE;
 	scene->objects[5].sphere.coordinates = (t_vector){1.85, -1.5, 3.3}; // yellow
@@ -158,11 +158,20 @@ void	init_new_rt(t_scene *scene)
 	scene->objects[5].sphere.specular = 0;
 	scene->objects[5].sphere.reflective = 0.8f;
 	scene->objects[5].sphere.metal_fuzz = 0;
-//	scene->objects[6].plane.type = PLANE;
-//	scene->objects[6].plane.coordinates = (t_rt_vector){0, -4, 0};
-//	scene->objects[6].plane.orientation = (t_rt_vector){1, 1, 0};
-//	scene->objects[6].plane.color = (t_rt_color){255, 255, 255, 255};
-//	scene->objects[6].plane.specular = 0;
-//	scene->objects[6].plane.reflective = 0;
+	scene->objects[6].plane.type = PLANE;
+	scene->objects[6].plane.coordinates = (t_vector){0, -4, 0};
+	scene->objects[6].plane.orientation = (t_vector){1, 1, 0};
+	scene->objects[6].plane.color = (t_color){255, 255, 255, 255};
+	scene->objects[6].plane.specular = 0;
+	scene->objects[6].plane.reflective = 0.6f;
+	scene->objects[6].plane.metal_fuzz = 0;
+	// scene->objects[6].cylinder.type = CYLINDER;
+	// scene->objects[6].cylinder.coordinates = (t_vector){1.85, -1.5, 3.3};
+	// scene->objects[6].cylinder.height = 4;
+	// scene->objects[6].cylinder.orientation = (t_vector){1, 1, 1};
+	// scene->objects[6].cylinder.radius = 1.7;
+	// scene->objects[6].cylinder.color = (t_color){255, 255, 0, 255};;
+	
+	
 	scene->recursion_depth = 1;
 }

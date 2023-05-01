@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/26 21:29:55 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/11/03 02:23:46 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/28 00:20:10 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_color	assemble_color(t_color local, t_color reflected, t_intersect_result ir)
 }
 
 void	calculate_reflected_ray(t_ray *ray, t_intersect_result *ir)
-{
+{	
 	ray->dest = reflect_sphere(multiply_vector(ray->dest, -1), ray->normal);
 	ray->dest = add_vector(ray->dest, multiply_vector(rnd_scalar(), \
 		ir->closest_obj->def.metal_fuzz));
@@ -82,7 +82,7 @@ void	calculate_refracted_ray(t_ray *ray, t_intersect_result *ir)
 {
 	(void)ir;
 //	t_color_ratio	attenuation = (t_color_ratio){1.0, 1.0, 1.0};
-	double			refraction_ratio = 0.8;
+	double			refraction_ratio = 0.7;
 //	double			index_of_refraction = 1.5;
 	t_vector		unit_direction = unit_vector(substract_vector(ray->dest, ray->origin));
 	t_vector		refracted = refract(unit_direction, ray->normal, refraction_ratio);
@@ -93,10 +93,17 @@ void	calculate_intersect_ray(t_ray *ray, t_intersect_result *ir)
 {
 	ray->inters_p = multiply_vector(ray->dest, ir->closest_t);
 	ray->inters_p = add_vector(ray->inters_p, ray->origin);
-	ray->normal = substract_vector(ray->inters_p, \
-		ir->closest_obj->def.coordinates);
-	ray->normal = multiply_vector(ray->normal, \
-		(double)1 / sqrt(dot_product(ray->normal, ray->normal)));
+	if (ir->closest_obj->def.type == SPHERE)
+	{
+		ray->normal = substract_vector(ray->inters_p, \
+			ir->closest_obj->def.coordinates);
+		ray->normal = multiply_vector(ray->normal, \
+			(double)1 / sqrt(dot_product(ray->normal, ray->normal)));
+	}
+	else if (ir->closest_obj->def.type == PLANE)
+	{
+		ray->normal = ir->closest_obj->plane.orientation;
+	}
 	if (ir->closest_obj->def.specular > 0)
 		ray->reverse_direction = multiply_vector(ray->dest, -1);
 	else
@@ -107,6 +114,7 @@ t_color	trace_ray(t_ray ray, t_scene *scene, int recursion_depth)
 {
 	t_color				local;
 	t_color				reflected;
+//	t_color				refracted;
 	t_intersect_result	ir;
 
 	ft_bzero(&ir, sizeof(ir));

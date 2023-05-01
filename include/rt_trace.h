@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 02:20:55 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/11/03 02:20:58 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/27 23:52:59 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define RT_TRACE_H
 
 # include <rt_intersect.h>
+
+typedef t_vector(*t_reflect_fun)(t_vector,  t_vector);
 
 t_ray		init_ray(t_point origin, t_point destination, t_minmax t);
 t_vector	reflect_sphere(t_vector ray, t_vector normal);

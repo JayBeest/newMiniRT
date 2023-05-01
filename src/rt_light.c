@@ -6,7 +6,7 @@
 /*   By: jcorneli <jcorneli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 02:23:00 by jcorneli      #+#    #+#                 */
-/*   Updated: 2022/11/03 02:23:01 by jcorneli      ########   odam.nl         */
+/*   Updated: 2023/04/28 21:56:42 by jcorneli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_color	calculate_light(t_obj_union *obj, t_ray ray, t_scene *scene)
 	t_color_intensity	intensity;
 	t_vector			l;
 	int					i;
+	// t_intersect_result	shadow;
 
 	i = 0;
 	init_intensity(&intensity, scene->ambient_light.intensity, \
@@ -66,9 +67,9 @@ t_color	calculate_light(t_obj_union *obj, t_ray ray, t_scene *scene)
 	while (i < scene->light_amount)
 	{
 		l = substract_vector(scene->lights[i].coordinates, ray.inters_p);
+		// shadow = get_closest_intersection(scene, ray.inters_p, scene->lights[i].coordinates, (t_minmax){EPSILON, INFINITY});
 		if (!scene->lights[i].toggle || scene->lights[i].intensity < EPSILON || \
-			(get_closest_intersection(scene, ray.inters_p, l, \
-			(t_minmax){1, EPSILON})).closest_obj) // == shadow or light out
+			(get_closest_intersection(scene, ray.inters_p, scene->lights[i].coordinates, (t_minmax){EPSILON, INFINITY})).closest_obj) // == shadow or light out
 		{
 			i++;
 			continue ;
